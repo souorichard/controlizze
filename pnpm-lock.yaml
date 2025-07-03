@@ -39,6 +39,20 @@ importers:
         specifier: ^0.6.13
         version: 0.6.13(prettier@3.6.0)
 
+  config/typescript-config: {}
+
+  packages/auth:
+    devDependencies:
+      '@controlizze/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
+      '@controlizze/prettier':
+        specifier: workspace:*
+        version: link:../../config/prettier
+      '@controlizze/tsconfig':
+        specifier: workspace:*
+        version: link:../../config/typescript-config
+
 packages:
 
   '@eslint-community/eslint-utils@4.7.0':
