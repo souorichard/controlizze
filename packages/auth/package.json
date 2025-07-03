@@ -5,12 +5,18 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "devDependencies": {
-    "@controlizze/prettier": "workspace:*",
     "@controlizze/eslint-config": "workspace:*",
+    "@controlizze/prettier": "workspace:*",
     "@controlizze/tsconfig": "workspace:*"
   },
   "prettier": "@controlizze/prettier",
   "eslintConfig": {
-    "extends": ["@controlizze/eslint-config/library"]
+    "extends": [
+      "@controlizze/eslint-config/library"
+    ]
+  },
+  "dependencies": {
+    "@casl/ability": "^6.7.3",
+    "zod": "^3.25.70"
   }
 }
