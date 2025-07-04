@@ -16,7 +16,9 @@
     "@controlizze/eslint-config": "workspace:*",
     "@controlizze/prettier": "workspace:*",
     "@controlizze/tsconfig": "workspace:*",
+    "@types/bcryptjs": "^3.0.0",
     "@types/node": "^24.0.10",
+    "bcryptjs": "^3.0.2",
     "prisma": "^6.11.1",
     "tsx": "^4.20.3"
   },
