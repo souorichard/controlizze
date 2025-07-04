@@ -5,6 +5,13 @@
   "scripts": {
     "dev": "tsx watch src/http/server.ts"
   },
+  "dependencies": {
+    "@fastify/cors": "^11.0.1",
+    "@prisma/client": "6.11.1",
+    "fastify": "^5.4.0",
+    "fastify-type-provider-zod": "^5.0.1",
+    "zod": "^3.25.70"
+  },
   "devDependencies": {
     "@controlizze/eslint-config": "workspace:*",
     "@controlizze/prettier": "workspace:*",
@@ -18,12 +25,5 @@
     "extends": [
       "@controlizze/eslint-config/node"
     ]
-  },
-  "dependencies": {
-    "@fastify/cors": "^11.0.1",
-    "@prisma/client": "6.11.1",
-    "fastify": "^5.4.0",
-    "fastify-type-provider-zod": "^5.0.1",
-    "zod": "^3.25.70"
   }
 }
