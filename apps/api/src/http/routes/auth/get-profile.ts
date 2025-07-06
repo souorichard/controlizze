@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
+import { NotFoundError } from '@/http/routes/_errors/not-found-error'
 import { prisma } from '@/lib/prisma'
 
 export async function getProfile(app: FastifyInstance) {
@@ -12,9 +13,6 @@ export async function getProfile(app: FastifyInstance) {
         tags: ['Auth'],
         summary: 'Get authenticated user profile.',
         response: {
-          404: z.object({
-            message: z.string(),
-          }),
           200: z.object({
             user: z.object({
               id: z.uuid(),
@@ -42,7 +40,7 @@ export async function getProfile(app: FastifyInstance) {
       })
 
       if (!user) {
-        return reply.status(404).send({ message: 'User not found' })
+        throw new NotFoundError('User not found.')
       }
 
       return reply.status(200).send({ user })

@@ -3,6 +3,7 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
+import { ConflictError } from '@/http/routes/_errors/conflict-error'
 import { prisma } from '@/lib/prisma'
 
 export async function createAccount(app: FastifyInstance) {
@@ -18,9 +19,6 @@ export async function createAccount(app: FastifyInstance) {
           password: z.string().min(6),
         }),
         response: {
-          409: z.object({
-            message: z.string(),
-          }),
           201: z.null(),
         },
       },
@@ -35,9 +33,7 @@ export async function createAccount(app: FastifyInstance) {
       })
 
       if (userWithSameEmail) {
-        return reply.status(409).send({
-          message: 'User with same e-mail already exists.',
-        })
+        throw new ConflictError('User with same e-mail already exists.')
       }
 
       const [, domain] = email.split('@')
