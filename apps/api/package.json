@@ -20,10 +20,11 @@
     "zod": "^3.25.70"
   },
   "devDependencies": {
-    "@controlizze/env": "workspace:*",
     "@controlizze/eslint-config": "workspace:*",
     "@controlizze/prettier": "workspace:*",
     "@controlizze/tsconfig": "workspace:*",
+    "@controlizze/auth": "workspace:*",
+    "@controlizze/env": "workspace:*",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^24.0.10",
     "bcryptjs": "^3.0.2",

@@ -48,6 +48,9 @@ importers:
         specifier: ^3.25.70
         version: 3.25.70
     devDependencies:
+      '@controlizze/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@controlizze/env':
         specifier: workspace:*
         version: link:../../packages/env

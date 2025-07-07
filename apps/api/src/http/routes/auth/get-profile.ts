@@ -29,7 +29,7 @@ export async function getProfile(app: FastifyInstance) {
           },
         },
       },
-      async (request, reply) => {
+      async (request) => {
         const userId = await request.getCurrentUserId()
 
         const user = await prisma.user.findUnique({
@@ -48,7 +48,7 @@ export async function getProfile(app: FastifyInstance) {
           throw new NotFoundError('User not found.')
         }
 
-        return reply.status(200).send({ user })
+        return { user }
       },
     )
 }
