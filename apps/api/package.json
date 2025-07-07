@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/http/server.ts"
+    "dev": "pnpm env:load tsx watch src/http/server.ts",
+    "db:migrate": "pnpm env:load prisma migrate dev",
+    "db:studio": "pnpm env:load prisma studio",
+    "env:load": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@fastify/cors": "^11.0.1",
@@ -17,12 +20,14 @@
     "zod": "^3.25.70"
   },
   "devDependencies": {
+    "@controlizze/env": "workspace:*",
     "@controlizze/eslint-config": "workspace:*",
     "@controlizze/prettier": "workspace:*",
     "@controlizze/tsconfig": "workspace:*",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^24.0.10",
     "bcryptjs": "^3.0.2",
+    "dotenv-cli": "^8.0.0",
     "prisma": "^6.11.1",
     "tsx": "^4.20.3"
   },

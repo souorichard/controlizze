@@ -9,7 +9,7 @@ import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function resetPassword(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    '/password/recover',
+    '/password/reset',
     {
       schema: {
         tags: ['Auth'],
