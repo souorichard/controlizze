@@ -1,4 +1,4 @@
-import { defineAbilityfor, Role, userSchema } from '@controlizze/auth'
+import { defineAbilityFor, Role, userSchema } from '@controlizze/auth'
 
 export function getUserPermissions(userId: string, role: Role) {
   const authUser = userSchema.parse({
@@ -6,7 +6,7 @@ export function getUserPermissions(userId: string, role: Role) {
     role,
   })
 
-  const ability = defineAbilityfor(authUser)
+  const ability = defineAbilityFor(authUser)
 
   return ability
 }
