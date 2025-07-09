@@ -9876,6 +9876,7 @@ export namespace Prisma {
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    organizationId_userId?: MemberOrganizationIdUserIdCompoundUniqueInput
     AND?: MemberWhereInput | MemberWhereInput[]
     OR?: MemberWhereInput[]
     NOT?: MemberWhereInput | MemberWhereInput[]
@@ -9884,7 +9885,7 @@ export namespace Prisma {
     userId?: StringFilter<"Member"> | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "organizationId_userId">
 
   export type MemberOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10915,6 +10916,11 @@ export namespace Prisma {
   export type OrganizationScalarRelationFilter = {
     is?: OrganizationWhereInput
     isNot?: OrganizationWhereInput
+  }
+
+  export type MemberOrganizationIdUserIdCompoundUniqueInput = {
+    organizationId: string
+    userId: string
   }
 
   export type MemberCountOrderByAggregateInput = {
