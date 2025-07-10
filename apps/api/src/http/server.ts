@@ -25,6 +25,7 @@ import { getOrganizations } from './routes/organization/get-organizations'
 import { shutdownOrganization } from './routes/organization/shutdown-organization'
 import { transferOrganization } from './routes/organization/transfer-organization'
 import { updateOrganization } from './routes/organization/update-organization'
+import { changeTransationStatus } from './routes/transaction/change-transaction-status'
 import { createTransation } from './routes/transaction/create-transaction'
 import { deleteTransation } from './routes/transaction/delete-transaction'
 import { getTransation } from './routes/transaction/get-transaction'
@@ -94,6 +95,7 @@ app.register(getTransations)
 app.register(getTransation)
 app.register(updateTransation)
 app.register(deleteTransation)
+app.register(changeTransationStatus)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log('HTTP server running!')
