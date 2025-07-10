@@ -26,6 +26,7 @@ import { shutdownOrganization } from './routes/organization/shutdown-organizatio
 import { transferOrganization } from './routes/organization/transfer-organization'
 import { updateOrganization } from './routes/organization/update-organization'
 import { createTransation } from './routes/transaction/create-transaction'
+import { deleteTransation } from './routes/transaction/delete-transaction'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -86,6 +87,7 @@ app.register(shutdownOrganization)
 app.register(transferOrganization)
 
 app.register(createTransation)
+app.register(deleteTransation)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log('HTTP server running!')
