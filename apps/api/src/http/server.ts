@@ -28,6 +28,7 @@ import { updateOrganization } from './routes/organization/update-organization'
 import { createTransation } from './routes/transaction/create-transaction'
 import { deleteTransation } from './routes/transaction/delete-transaction'
 import { getTransation } from './routes/transaction/get-transaction'
+import { getTransations } from './routes/transaction/get-transactions'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -88,6 +89,7 @@ app.register(shutdownOrganization)
 app.register(transferOrganization)
 
 app.register(createTransation)
+app.register(getTransations)
 app.register(getTransation)
 app.register(deleteTransation)
 
