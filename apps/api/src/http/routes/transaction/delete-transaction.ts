@@ -19,7 +19,7 @@ export async function deleteTransation(app: FastifyInstance) {
       {
         schema: {
           tags: ['Transactions'],
-          summary: 'Create a new transaction.',
+          summary: 'Delete a transaction.',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
