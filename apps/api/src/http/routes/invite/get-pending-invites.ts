@@ -4,23 +4,19 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
-import { getUserPermissions } from '@/utils/get-user-permissions'
 
-import { UnauthorizedError } from '../_errors/unauthorized-error'
+import { NotFoundError } from '../_errors/not-found-error'
 
-export async function getInvites(app: FastifyInstance) {
+export async function getPendingInvites(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/organizations/:slug/invites',
+      '/pending-invites',
       {
         schema: {
           tags: ['Invite'],
-          summary: 'Get all organization invites.',
-          params: z.object({
-            slug: z.string(),
-          }),
+          summary: 'Get all user pending invites.',
           response: {
             200: z.object({
               invites: z.array(
@@ -37,8 +33,12 @@ export async function getInvites(app: FastifyInstance) {
                     .object({
                       id: z.uuid(),
                       name: z.string().nullable(),
+                      avatarUrl: z.url().nullable(),
                     })
                     .nullable(),
+                  organization: z.object({
+                    name: z.string(),
+                  }),
                 }),
               ),
             }),
@@ -46,18 +46,16 @@ export async function getInvites(app: FastifyInstance) {
         },
       },
       async (request) => {
-        const { slug } = request.params
-
         const userId = await request.getCurrentUserId()
-        const { organization, membership } =
-          await request.getUserMembership(slug)
 
-        const { cannot } = getUserPermissions(userId, membership.role)
+        const user = await prisma.user.findUnique({
+          where: {
+            id: userId,
+          },
+        })
 
-        if (cannot('get', 'Invite')) {
-          throw new UnauthorizedError(
-            `You're not allowed to get organization invites.`,
-          )
+        if (!user) {
+          throw new NotFoundError('User not found.')
         }
 
         const invites = await prisma.invite.findMany({
@@ -70,14 +68,17 @@ export async function getInvites(app: FastifyInstance) {
               select: {
                 id: true,
                 name: true,
+                avatarUrl: true,
+              },
+            },
+            organization: {
+              select: {
+                name: true,
               },
             },
           },
           where: {
-            organizationId: organization.id,
-          },
-          orderBy: {
-            createdAt: 'desc',
+            email: user.email,
           },
         })
 
