@@ -156,7 +156,7 @@ exports.Prisma.InviteScalarFieldEnum = {
   email: 'email',
   role: 'role',
   createdAt: 'createdAt',
-  userId: 'userId',
+  authorId: 'authorId',
   organizationId: 'organizationId'
 };
 
