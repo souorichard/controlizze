@@ -18,7 +18,7 @@ export async function changeTransationStatus(app: FastifyInstance) {
       '/organizations/:slug/transactions/:transactionId/status',
       {
         schema: {
-          tags: ['Transactions'],
+          tags: ['Transaction'],
           summary: 'Update a transaction.',
           security: [{ bearerAuth: [] }],
           params: z.object({

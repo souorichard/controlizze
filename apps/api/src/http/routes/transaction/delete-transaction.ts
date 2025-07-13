@@ -18,7 +18,7 @@ export async function deleteTransation(app: FastifyInstance) {
       '/organizations/:slug/transactions/:transactionId',
       {
         schema: {
-          tags: ['Transactions'],
+          tags: ['Transaction'],
           summary: 'Delete a transaction.',
           security: [{ bearerAuth: [] }],
           params: z.object({

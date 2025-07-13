@@ -16,7 +16,7 @@ export async function createTransation(app: FastifyInstance) {
       '/organizations/:slug/transactions',
       {
         schema: {
-          tags: ['Transactions'],
+          tags: ['Transaction'],
           summary: 'Create a new transaction.',
           security: [{ bearerAuth: [] }],
           params: z.object({
