@@ -8,16 +8,16 @@ import { prisma } from '@/lib/prisma'
 import { BadRequestError } from '../_errors/bad-request-error'
 import { NotFoundError } from '../_errors/not-found-error'
 
-export async function acceptInvite(app: FastifyInstance) {
+export async function rejectInvite(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/invites/:inviteId/accept',
+      '/invites/:inviteId/reject',
       {
         schema: {
           tags: ['Invite'],
-          summary: 'Accept an invite.',
+          summary: 'Reject an invite.',
           security: [{ bearerAuth: [] }],
           params: z.object({
             inviteId: z.uuid(),
@@ -56,21 +56,11 @@ export async function acceptInvite(app: FastifyInstance) {
           throw new BadRequestError('This invite belongs to another user.')
         }
 
-        await prisma.$transaction([
-          prisma.member.create({
-            data: {
-              role: invite.role,
-              organizationId: invite.organizationId,
-              userId,
-            },
-          }),
-
-          prisma.invite.delete({
-            where: {
-              id: inviteId,
-            },
-          }),
-        ])
+        await prisma.invite.delete({
+          where: {
+            id: inviteId,
+          },
+        })
 
         return reply.status(204).send()
       },
