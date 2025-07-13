@@ -12,6 +12,10 @@ export const env = createEnv({
     GITHUB_OAUTH_CLIENT_ID: z.string(),
     GITHUB_OAUTH_CLIENT_SECRET: z.string(),
     GITHUB_OAUTH_CLIENT_REDIRECT_URI: z.url(),
+
+    GOOGLE_OAUTH_CLIENT_ID: z.string(),
+    GOOGLE_OAUTH_CLIENT_SECRET: z.string(),
+    GOOGLE_OAUTH_CLIENT_REDIRECT_URI: z.url(),
   },
   client: {},
   shared: {},
@@ -26,6 +30,11 @@ export const env = createEnv({
     GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
     GITHUB_OAUTH_CLIENT_REDIRECT_URI:
       process.env.GITHUB_OAUTH_CLIENT_REDIRECT_URI,
+
+    GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+    GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+    GOOGLE_OAUTH_CLIENT_REDIRECT_URI:
+      process.env.GOOGLE_OAUTH_CLIENT_REDIRECT_URI,
   },
   emptyStringAsUndefined: true,
 })
