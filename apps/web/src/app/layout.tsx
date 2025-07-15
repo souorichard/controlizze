@@ -1,7 +1,12 @@
 import './globals.css'
 
 import type { Metadata } from 'next'
-// import { Geist, Geist_Mono } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-mont-sans',
+})
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`${montserrat.className} dark antialiased`}>
+        {children}
+      </body>
     </html>
   )
 }
