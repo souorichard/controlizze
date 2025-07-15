@@ -1,0 +1,35 @@
+{
+  "name": "@controlizze/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "next": "15.4.1"
+  },
+  "devDependencies": {
+    "@controlizze/eslint-config": "workspace:*",
+    "@controlizze/prettier": "workspace:*",
+    "@controlizze/tsconfig": "workspace:*",
+    "@controlizze/auth": "workspace:*",
+    "@controlizze/env": "workspace:*",
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4"
+  },
+  "prettier": "@controlizze/prettier",
+  "eslintConfig": {
+    "extends": [
+      "@controlizze/eslint-config/node"
+    ]
+  }
+}
