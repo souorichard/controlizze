@@ -17,14 +17,15 @@
     "fastify": "^5.4.0",
     "fastify-plugin": "^5.0.1",
     "fastify-type-provider-zod": "^5.0.1",
+    "resend": "^4.6.0",
     "zod": "^3.25.70"
   },
   "devDependencies": {
+    "@controlizze/auth": "workspace:*",
+    "@controlizze/env": "workspace:*",
     "@controlizze/eslint-config": "workspace:*",
     "@controlizze/prettier": "workspace:*",
     "@controlizze/tsconfig": "workspace:*",
-    "@controlizze/auth": "workspace:*",
-    "@controlizze/env": "workspace:*",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^24.0.10",
     "bcryptjs": "^3.0.2",

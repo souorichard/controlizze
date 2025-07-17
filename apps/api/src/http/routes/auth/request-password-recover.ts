@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { prisma } from '@/lib/prisma'
+import { sendRecoverPasswordEmail } from '@/services/email/send-recover-password-email'
 
 export async function requestPasswordRecover(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -33,14 +34,14 @@ export async function requestPasswordRecover(app: FastifyInstance) {
         return reply.status(201).send()
       }
 
-      await prisma.token.create({
+      const { id: code } = await prisma.token.create({
         data: {
           type: 'PASSWORD_RECOVER',
           userId: userFromEmail.id,
         },
       })
 
-      // TODO: Send email user to recover password
+      await sendRecoverPasswordEmail(userFromEmail, code)
 
       return reply.status(201).send()
     },
