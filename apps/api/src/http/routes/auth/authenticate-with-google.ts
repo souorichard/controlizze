@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function authenticateWithGoogle(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    '/sessions/goolge',
+    '/sessions/google',
     {
       schema: {
         tags: ['Auth'],
@@ -55,8 +55,8 @@ export async function authenticateWithGoogle(app: FastifyInstance) {
           id_token: z.string(),
           access_token: z.string(),
           expires_in: z.number(),
-          refresh_token: z.string(),
-          token_type: z.literal('bearer'),
+          refresh_token: z.string().optional(),
+          token_type: z.literal('Bearer'),
           scope: z.string(),
         })
         .parse(googleAccessTokenData)
@@ -86,7 +86,7 @@ export async function authenticateWithGoogle(app: FastifyInstance) {
           email: z.email().nullable(),
           verified_email: z.boolean(),
           picture: z.url().nullable(),
-          locale: z.string(),
+          locale: z.string().optional(),
         })
         .parse(googleUserData)
 

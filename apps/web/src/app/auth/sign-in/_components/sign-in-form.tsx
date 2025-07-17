@@ -2,14 +2,12 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
 
-import githubIcon from '@/assets/github-icon.svg'
-import googleIcon from '@/assets/google-icon.svg'
+import { SocialSignInButtons } from '@/components/auth/social-sign-in-buttons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -110,34 +108,7 @@ export function SignInForm() {
 
       <Separator />
 
-      <div className="grid grid-rows-2 gap-3 md:grid-cols-2 md:grid-rows-none">
-        <form>
-          <Button
-            type="submit"
-            variant="outline"
-            className="w-full"
-            disabled={isLoading}
-          >
-            <Image
-              src={githubIcon}
-              alt="Github"
-              className="size-4 scale-125 invert"
-            />
-            Sign in with Github
-          </Button>
-        </form>
-        <form>
-          <Button
-            type="submit"
-            variant="outline"
-            className="w-full"
-            disabled={isLoading}
-          >
-            <Image src={googleIcon} alt="Github" className="size-4" />
-            Sign in with Google
-          </Button>
-        </form>
-      </div>
+      <SocialSignInButtons disabled={isLoading} />
     </div>
   )
 }
