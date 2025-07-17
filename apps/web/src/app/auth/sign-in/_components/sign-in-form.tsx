@@ -1,7 +1,11 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod/v4'
 
 import githubIcon from '@/assets/github-icon.svg'
 import googleIcon from '@/assets/google-icon.svg'
@@ -10,13 +14,61 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 
+import { signInWithPasswordAction } from '../actions'
+
+const signInSchema = z.object({
+  email: z.email({ error: 'Please, provide a valid e-mail.' }),
+  password: z
+    .string()
+    .min(6, { error: 'Password must be at least 6 characters.' }),
+})
+
+export type SignInFormData = z.infer<typeof signInSchema>
+
 export function SignInForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isLoading },
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+  })
+
+  async function handleSignIn({ email, password }: SignInFormData) {
+    const { success, message } = await signInWithPasswordAction({
+      email,
+      password,
+    })
+
+    if (!success) {
+      toast.error(message)
+
+      return
+    }
+
+    toast.success(message)
+  }
+
   return (
     <div className="space-y-4 md:space-y-5">
-      <form className="space-y-4 md:space-y-5">
+      <form
+        onSubmit={handleSubmit(handleSignIn)}
+        className="space-y-4 md:space-y-5"
+      >
         <div className="space-y-1.5">
           <Label>E-mail</Label>
-          <Input id="email" type="email" placeholder="john@acme.com" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="john@acme.com"
+            {...register('email')}
+          />
+
+          {errors.email && (
+            <span className="text-destructive block text-xs">
+              {errors.email.message}
+            </span>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -25,7 +77,14 @@ export function SignInForm() {
             id="password"
             type="password"
             placeholder="Enter your password"
+            {...register('password')}
           />
+
+          {errors.password && (
+            <span className="text-destructive block text-xs">
+              {errors.password.message}
+            </span>
+          )}
 
           <Link
             href="/auth/forgot-password"
@@ -35,7 +94,7 @@ export function SignInForm() {
           </Link>
         </div>
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={isLoading}>
           Sign in with e-mail
         </Button>
 
@@ -48,7 +107,12 @@ export function SignInForm() {
 
       <div className="grid grid-rows-2 gap-3 md:grid-cols-2 md:grid-rows-none">
         <form>
-          <Button type="submit" variant="outline" className="w-full">
+          <Button
+            type="submit"
+            variant="outline"
+            className="w-full"
+            disabled={isLoading}
+          >
             <Image
               src={githubIcon}
               alt="Github"
@@ -58,7 +122,12 @@ export function SignInForm() {
           </Button>
         </form>
         <form>
-          <Button type="submit" variant="outline" className="w-full">
+          <Button
+            type="submit"
+            variant="outline"
+            className="w-full"
+            disabled={isLoading}
+          >
             <Image src={googleIcon} alt="Github" className="size-4" />
             Sign in with Google
           </Button>

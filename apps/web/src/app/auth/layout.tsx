@@ -1,6 +1,13 @@
+import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
-export default function AuthLayout({ children }: PropsWithChildren) {
+import { isAuthenticated } from '@/auth/auth'
+
+export default async function AuthLayout({ children }: PropsWithChildren) {
+  if (await isAuthenticated()) {
+    redirect('/')
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center px-8 py-12">
       <div className="flex w-full max-w-md flex-col gap-6">
