@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
@@ -95,7 +96,11 @@ export function SignInForm() {
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
-          Sign in with e-mail
+          {isLoading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            'Sign in with e-mail'
+          )}
         </Button>
 
         <Button type="button" variant="link" className="w-full" asChild>
