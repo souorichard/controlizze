@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { getProfile } from '@/http/get-profile'
+import { getProfile } from '@/http/auth/get-profile'
 
 export async function isAuthenticated() {
   const cookieStore = await cookies()

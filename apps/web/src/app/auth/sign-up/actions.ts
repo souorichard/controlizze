@@ -2,7 +2,7 @@
 
 import { HTTPError } from 'ky'
 
-import { createAccount } from '@/http/create-account'
+import { createAccount } from '@/http/auth/create-account'
 import { ActionResponse } from '@/interfaces/action-response'
 
 import { SignUpFormData } from './_components/sign-up-form'

@@ -1,7 +1,7 @@
 import { HTTPError } from 'ky'
 
-import { recoverPassword } from '@/http/recover-password'
-import { resetPassword } from '@/http/reset-password'
+import { recoverPassword } from '@/http/auth/recover-password'
+import { resetPassword } from '@/http/auth/reset-password'
 import { ActionResponse } from '@/interfaces/action-response'
 
 import { RecoverPasswordFormData } from './_components/recover-password-form'
