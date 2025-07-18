@@ -18,7 +18,12 @@ import { createAccountAction } from '../actions'
 
 const signUpSchema = z
   .object({
-    name: z.string().min(3, { error: 'Name must be at least 3 characters.' }),
+    name: z
+      .string()
+      .min(3, { error: 'Name must be at least 3 characters.' })
+      .refine((value) => value.split(' ').length > 1, {
+        message: 'Please, enter your full name.',
+      }),
     email: z.email({ error: 'Please, provide a valid e-mail.' }),
     password: z
       .string()
