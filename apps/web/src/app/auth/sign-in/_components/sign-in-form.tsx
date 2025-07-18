@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
@@ -25,10 +26,13 @@ const signInSchema = z.object({
 export type SignInFormData = z.infer<typeof signInSchema>
 
 export function SignInForm() {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
     formState: { errors, isLoading },
+    getValues,
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   })
@@ -46,6 +50,20 @@ export function SignInForm() {
     }
 
     toast.success(message)
+  }
+
+  function handleForgotPassword(e: React.MouseEvent) {
+    e.preventDefault()
+
+    const email = getValues('email')
+
+    if (!email) {
+      toast.error('Please, enter your e-mail first.')
+
+      return
+    }
+
+    router.push(`/auth/forgot-password?email=${email}`)
   }
 
   return (
@@ -86,7 +104,8 @@ export function SignInForm() {
           )}
 
           <Link
-            href="/auth/forgot-password"
+            href="/auth/sign-in"
+            onClick={handleForgotPassword}
             className="text-muted-foreground hover:text-foreground text-xs transition hover:underline hover:underline-offset-4"
           >
             Forgot your password?
