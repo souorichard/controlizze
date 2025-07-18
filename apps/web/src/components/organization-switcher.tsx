@@ -1,4 +1,5 @@
 import { ChevronsUpDown, CirclePlus } from 'lucide-react'
+import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 import { getOrganizations } from '@/http/organization/get-organizations'
@@ -16,12 +17,33 @@ import {
 } from './ui/dropdown-menu'
 
 export async function OrganizationSwitcher() {
+  const cookieStore = await cookies()
+  const currentOrganizationByCookie = cookieStore.get('organization')?.value
+
   const { organizations } = await getOrganizations()
+
+  const currentOrganization = organizations.find(
+    (organization) => organization.slug === currentOrganizationByCookie,
+  )
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus-visible:ring-primary flex h-9 w-[180px] items-center gap-2 rounded px-1 text-sm font-medium outline-none focus-visible:ring-2">
-        <span className="text-muted-foreground">Select organization</span>
+        {currentOrganization ? (
+          <>
+            <Avatar className="mr-1 size-5">
+              {currentOrganization.avatarUrl && (
+                <AvatarImage src={currentOrganization.avatarUrl as string} />
+              )}
+              <AvatarFallback className="text-xs">
+                {getInitials(currentOrganization.name)}
+              </AvatarFallback>
+            </Avatar>
+            <span className="truncate">{currentOrganization.name}</span>
+          </>
+        ) : (
+          <span className="text-muted-foreground">Select organization</span>
+        )}
         <ChevronsUpDown className="text-muted-foreground ml-auto size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -41,7 +63,7 @@ export async function OrganizationSwitcher() {
                     {organization.avatarUrl && (
                       <AvatarImage src={organization.avatarUrl as string} />
                     )}
-                    <AvatarFallback>
+                    <AvatarFallback className="text-xs">
                       {getInitials(organization.name)}
                     </AvatarFallback>
                   </Avatar>

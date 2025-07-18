@@ -8,7 +8,7 @@ import {
 import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
+  title: 'Home',
 }
 
 export default async function Home() {
@@ -17,7 +17,7 @@ export default async function Home() {
       <HeaderContainer className="border-none pb-5">
         <Header />
       </HeaderContainer>
-      <MainContainer>asd</MainContainer>
+      <MainContainer>Home</MainContainer>
     </Container>
   )
 }
