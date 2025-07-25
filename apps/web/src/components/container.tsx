@@ -17,7 +17,9 @@ export function HeaderContainer({ className, children }: GenericProps) {
 
 export function MainContainer({ className, children }: GenericProps) {
   return (
-    <div className={cn('mx-auto w-full max-w-7xl p-5', className)}>
+    <div
+      className={cn('mx-auto w-full max-w-7xl space-y-5 px-5 py-8', className)}
+    >
       {children}
     </div>
   )

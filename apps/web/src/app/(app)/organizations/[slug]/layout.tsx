@@ -22,7 +22,7 @@ export default async function OrganizationLayout({
 
   return (
     <Container>
-      <HeaderContainer className="border-none">
+      <HeaderContainer className="border-b pb-5">
         <Header />
       </HeaderContainer>
       <MainContainer>{children}</MainContainer>
