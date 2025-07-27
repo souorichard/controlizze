@@ -55,7 +55,7 @@ export async function OrganizationSwitcher() {
           className="w-[200px]"
         >
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Organization(s)</DropdownMenuLabel>
+            <DropdownMenuLabel>Organizations</DropdownMenuLabel>
 
             {organizations.map((organization) => {
               return (

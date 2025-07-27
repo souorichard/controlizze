@@ -8,6 +8,7 @@ import {
   MainContainer,
 } from '@/components/container'
 import { Header } from '@/components/header'
+import { Tabs } from '@/components/tabs'
 
 interface OrganizationLayoutProps {
   children: ReactNode
@@ -22,8 +23,9 @@ export default async function OrganizationLayout({
 
   return (
     <Container>
-      <HeaderContainer className="border-b pb-5">
+      <HeaderContainer className="space-y-5 border-b">
         <Header />
+        <Tabs />
       </HeaderContainer>
       <MainContainer>{children}</MainContainer>
     </Container>

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <Container>
-      <HeaderContainer className="border-none pb-5">
+      <HeaderContainer className="pb-5">
         <Header />
       </HeaderContainer>
       <MainContainer>Home</MainContainer>

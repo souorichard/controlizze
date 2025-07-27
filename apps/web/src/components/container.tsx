@@ -12,7 +12,11 @@ export function Container({ className, children }: GenericProps) {
 }
 
 export function HeaderContainer({ className, children }: GenericProps) {
-  return <div className={cn('border-b pt-5', className)}>{children}</div>
+  return (
+    <div className={cn('border-b bg-zinc-900/15 pt-5', className)}>
+      {children}
+    </div>
+  )
 }
 
 export function MainContainer({ className, children }: GenericProps) {
