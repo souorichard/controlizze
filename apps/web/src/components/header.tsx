@@ -1,5 +1,6 @@
 import { Slash } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import controlizzeIcon from '@/assets/controlizze/icon.svg'
 
@@ -10,7 +11,9 @@ export function Header() {
   return (
     <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5">
       <div className="flex items-center gap-4">
-        <Image src={controlizzeIcon} alt="Controlizze" className="size-7" />
+        <Link href="/">
+          <Image src={controlizzeIcon} alt="Controlizze" className="size-7" />
+        </Link>
 
         <Slash className="text-border size-4 -rotate-[24deg]" />
 

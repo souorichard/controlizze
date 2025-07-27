@@ -7,7 +7,7 @@ import { getInitials } from '@/utils/get-initials'
 
 import { CreateOrganizationDialog } from './create-organization-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { Dialog, DialogTrigger } from './ui/dialog'
+import { Dialog } from './ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -78,12 +78,12 @@ export async function OrganizationSwitcher() {
 
           <DropdownMenuSeparator />
 
-          <DialogTrigger asChild>
-            <DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/create-organization">
               <CirclePlus className="size-5" />
               Create organization
-            </DropdownMenuItem>
-          </DialogTrigger>
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
