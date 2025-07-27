@@ -1,4 +1,4 @@
-import { ChevronsUpDown, CirclePlus } from 'lucide-react'
+import { Check, ChevronsUpDown, CirclePlus } from 'lucide-react'
 import Link from 'next/link'
 
 import { getCurrentOrganization } from '@/auth/auth'
@@ -30,7 +30,7 @@ export async function OrganizationSwitcher() {
   return (
     <Dialog>
       <DropdownMenu>
-        <DropdownMenuTrigger className="focus-visible:ring-primary flex h-9 w-[180px] items-center gap-2 rounded px-1 text-sm font-medium outline-none focus-visible:ring-2">
+        <DropdownMenuTrigger className="focus-visible:ring-primary bg-background flex h-9 w-56 items-center gap-2 rounded-md border px-3 text-sm font-medium outline-none focus-visible:ring-2">
           {currentOrganization ? (
             <>
               <Avatar className="mr-1 size-5">
@@ -48,12 +48,7 @@ export async function OrganizationSwitcher() {
           )}
           <ChevronsUpDown className="text-muted-foreground ml-auto size-4" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          sideOffset={12}
-          alignOffset={-8}
-          className="w-[200px]"
-        >
+        <DropdownMenuContent align="start" sideOffset={12} className="w-56">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Organizations</DropdownMenuLabel>
 
@@ -61,7 +56,7 @@ export async function OrganizationSwitcher() {
               return (
                 <DropdownMenuItem key={organization.id} asChild>
                   <Link href={`/organizations/${organization.slug}`}>
-                    <Avatar className="size-5">
+                    <Avatar className="size-6">
                       {organization.avatarUrl && (
                         <AvatarImage src={organization.avatarUrl as string} />
                       )}
@@ -70,6 +65,9 @@ export async function OrganizationSwitcher() {
                       </AvatarFallback>
                     </Avatar>
                     <span className="line-clamp-1">{organization.name}</span>
+                    {organization.slug === currentOrganization?.slug && (
+                      <Check className="text-primary ml-auto size-4" />
+                    )}
                   </Link>
                 </DropdownMenuItem>
               )
@@ -80,7 +78,7 @@ export async function OrganizationSwitcher() {
 
           <DropdownMenuItem asChild>
             <Link href="/create-organization">
-              <CirclePlus className="size-5" />
+              <CirclePlus className="text-primary size-6" />
               Create organization
             </Link>
           </DropdownMenuItem>

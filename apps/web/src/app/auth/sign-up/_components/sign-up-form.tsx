@@ -75,7 +75,7 @@ export function SignUpForm() {
           <Input
             id="name"
             type="name"
-            placeholder="Enter your name"
+            placeholder="John Doe"
             {...register('name')}
           />
 
@@ -91,7 +91,7 @@ export function SignUpForm() {
           <Input
             id="email"
             type="email"
-            placeholder="john@acme.com"
+            placeholder="john@example.com"
             {...register('email')}
           />
 
@@ -107,7 +107,7 @@ export function SignUpForm() {
           <Input
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="••••••"
             {...register('password')}
           />
 
@@ -123,7 +123,7 @@ export function SignUpForm() {
           <Input
             id="confirmPassword"
             type="password"
-            placeholder="Enter your password again"
+            placeholder="••••••"
             {...register('confirmPassword')}
           />
 
@@ -134,16 +134,22 @@ export function SignUpForm() {
           )}
         </div>
 
+        <div className="flex items-center justify-center gap-1 py-2 text-sm">
+          <span className="text-muted-foreground">Already registered?</span>
+          <Link
+            href="/auth/sign-in"
+            className="underline-offset-4 transition hover:underline"
+          >
+            Sign in
+          </Link>
+        </div>
+
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             'Create account'
           )}
-        </Button>
-
-        <Button type="button" variant="link" className="w-full" asChild>
-          <Link href="/auth/sign-in">Already registered? Sign in</Link>
         </Button>
       </form>
 

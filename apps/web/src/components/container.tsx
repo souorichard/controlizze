@@ -13,9 +13,7 @@ export function Container({ className, children }: GenericProps) {
 
 export function HeaderContainer({ className, children }: GenericProps) {
   return (
-    <div className={cn('border-b bg-zinc-900/15 pt-5', className)}>
-      {children}
-    </div>
+    <div className={cn('bg-muted/10 border-b pt-5', className)}>{children}</div>
   )
 }
 

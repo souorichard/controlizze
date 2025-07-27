@@ -26,7 +26,7 @@ export function SocialSignInButtons({ disabled }: SocialSignInButtonsProps) {
           <Image
             src={githubIcon}
             alt="Github"
-            className="size-4 scale-125 invert"
+            className="size-4 scale-125 dark:invert"
           />
           Sign in with Github
         </Button>

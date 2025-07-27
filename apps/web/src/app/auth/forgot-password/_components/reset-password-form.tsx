@@ -108,9 +108,15 @@ export function ResetPasswordForm() {
           )}
         </Button>
 
-        <Button type="button" variant="link" className="w-full" asChild>
-          <Link href="/auth/sign-in">Back to sign in</Link>
-        </Button>
+        <div className="flex items-center justify-center gap-1 py-2 text-sm">
+          <span className="text-muted-foreground">Remeber your password?</span>
+          <Link
+            href="/auth/sign-in"
+            className="underline-offset-4 transition hover:underline"
+          >
+            Sign in
+          </Link>
+        </div>
       </form>
     </div>
   )

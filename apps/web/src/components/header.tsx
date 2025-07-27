@@ -1,13 +1,18 @@
-import { Slash } from 'lucide-react'
+import { CirclePlus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import controlizzeIcon from '@/assets/controlizze/icon.svg'
+import { getCurrentOrganization } from '@/auth/auth'
 
 import { OrganizationSwitcher } from './organization-switcher'
 import { ProfileButton } from './profile-button'
+import { Button } from './ui/button'
+import { Separator } from './ui/separator'
 
-export function Header() {
+export async function Header() {
+  const currentOrganization = await getCurrentOrganization()
+
   return (
     <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5">
       <div className="flex items-center gap-4">
@@ -15,12 +20,21 @@ export function Header() {
           <Image src={controlizzeIcon} alt="Controlizze" className="size-7" />
         </Link>
 
-        <Slash className="text-border size-4 -rotate-[24deg]" />
+        <Separator orientation="vertical" className="!h-5" />
 
         <OrganizationSwitcher />
       </div>
 
       <div className="flex items-center gap-4">
+        {currentOrganization && (
+          <Button size="sm" className="hidden md:inline-flex">
+            <CirclePlus className="size-4" />
+            New transaction
+          </Button>
+        )}
+
+        <Separator orientation="vertical" className="!h-5" />
+
         <ProfileButton />
       </div>
     </header>

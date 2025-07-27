@@ -77,7 +77,7 @@ export function SignInForm() {
           <Input
             id="email"
             type="email"
-            placeholder="john@acme.com"
+            placeholder="john@example.com"
             {...register('email')}
           />
 
@@ -93,7 +93,7 @@ export function SignInForm() {
           <Input
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="••••••"
             {...register('password')}
           />
 
@@ -120,9 +120,15 @@ export function SignInForm() {
           )}
         </Button>
 
-        <Button type="button" variant="link" className="w-full" asChild>
-          <Link href="/auth/sign-up">Create a new account</Link>
-        </Button>
+        <div className="flex items-center justify-center gap-1 py-2 text-sm">
+          <span className="text-muted-foreground">Don't have an account?</span>
+          <Link
+            href="/auth/sign-up"
+            className="underline-offset-4 transition hover:underline"
+          >
+            Sign up
+          </Link>
+        </div>
       </form>
 
       <Separator />

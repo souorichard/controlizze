@@ -1,3 +1,5 @@
+import { ArrowLeftRight, LayoutDashboard, Settings, Users } from 'lucide-react'
+
 import { ability, getCurrentOrganization } from '@/auth/auth'
 
 import { NavLink } from './nav-link'
@@ -13,15 +15,18 @@ export async function Tabs() {
   const canUpdateOrganization = permissions?.can('update', 'Organization')
   const canGetBilling = permissions?.can('get', 'Billing')
 
-  const linkClass = `text-muted-foreground data-[current=true]:text-foreground data-[current=true]:after:bg-primary data-[current=false]:hover:text-foreground data data-[current=false]:hover:after:bg-muted relative px-4 py-3 text-sm font-medium transition after:absolute after:-bottom-px after:left-0 after:z-10 after:h-0.5 after:w-full after:content-['']`
+  const linkClass = `group flex items-center gap-2 text-muted-foreground data-[current=true]:text-foreground data-[current=true]:after:bg-primary data-[current=false]:hover:text-foreground data data-[current=false]:hover:after:bg-muted relative px-5 py-3 text-sm font-medium transition after:absolute after:-bottom-px after:left-0 after:z-10 after:h-0.5 after:w-full after:content-['']`
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl items-center gap-1 px-1">
+    <div className="mx-auto flex w-full max-w-7xl items-center gap-1">
       <NavLink
         href={`/organizations/${currentOrganization}`}
         className={linkClass}
       >
-        Overview
+        <LayoutDashboard className="size-4" />
+        <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
+          Overview
+        </span>
       </NavLink>
 
       {canGetTransactions && (
@@ -29,7 +34,10 @@ export async function Tabs() {
           href={`/organizations/${currentOrganization}/transactions`}
           className={linkClass}
         >
-          Transactions
+          <ArrowLeftRight className="size-4" />
+          <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
+            Transactions
+          </span>
         </NavLink>
       )}
 
@@ -38,7 +46,10 @@ export async function Tabs() {
           href={`/organizations/${currentOrganization}/members`}
           className={linkClass}
         >
-          Members
+          <Users className="size-4" />
+          <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
+            Members
+          </span>
         </NavLink>
       )}
 
@@ -47,7 +58,10 @@ export async function Tabs() {
           href={`/organizations/${currentOrganization}/settings`}
           className={linkClass}
         >
-          Settings & Billing
+          <Settings className="size-4" />
+          <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
+            Settings
+          </span>
         </NavLink>
       )}
     </div>
