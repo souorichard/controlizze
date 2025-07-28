@@ -1,4 +1,4 @@
-import { ArrowLeftRight, LayoutDashboard, Settings, Users } from 'lucide-react'
+import { ArrowLeftRight, LayoutDashboard, Settings } from 'lucide-react'
 
 import { ability, getCurrentOrganization } from '@/auth/auth'
 
@@ -10,7 +10,6 @@ export async function Tabs() {
   const permissions = await ability()
 
   const canGetTransactions = permissions?.can('get', 'Transaction')
-  const canGetMembers = permissions?.can('get', 'User')
 
   const canUpdateOrganization = permissions?.can('update', 'Organization')
   const canGetBilling = permissions?.can('get', 'Billing')
@@ -20,7 +19,7 @@ export async function Tabs() {
   return (
     <div className="mx-auto flex w-full max-w-7xl items-center gap-1">
       <NavLink
-        href={`/organizations/${currentOrganization}`}
+        href={`/organizations/${currentOrganization}/overview`}
         className={linkClass}
       >
         <LayoutDashboard className="size-4" />
@@ -37,18 +36,6 @@ export async function Tabs() {
           <ArrowLeftRight className="size-4" />
           <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
             Transactions
-          </span>
-        </NavLink>
-      )}
-
-      {canGetMembers && (
-        <NavLink
-          href={`/organizations/${currentOrganization}/members`}
-          className={linkClass}
-        >
-          <Users className="size-4" />
-          <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
-            Members
           </span>
         </NavLink>
       )}
