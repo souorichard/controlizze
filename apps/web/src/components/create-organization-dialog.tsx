@@ -1,5 +1,4 @@
-import { OrganizationForm } from '@/app/(app)/organizations/_components/organization-form'
-
+import { OrganizationForm } from './organization-form'
 import {
   DialogContent,
   DialogDescription,

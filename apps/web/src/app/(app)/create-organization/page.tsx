@@ -4,8 +4,7 @@ import {
   MainContainer,
 } from '@/components/container'
 import { Header } from '@/components/header'
-
-import { OrganizationForm } from '../organizations/_components/organization-form'
+import { OrganizationForm } from '@/components/organization-form'
 
 export default function CreateOrganizationPage() {
   return (

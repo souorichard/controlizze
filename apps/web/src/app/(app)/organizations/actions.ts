@@ -3,10 +3,9 @@
 import { HTTPError } from 'ky'
 import { revalidateTag } from 'next/cache'
 
+import { UpsertOrganizationFormData } from '@/components/organization-form'
 import { createOrganization } from '@/http/organization/create-organization'
 import { ActionResponse } from '@/interfaces/action-response'
-
-import { UpsertOrganizationFormData } from './_components/organization-form'
 
 export async function createOrganizationAction({
   name,

@@ -1,6 +1,6 @@
 import { api } from '../api-client'
 
-interface GetOrganizationResponse {
+interface GetOrganizationsResponse {
   organizations: {
     id: string
     name: string
@@ -9,14 +9,14 @@ interface GetOrganizationResponse {
   }[]
 }
 
-export async function getOrganizations(): Promise<GetOrganizationResponse> {
+export async function getOrganizations(): Promise<GetOrganizationsResponse> {
   const response = await api
     .get('organizations', {
       next: {
         tags: ['organizations'],
       },
     })
-    .json<GetOrganizationResponse>()
+    .json<GetOrganizationsResponse>()
 
   return response
 }
