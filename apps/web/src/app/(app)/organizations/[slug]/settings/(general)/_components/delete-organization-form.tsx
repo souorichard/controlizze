@@ -1,19 +1,9 @@
-'use client'
-
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-interface DeleteOrganizationFormProps {
-  organizationId: string
-}
+import { deleteOrganizationAction } from '../actions'
 
-export function DeleteOrganizationForm({
-  organizationId,
-}: DeleteOrganizationFormProps) {
-  async function handleDeleteOrganization() {
-    console.log('delete organization:', organizationId)
-  }
-
+export function DeleteOrganizationForm() {
   return (
     <div className="grid grid-cols-2 items-center gap-10">
       <div className="space-y-2">
@@ -28,7 +18,7 @@ export function DeleteOrganizationForm({
         </p>
       </div>
 
-      <form onSubmit={handleDeleteOrganization}>
+      <form action={deleteOrganizationAction}>
         <Button type="submit" variant="destructive">
           Delete organization
         </Button>

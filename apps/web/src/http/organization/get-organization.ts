@@ -16,11 +16,7 @@ export async function getOrganization(
   slug: string,
 ): Promise<GetOrganizationResponse> {
   const response = await api
-    .get(`organizations/${slug}`, {
-      next: {
-        tags: ['organizations'],
-      },
-    })
+    .get(`organizations/${slug}`)
     .json<GetOrganizationResponse>()
 
   return response

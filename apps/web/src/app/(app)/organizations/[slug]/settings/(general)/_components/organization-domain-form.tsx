@@ -2,11 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+
+import { updateOrganizationDomainAction } from '../actions'
 
 const organizationDomainSchema = z
   .object({
@@ -67,8 +70,20 @@ export function OrganizationDomainForm({
 
   async function handleUpdateOrganizationName({
     domain,
+    shouldAttachUsersByDomain,
   }: OrganizationDomainFormData) {
-    console.log(domain)
+    const { success, message } = await updateOrganizationDomainAction({
+      domain,
+      shouldAttachUsersByDomain,
+    })
+
+    if (!success) {
+      toast.error(message)
+
+      return
+    }
+
+    toast.success(message)
   }
 
   return (
@@ -98,14 +113,14 @@ export function OrganizationDomainForm({
               control={control}
               render={({ field }) => (
                 <Checkbox
-                  id="shouldAttachUsersByDomain"
+                  id="@shouldAttachUsersByDomain"
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               )}
             />
           </div>
-          <label htmlFor="shouldAttachUsersByDomain" className="space-y-1">
+          <label htmlFor="@shouldAttachUsersByDomain" className="space-y-1">
             <span className="text-sm leading-none font-medium">
               Auto-join new members
             </span>

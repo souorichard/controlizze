@@ -2,10 +2,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod/v4'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+
+import { updateOrganizationNameAction } from '../actions'
 
 const organizationNameSchema = z.object({
   name: z
@@ -32,7 +35,17 @@ export function OrganizationNameForm({
   async function handleUpdateOrganizationName({
     name,
   }: OrganizationNameFormData) {
-    console.log(name)
+    const { success, message } = await updateOrganizationNameAction({
+      name,
+    })
+
+    if (!success) {
+      toast.error(message)
+
+      return
+    }
+
+    toast.success(message)
   }
 
   return (
