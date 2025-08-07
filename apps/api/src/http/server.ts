@@ -36,6 +36,8 @@ import { getOrganizations } from './routes/organization/get-organizations'
 import { shutdownOrganization } from './routes/organization/shutdown-organization'
 import { transferOrganization } from './routes/organization/transfer-organization'
 import { updateOrganization } from './routes/organization/update-organization'
+import { updateOrganizationDomain } from './routes/organization/update-organization-domain'
+import { updateOrganizationName } from './routes/organization/update-organization-name'
 import { changeTransationStatus } from './routes/transaction/change-transaction-status'
 import { createTransation } from './routes/transaction/create-transaction'
 import { deleteTransation } from './routes/transaction/delete-transaction'
@@ -99,6 +101,8 @@ app.register(getMembership)
 app.register(getOrganizations)
 app.register(getOrganization)
 app.register(updateOrganization)
+app.register(updateOrganizationName)
+app.register(updateOrganizationDomain)
 app.register(shutdownOrganization)
 app.register(transferOrganization)
 
