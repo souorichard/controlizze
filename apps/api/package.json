@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "pnpm env:load tsx watch src/http/server.ts",
     "db:migrate": "pnpm env:load prisma migrate dev",
+    "db:seed": "pnpm env:load prisma db seed",
     "db:studio": "pnpm env:load prisma studio",
     "env:load": "dotenv -e ../../.env --"
   },
@@ -26,6 +27,7 @@
     "@controlizze/eslint-config": "workspace:*",
     "@controlizze/prettier": "workspace:*",
     "@controlizze/tsconfig": "workspace:*",
+    "@faker-js/faker": "^9.9.0",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^24.0.10",
     "bcryptjs": "^3.0.2",
@@ -34,7 +36,7 @@
     "tsx": "^4.20.3"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "pnpm env:load tsx prisma/seed.ts"
   },
   "prettier": "@controlizze/prettier",
   "eslintConfig": {
