@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-import { getCurrentOrganization } from '@/auth/auth'
+import { ability, getCurrentOrganization } from '@/auth/auth'
 import { Separator } from '@/components/ui/separator'
 import { getOrganization } from '@/http/organization/get-organization'
 
@@ -14,8 +15,15 @@ export const metadata: Metadata = {
 
 export default async function GeneralPage() {
   const currentOrganization = await getCurrentOrganization()
+  const permissions = await ability()
+
+  const canUpdateOrganization = permissions?.can('update', 'Organization')
 
   const { organization } = await getOrganization(currentOrganization!)
+
+  if (!canUpdateOrganization) {
+    redirect(`/organizations/${currentOrganization}/settings/members`)
+  }
 
   return (
     <main className="space-y-8">

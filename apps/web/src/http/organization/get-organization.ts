@@ -13,10 +13,10 @@ interface GetOrganizationResponse {
 }
 
 export async function getOrganization(
-  slug: string,
+  organization: string,
 ): Promise<GetOrganizationResponse> {
   const response = await api
-    .get(`organizations/${slug}`)
+    .get(`organizations/${organization}`)
     .json<GetOrganizationResponse>()
 
   return response

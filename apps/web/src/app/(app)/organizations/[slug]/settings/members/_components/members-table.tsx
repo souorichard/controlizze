@@ -1,5 +1,7 @@
-import { Pencil, Trash2 } from 'lucide-react'
+import { organizationSchema } from '@controlizze/auth'
+import { ArrowLeftRight, Crown, Trash2 } from 'lucide-react'
 
+import { ability, getCurrentOrganization } from '@/auth/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,10 +12,25 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { getMembers } from '@/http/member/get-members'
+import { getMembership } from '@/http/organization/get-membership'
+import { getOrganization } from '@/http/organization/get-organization'
+import { getInitials } from '@/utils/get-initials'
 
 import { RoleSelect } from './role-select'
 
-export function MembersTable() {
+export async function MembersTable() {
+  const currentOrganiation = await getCurrentOrganization()
+  const permissions = await ability()
+
+  const [{ organization }, { membership }, { members }] = await Promise.all([
+    getOrganization(currentOrganiation!),
+    getMembership(currentOrganiation!),
+    getMembers(currentOrganiation!),
+  ])
+
+  const authOrganization = organizationSchema.parse(organization)
+
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
@@ -32,40 +49,75 @@ export function MembersTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Avatar className="size-8">
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="Member avatar"
-                    />
-                    <AvatarFallback>SC</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    <span>Shadcn</span>
-                    <span className="text-muted-foreground text-xs">
-                      shadcn@acme.com
-                    </span>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <RoleSelect defaultValue="MEMBER" className="w-[160px]" />
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center justify-center gap-1">
-                  <Button size="icon" variant="outline">
-                    <Pencil className="size-4" />
-                    <span className="sr-only">Edit member</span>
-                  </Button>
-                  <Button size="icon" variant="destructive">
-                    <Trash2 className="size-4" />
-                    <span className="sr-only">Remove member</span>
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
+            {members.map((member) => {
+              return (
+                <TableRow key={member.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="size-8">
+                        {member.avatarUrl && (
+                          <AvatarImage
+                            src={member.avatarUrl}
+                            alt="Member avatar"
+                          />
+                        )}
+                        <AvatarFallback>
+                          {getInitials(member.name ?? 'Undefined')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="inline-flex items-center gap-2">
+                          {member.name ?? 'Undefined'}
+                          {membership.userId === member.userId && ' (me)'}
+                          {organization.ownerId === member.userId && (
+                            <span className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+                              <Crown className="size-4" />
+                              Owner
+                            </span>
+                          )}
+                        </span>
+                        <span className="text-muted-foreground text-xs">
+                          {member.email}
+                        </span>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <RoleSelect value={member.role} className="w-[160px]" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-center gap-1">
+                      {permissions?.can(
+                        'transfer_ownership',
+                        authOrganization,
+                      ) && (
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          disabled={member.userId === organization.ownerId}
+                        >
+                          <ArrowLeftRight className="size-4" />
+                          <span className="sr-only">Transfer ownership</span>
+                        </Button>
+                      )}
+                      {permissions?.can('delete', 'User') && (
+                        <Button
+                          size="icon"
+                          variant="destructive"
+                          disabled={
+                            member.userId === membership.userId ||
+                            member.userId === organization.ownerId
+                          }
+                        >
+                          <Trash2 className="size-4" />
+                          <span className="sr-only">Remove member</span>
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </div>
