@@ -100,7 +100,11 @@ export function OrganizationDomainForm({
         className="flex flex-col items-start gap-2 py-2"
       >
         <div className="flex w-full items-center gap-2">
-          <Input className="w-full" {...register('domain')} />
+          <Input
+            className="w-full"
+            placeholder="example.com"
+            {...register('domain')}
+          />
           <Button type="submit" variant="outline">
             Save
           </Button>

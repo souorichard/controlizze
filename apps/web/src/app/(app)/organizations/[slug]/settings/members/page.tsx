@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
 
-import { ability, getCurrentOrganization } from '@/auth/auth'
+import { ability } from '@/auth/auth'
 import { Separator } from '@/components/ui/separator'
 
 import { InviteMemberForm } from './_components/invite-member-form'
@@ -12,20 +11,18 @@ export const metadata: Metadata = {
 }
 
 export default async function MembersPage() {
-  const currentOrganization = await getCurrentOrganization()
   const permissions = await ability()
 
-  const canGetMembers = permissions?.can('get', 'User')
-
-  if (!canGetMembers) {
-    redirect(`/organizations/${currentOrganization}/settings/billing`)
-  }
+  const canInviteMembers = permissions?.can('create', 'Invite')
 
   return (
     <main className="space-y-8">
-      <InviteMemberForm />
-
-      <Separator />
+      {canInviteMembers && (
+        <>
+          <InviteMemberForm />
+          <Separator />
+        </>
+      )}
 
       <MembersTable />
     </main>

@@ -31,6 +31,10 @@ export async function MembersTable() {
 
   const authOrganization = organizationSchema.parse(organization)
 
+  const canUpdateMember = permissions?.can('update', 'User')
+  const canTransferOwnership = permissions?.can('update', authOrganization)
+  const canRemoveMember = permissions?.can('delete', 'User')
+
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
@@ -83,14 +87,19 @@ export async function MembersTable() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <RoleSelect value={member.role} className="w-[160px]" />
+                    <RoleSelect
+                      value={member.role}
+                      className="w-[160px]"
+                      disabled={
+                        member.userId === membership.userId ||
+                        member.userId === organization.ownerId ||
+                        !canUpdateMember
+                      }
+                    />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center gap-1">
-                      {permissions?.can(
-                        'transfer_ownership',
-                        authOrganization,
-                      ) && (
+                      {canTransferOwnership && (
                         <Button
                           size="icon"
                           variant="outline"
@@ -100,7 +109,7 @@ export async function MembersTable() {
                           <span className="sr-only">Transfer ownership</span>
                         </Button>
                       )}
-                      {permissions?.can('delete', 'User') && (
+                      {canRemoveMember && (
                         <Button
                           size="icon"
                           variant="destructive"
