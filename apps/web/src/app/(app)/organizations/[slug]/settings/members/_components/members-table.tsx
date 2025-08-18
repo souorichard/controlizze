@@ -17,8 +17,8 @@ import {
 import { getInitials } from '@/utils/get-initials'
 
 import { getMembersAction } from '../actions'
-import { RoleSelect } from './role-select'
 import { MembersTableSkeleton } from './skeletons/members-table-skeleton'
+import { UpdateMemberRoleSelect } from './update-member-role-select'
 
 interface MembersTableProps {
   permissions: {
@@ -51,7 +51,7 @@ export function MembersTable({
   const { canUpdateMember, canTransferOwnership, canRemoveMember } = permissions
 
   const { data, isPending } = useQuery({
-    queryKey: [`${organization}/members`],
+    queryKey: [`${organization.slug}/members`],
     queryFn: getMembersAction,
   })
 
@@ -109,9 +109,10 @@ export function MembersTable({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <RoleSelect
+                    <UpdateMemberRoleSelect
+                      organization={organization.slug}
+                      memberId={member.id}
                       value={member.role}
-                      className="w-[160px]"
                       disabled={
                         member.userId === membership.userId ||
                         member.userId === organization.ownerId ||
