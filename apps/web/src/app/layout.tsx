@@ -5,6 +5,8 @@ import { Montserrat } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
 
+import { Providers } from './providers'
+
 const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-mont-sans',
@@ -25,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} dark antialiased`}>
-        {children}
-        <Toaster richColors />
+        <Providers>
+          {children}
+          <Toaster richColors />
+        </Providers>
       </body>
     </html>
   )

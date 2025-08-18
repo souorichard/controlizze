@@ -1,13 +1,16 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+import { inviteMemberAction } from '../actions'
 import { RoleSelect } from './role-select'
 
 const inviteMemberSchema = z.object({
@@ -17,7 +20,9 @@ const inviteMemberSchema = z.object({
 
 export type InviteMemberFormData = z.infer<typeof inviteMemberSchema>
 
-export function InviteMemberForm() {
+export function InviteMemberForm({ organization }: { organization: string }) {
+  const queryClient = useQueryClient()
+
   const {
     control,
     register,
@@ -33,8 +38,16 @@ export function InviteMemberForm() {
   })
 
   async function handleInviteMember({ email, role }: InviteMemberFormData) {
-    console.log({ email, role })
+    const { success, message } = await inviteMemberAction({ email, role })
 
+    if (!success) {
+      toast.error(message)
+
+      return
+    }
+
+    queryClient.invalidateQueries({ queryKey: [`${organization}/invites`] })
+    toast.success(message)
     reset()
   }
 

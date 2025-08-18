@@ -1,7 +1,9 @@
-import { organizationSchema } from '@controlizze/auth'
+'use client'
+
+import { Role } from '@controlizze/auth'
+import { useQuery } from '@tanstack/react-query'
 import { ArrowLeftRight, Crown, Trash2 } from 'lucide-react'
 
-import { ability, getCurrentOrganization } from '@/auth/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,28 +14,46 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { getMembers } from '@/http/member/get-members'
-import { getMembership } from '@/http/organization/get-membership'
-import { getOrganization } from '@/http/organization/get-organization'
 import { getInitials } from '@/utils/get-initials'
 
+import { getMembersAction } from '../actions'
 import { RoleSelect } from './role-select'
+import { MembersTableSkeleton } from './skeletons/members-table-skeleton'
 
-export async function MembersTable() {
-  const currentOrganiation = await getCurrentOrganization()
-  const permissions = await ability()
+interface MembersTableProps {
+  permissions: {
+    canUpdateMember: boolean | undefined
+    canTransferOwnership: boolean | undefined
+    canRemoveMember: boolean | undefined
+  }
+  organization: {
+    id: string
+    name: string
+    slug: string
+    domain: string | null
+    shouldAttachUsersByDomain: boolean
+    avatarUrl: string | null
+    ownerId: string
+  }
+  membership: {
+    id: string
+    role: Role
+    userId: string
+    organizationId: string
+  }
+}
 
-  const [{ organization }, { membership }, { members }] = await Promise.all([
-    getOrganization(currentOrganiation!),
-    getMembership(currentOrganiation!),
-    getMembers(currentOrganiation!),
-  ])
+export function MembersTable({
+  permissions,
+  organization,
+  membership,
+}: MembersTableProps) {
+  const { canUpdateMember, canTransferOwnership, canRemoveMember } = permissions
 
-  const authOrganization = organizationSchema.parse(organization)
-
-  const canUpdateMember = permissions?.can('update', 'User')
-  const canTransferOwnership = permissions?.can('update', authOrganization)
-  const canRemoveMember = permissions?.can('delete', 'User')
+  const { data, isPending } = useQuery({
+    queryKey: [`${organization}/members`],
+    queryFn: getMembersAction,
+  })
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,7 +73,9 @@ export async function MembersTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {members.map((member) => {
+            {isPending && <MembersTableSkeleton />}
+
+            {data?.members.map((member) => {
               return (
                 <TableRow key={member.id}>
                   <TableCell>
@@ -98,7 +120,7 @@ export async function MembersTable() {
                     />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-end gap-1">
                       {canTransferOwnership && (
                         <Button
                           size="icon"

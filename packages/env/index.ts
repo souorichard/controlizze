@@ -3,6 +3,10 @@ import { z } from 'zod/v4'
 
 export const env = createEnv({
   server: {
+    APP_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
+
     SERVER_PORT: z.coerce.number().default(3333),
 
     DATABASE_URL: z.url(),
@@ -25,6 +29,8 @@ export const env = createEnv({
     NEXT_PUBLIC_API_URL: z.url(),
   },
   runtimeEnv: {
+    APP_ENV: process.env.APP_ENV || 'development',
+
     SERVER_PORT: process.env.PORT,
 
     DATABASE_URL: process.env.DATABASE_URL,
