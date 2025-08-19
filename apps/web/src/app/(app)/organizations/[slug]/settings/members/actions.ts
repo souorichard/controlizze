@@ -117,6 +117,6 @@ export async function transferOrganizationAction(memberId: string) {
 
   await transferOrganization({
     organization: currentOrganization!,
-    memberId,
+    transferToUserId: memberId,
   })
 }

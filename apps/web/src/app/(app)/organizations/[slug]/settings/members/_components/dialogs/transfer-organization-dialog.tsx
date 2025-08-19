@@ -44,10 +44,7 @@ export function TransferOrganizationDialog({
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <Button
-          variant="secondary"
-          onClick={() => handleTransferOrganization()}
-        >
+        <Button variant="secondary" onClick={handleTransferOrganization}>
           Confirm
         </Button>
       </AlertDialogFooter>

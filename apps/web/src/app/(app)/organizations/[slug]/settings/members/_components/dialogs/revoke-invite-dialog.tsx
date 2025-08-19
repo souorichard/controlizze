@@ -44,11 +44,13 @@ export function RevokeInviteDialog({
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <form onSubmit={handleRevokeInvite}>
-          <Button type="submit" variant="destructive">
-            Confirm
-          </Button>
-        </form>
+        <Button
+          type="submit"
+          variant="destructive"
+          onClick={handleRevokeInvite}
+        >
+          Confirm
+        </Button>
       </AlertDialogFooter>
     </AlertDialogContent>
   )
