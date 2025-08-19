@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/table'
 
 import { getInvitesAction } from '../actions'
-import { RevokeInviteDialog } from './revoke-invite-dialog'
+import { RevokeInviteDialog } from './dialogs/revoke-invite-dialog'
 import { InvitesTableSkeleton } from './skeletons/invites-table-skeleton'
 
 export function InvitesTable({ organization }: { organization: string }) {

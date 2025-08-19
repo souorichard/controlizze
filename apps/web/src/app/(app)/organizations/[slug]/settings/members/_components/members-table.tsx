@@ -4,6 +4,7 @@ import { Role } from '@controlizze/auth'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeftRight, Crown, Trash2 } from 'lucide-react'
 
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +18,7 @@ import {
 import { getInitials } from '@/utils/get-initials'
 
 import { getMembersAction } from '../actions'
+import { TransferOrganizationDialog } from './dialogs/transfer-organization-dialog'
 import { MembersTableSkeleton } from './skeletons/members-table-skeleton'
 import { UpdateMemberRoleSelect } from './update-member-role-select'
 
@@ -123,14 +125,25 @@ export function MembersTable({
                   <TableCell>
                     <div className="flex items-center justify-end gap-1">
                       {canTransferOwnership && (
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          disabled={member.userId === organization.ownerId}
-                        >
-                          <ArrowLeftRight className="size-4" />
-                          <span className="sr-only">Transfer ownership</span>
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              disabled={member.userId === organization.ownerId}
+                            >
+                              <ArrowLeftRight className="size-4" />
+                              <span className="sr-only">
+                                Transfer ownership
+                              </span>
+                            </Button>
+                          </AlertDialogTrigger>
+
+                          <TransferOrganizationDialog
+                            organization={organization.slug}
+                            memberId={member.id}
+                          />
+                        </AlertDialog>
                       )}
                       {canRemoveMember && (
                         <Button

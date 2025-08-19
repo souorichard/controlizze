@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 
-import { revokeInviteAction } from '../actions'
+import { revokeInviteAction } from '../../actions'
 
 interface RevokeInviteDialogProps {
   organization: string

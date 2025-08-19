@@ -9,6 +9,7 @@ import { getInvites } from '@/http/invite/get-invites'
 import { revokeInvite } from '@/http/invite/revoke-invite'
 import { getMembers } from '@/http/member/get-members'
 import { updateMember } from '@/http/member/update-member'
+import { transferOrganization } from '@/http/organization/transfer-organization'
 import { ActionResponse } from '@/interfaces/action-response'
 
 import { InviteMemberFormData } from './_components/invite-member-form'
@@ -109,4 +110,13 @@ export async function updateMemberAction({
     success: true,
     message: 'Member role updated successfully.',
   }
+}
+
+export async function transferOrganizationAction(memberId: string) {
+  const currentOrganization = await getCurrentOrganization()
+
+  await transferOrganization({
+    organization: currentOrganization!,
+    memberId,
+  })
 }
