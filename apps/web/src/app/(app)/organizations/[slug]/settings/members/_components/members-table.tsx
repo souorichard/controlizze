@@ -141,7 +141,7 @@ export function MembersTable({
 
                           <TransferOrganizationDialog
                             organization={organization.slug}
-                            memberId={member.id}
+                            memberId={member.userId}
                           />
                         </AlertDialog>
                       )}

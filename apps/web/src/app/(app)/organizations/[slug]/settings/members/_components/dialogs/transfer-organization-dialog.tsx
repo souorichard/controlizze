@@ -26,7 +26,7 @@ export function TransferOrganizationDialog({
   const queryClient = useQueryClient()
 
   async function handleTransferOrganization() {
-    await transferOrganizationAction(memberId)
+    await transferOrganizationAction({ transferToUserId: memberId })
 
     queryClient.invalidateQueries({ queryKey: [`${organization}/members`] })
   }

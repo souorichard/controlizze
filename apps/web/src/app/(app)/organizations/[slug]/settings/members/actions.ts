@@ -112,11 +112,17 @@ export async function updateMemberAction({
   }
 }
 
-export async function transferOrganizationAction(memberId: string) {
+interface TransferOrganizationActionProps {
+  transferToUserId: string
+}
+
+export async function transferOrganizationAction({
+  transferToUserId,
+}: TransferOrganizationActionProps) {
   const currentOrganization = await getCurrentOrganization()
 
   await transferOrganization({
     organization: currentOrganization!,
-    transferToUserId: memberId,
+    transferToUserId,
   })
 }
