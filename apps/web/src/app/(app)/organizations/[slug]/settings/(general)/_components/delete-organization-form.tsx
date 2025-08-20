@@ -5,7 +5,7 @@ import { deleteOrganizationAction } from '../actions'
 
 export function DeleteOrganizationForm() {
   return (
-    <div className="grid grid-cols-2 items-center gap-10">
+    <div className="grid grid-rows-[auto_auto] items-center gap-6 lg:grid-cols-2 lg:grid-rows-none lg:gap-10">
       <div className="space-y-2">
         <Badge variant="destructive" className="text-[10px] uppercase">
           Danger zone
@@ -19,7 +19,11 @@ export function DeleteOrganizationForm() {
       </div>
 
       <form action={deleteOrganizationAction}>
-        <Button type="submit" variant="destructive">
+        <Button
+          type="submit"
+          variant="destructive"
+          className="w-full lg:w-auto"
+        >
           Delete organization
         </Button>
       </form>

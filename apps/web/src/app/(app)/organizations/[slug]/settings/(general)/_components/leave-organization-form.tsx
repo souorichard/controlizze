@@ -7,7 +7,7 @@ export async function LeaveOrganizationForm() {
   const canLeaveOrganization = true
 
   return (
-    <div className="grid grid-cols-2 items-center gap-10">
+    <div className="grid grid-rows-[auto_auto] items-center gap-6 lg:grid-cols-2 lg:grid-rows-none lg:gap-10">
       <div className="space-y-2">
         <h2 className="font-semibold">Leave organization</h2>
         <p className="text-muted-foreground text-sm">
@@ -20,6 +20,7 @@ export async function LeaveOrganizationForm() {
         <Button
           type="submit"
           variant="secondary"
+          className="w-full lg:w-auto"
           disabled={canLeaveOrganization}
         >
           Leave organization

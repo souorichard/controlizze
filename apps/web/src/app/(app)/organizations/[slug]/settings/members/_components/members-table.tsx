@@ -66,7 +66,7 @@ export function MembersTable({
           Manage all members of your organization.
         </p>
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>

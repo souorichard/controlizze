@@ -12,7 +12,7 @@ export async function SettingsNavigation() {
   // const canGetBilling = permissions?.can('get', 'Billing')
 
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="bg-secondary/25 flex gap-1 rounded-md p-1 lg:w-[16rem] lg:flex-col lg:bg-transparent lg:p-0">
       <SettingsNavLink href={`/organizations/${currentOrganization}/settings`}>
         <Settings2 className="size-4" />
         General

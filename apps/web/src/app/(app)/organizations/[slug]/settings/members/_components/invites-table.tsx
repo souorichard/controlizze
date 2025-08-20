@@ -32,13 +32,13 @@ export function InvitesTable({ organization }: { organization: string }) {
           Manage all invites that you have sent.
         </p>
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>E-mail</TableHead>
-              <TableHead className="w-[200px]">Role</TableHead>
-              <TableHead className="w-[140px] text-center" />
+              <TableHead className="lg:w-[200px]">Role</TableHead>
+              <TableHead className="text-center lg:w-[140px]" />
             </TableRow>
           </TableHeader>
           <TableBody>

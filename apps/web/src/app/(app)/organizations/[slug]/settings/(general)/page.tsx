@@ -23,7 +23,7 @@ export default async function GeneralPage() {
   const { organization } = await getOrganization(currentOrganization!)
 
   return (
-    <main className="space-y-8">
+    <main className="w-full space-y-8">
       {canUpdateOrganization && (
         <>
           <OrganizationNameForm initialData={organization.name} />

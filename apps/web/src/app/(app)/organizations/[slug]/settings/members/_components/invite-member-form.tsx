@@ -60,32 +60,33 @@ export function InviteMemberForm({ organization }: { organization: string }) {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(handleInviteMember)} className="flex gap-2">
-        <div className="flex w-full gap-2">
-          <div className="w-full space-y-1.5">
-            <Input placeholder="john@acme.com" {...register('email')} />
+      <form
+        onSubmit={handleSubmit(handleInviteMember)}
+        className="flex w-full flex-col gap-2 md:flex-row"
+      >
+        <div className="w-full space-y-1.5">
+          <Input placeholder="john@acme.com" {...register('email')} />
 
-            {errors.email && (
-              <span className="text-destructive block text-xs">
-                {errors.email.message}
-              </span>
-            )}
-          </div>
-
-          <Controller
-            control={control}
-            name="role"
-            render={({ field }) => {
-              return (
-                <RoleSelect
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="w-[160px]"
-                />
-              )
-            }}
-          />
+          {errors.email && (
+            <span className="text-destructive block text-xs">
+              {errors.email.message}
+            </span>
+          )}
         </div>
+
+        <Controller
+          control={control}
+          name="role"
+          render={({ field }) => {
+            return (
+              <RoleSelect
+                value={field.value}
+                onValueChange={field.onChange}
+                className="w-auto md:w-[160px]"
+              />
+            )
+          }}
+        />
         <Button type="submit" variant="outline" disabled={isLoading}>
           {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Send'}
         </Button>
