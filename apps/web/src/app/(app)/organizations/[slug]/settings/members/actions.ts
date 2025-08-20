@@ -8,6 +8,7 @@ import { createInvite } from '@/http/invite/create-invite'
 import { getInvites } from '@/http/invite/get-invites'
 import { revokeInvite } from '@/http/invite/revoke-invite'
 import { getMembers } from '@/http/member/get-members'
+import { removeMember } from '@/http/member/remove-member'
 import { updateMember } from '@/http/member/update-member'
 import { transferOrganization } from '@/http/organization/transfer-organization'
 import { ActionResponse } from '@/interfaces/action-response'
@@ -124,5 +125,20 @@ export async function transferOrganizationAction({
   await transferOrganization({
     organization: currentOrganization!,
     transferToUserId,
+  })
+}
+
+interface RemoveMemberActionProps {
+  memberId: string
+}
+
+export async function removeMemberAction({
+  memberId,
+}: RemoveMemberActionProps) {
+  const currentOrganization = await getCurrentOrganization()
+
+  await removeMember({
+    organization: currentOrganization!,
+    memberId,
   })
 }

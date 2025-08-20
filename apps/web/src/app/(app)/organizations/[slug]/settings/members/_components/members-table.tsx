@@ -18,6 +18,7 @@ import {
 import { getInitials } from '@/utils/get-initials'
 
 import { getMembersAction } from '../actions'
+import { RemoveMemberDialog } from './dialogs/remove-member-dialog'
 import { TransferOrganizationDialog } from './dialogs/transfer-organization-dialog'
 import { MembersTableSkeleton } from './skeletons/members-table-skeleton'
 import { UpdateMemberRoleSelect } from './update-member-role-select'
@@ -146,17 +147,26 @@ export function MembersTable({
                         </AlertDialog>
                       )}
                       {canRemoveMember && (
-                        <Button
-                          size="icon"
-                          variant="destructive"
-                          disabled={
-                            member.userId === membership.userId ||
-                            member.userId === organization.ownerId
-                          }
-                        >
-                          <Trash2 className="size-4" />
-                          <span className="sr-only">Remove member</span>
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="destructive"
+                              disabled={
+                                member.userId === membership.userId ||
+                                member.userId === organization.ownerId
+                              }
+                            >
+                              <Trash2 className="size-4" />
+                              <span className="sr-only">Remove member</span>
+                            </Button>
+                          </AlertDialogTrigger>
+
+                          <RemoveMemberDialog
+                            organization={organization.slug}
+                            memberId={member.id}
+                          />
+                        </AlertDialog>
                       )}
                     </div>
                   </TableCell>
