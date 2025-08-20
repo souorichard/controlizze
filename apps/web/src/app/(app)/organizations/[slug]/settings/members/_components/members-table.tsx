@@ -53,7 +53,7 @@ export function MembersTable({
   const { canUpdateMember, canTransferOwnership, canRemoveMember } = permissions
 
   const { data, isPending } = useQuery({
-    queryKey: [`${organization.slug}/members`],
+    queryKey: ['members', organization.slug],
     queryFn: getMembersAction,
   })
 

@@ -9,7 +9,7 @@ import { OrganizationForm } from '@/components/organization-form'
 export default function CreateOrganizationPage() {
   return (
     <Container>
-      <HeaderContainer className="border-none pb-5">
+      <HeaderContainer className="pb-5">
         <Header />
       </HeaderContainer>
       <MainContainer>

@@ -20,7 +20,7 @@ import { InvitesTableSkeleton } from './skeletons/invites-table-skeleton'
 
 export function InvitesTable({ organization }: { organization: string }) {
   const { data, isPending } = useQuery({
-    queryKey: [`${organization}/invites`],
+    queryKey: ['invites', organization],
     queryFn: getInvitesAction,
   })
 

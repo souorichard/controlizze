@@ -28,7 +28,7 @@ export function RevokeInviteDialog({
   async function handleRevokeInvite() {
     await revokeInviteAction(inviteId)
 
-    queryClient.invalidateQueries({ queryKey: [`${organization}/invites`] })
+    queryClient.invalidateQueries({ queryKey: ['invites', organization] })
   }
 
   return (

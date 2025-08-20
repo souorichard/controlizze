@@ -28,7 +28,7 @@ export function TransferOrganizationDialog({
   async function handleTransferOrganization() {
     await transferOrganizationAction({ transferToUserId: memberId })
 
-    queryClient.invalidateQueries({ queryKey: [`${organization}/members`] })
+    queryClient.invalidateQueries({ queryKey: ['members', organization] })
   }
 
   return (

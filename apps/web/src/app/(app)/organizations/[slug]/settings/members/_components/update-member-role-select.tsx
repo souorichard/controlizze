@@ -34,7 +34,7 @@ export function UpdateMemberRoleSelect({
       return
     }
 
-    queryClient.invalidateQueries({ queryKey: [`${organization}/members`] })
+    queryClient.invalidateQueries({ queryKey: ['members', organization] })
     toast.success(message)
   }
 
