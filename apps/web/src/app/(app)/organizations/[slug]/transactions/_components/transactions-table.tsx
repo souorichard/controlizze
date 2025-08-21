@@ -1,0 +1,116 @@
+'use client'
+
+import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { AlertCircle, EllipsisVertical } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+
+import { getTransactionsAction } from '../actions'
+import { statusHandler } from './functions/status-handler'
+import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
+
+dayjs.extend(relativeTime)
+
+export function TransactionsTable({ organization }: { organization: string }) {
+  const { data, isPending } = useQuery({
+    queryKey: ['transactions', organization],
+    queryFn: getTransactionsAction,
+  })
+
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[160px]">Created at</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead className="w-[140px]">Type</TableHead>
+            <TableHead className="w-[180px]">Category</TableHead>
+            <TableHead className="w-[160px]">Status</TableHead>
+            <TableHead className="w-[140px] text-right">Amount</TableHead>
+            <TableHead className="w-[120px]" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isPending && <TransactionsTableSkeleton />}
+
+          {data?.transactions.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={7} className="h-20">
+                <div className="flex items-center justify-center gap-2">
+                  <AlertCircle className="text-primary size-4" />
+                  No transactions.
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+
+          {data?.transactions.map((transaction) => {
+            return (
+              <TableRow key={transaction.id}>
+                <TableCell>{dayjs(transaction.createdAt).fromNow()}</TableCell>
+                <TableCell>{transaction.description}</TableCell>
+                <TableCell>{transaction.type}</TableCell>
+                <TableCell>{transaction.category}</TableCell>
+                <TableCell>
+                  {statusHandler({ status: transaction.status })}
+                </TableCell>
+                <TableCell className="text-right font-medium">
+                  {transaction.amount.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </TableCell>
+                <TableCell className="flex items-center justify-end">
+                  <Button size="icon" variant="outline">
+                    <EllipsisVertical className="size-4" />
+                    <span className="sr-only">Options</span>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={4} />
+            <TableCell colSpan={1}>
+              <div className="flex flex-col justify-center gap-4 text-sm font-semibold">
+                <span className="text-primary text-sm font-medium">
+                  Subtotal{' '}
+                  <span className="text-muted-foreground font-normal">
+                    (per page)
+                  </span>
+                </span>
+                <span className="text-primary text-sm font-medium">
+                  Total{' '}
+                  <span className="text-muted-foreground font-normal">
+                    (per page)
+                  </span>
+                </span>
+              </div>
+            </TableCell>
+            <TableCell colSpan={1}>
+              <div className="flex flex-col items-end justify-center gap-4 text-sm font-semibold">
+                <span>R$ 14.580,00</span>
+                <span>R$ 204.190,00</span>
+              </div>
+            </TableCell>
+            <TableCell colSpan={1} />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </div>
+  )
+}
