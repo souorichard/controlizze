@@ -3,9 +3,8 @@
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { AlertCircle, EllipsisVertical } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -18,7 +17,9 @@ import {
 
 import { getTransactionsAction } from '../actions'
 import { statusHandler } from './functions/status-handler'
+import { typeHandler } from './functions/type-handler'
 import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
+import { TransactionOptions } from './transaction-options'
 
 dayjs.extend(relativeTime)
 
@@ -61,7 +62,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
               <TableRow key={transaction.id}>
                 <TableCell>{dayjs(transaction.createdAt).fromNow()}</TableCell>
                 <TableCell>{transaction.description}</TableCell>
-                <TableCell>{transaction.type}</TableCell>
+                <TableCell>{typeHandler({ type: transaction.type })}</TableCell>
                 <TableCell>{transaction.category}</TableCell>
                 <TableCell>
                   {statusHandler({ status: transaction.status })}
@@ -73,10 +74,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
                   })}
                 </TableCell>
                 <TableCell className="flex items-center justify-end">
-                  <Button size="icon" variant="outline">
-                    <EllipsisVertical className="size-4" />
-                    <span className="sr-only">Options</span>
-                  </Button>
+                  <TransactionOptions transaction={transaction} />
                 </TableCell>
               </TableRow>
             )
