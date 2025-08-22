@@ -13,7 +13,9 @@ export default function CreateOrganizationPage() {
         <Header />
       </HeaderContainer>
       <MainContainer>
-        <h1 className="text-2xl font-semibold">Create organization</h1>
+        <h1 className="text-xl font-semibold md:text-2xl">
+          Create organization
+        </h1>
 
         <OrganizationForm />
       </MainContainer>
