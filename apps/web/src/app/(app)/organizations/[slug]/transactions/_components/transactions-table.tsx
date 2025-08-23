@@ -3,8 +3,9 @@
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Trash2 } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -36,10 +37,10 @@ export function TransactionsTable({ organization }: { organization: string }) {
           <TableRow>
             <TableHead className="w-[160px]">Created at</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead className="w-[140px]">Type</TableHead>
-            <TableHead className="w-[180px]">Category</TableHead>
+            <TableHead className="w-[120px]">Type</TableHead>
+            <TableHead className="w-[160px]">Category</TableHead>
             <TableHead className="w-[160px]">Status</TableHead>
-            <TableHead className="w-[140px] text-right">Amount</TableHead>
+            <TableHead className="w-[132px] text-right">Amount</TableHead>
             <TableHead className="w-[120px]" />
           </TableRow>
         </TableHeader>
@@ -63,7 +64,9 @@ export function TransactionsTable({ organization }: { organization: string }) {
                 <TableCell>{dayjs(transaction.createdAt).fromNow()}</TableCell>
                 <TableCell>{transaction.description}</TableCell>
                 <TableCell>{typeHandler({ type: transaction.type })}</TableCell>
-                <TableCell>{transaction.category}</TableCell>
+                <TableCell className="max-w-[160px] truncate">
+                  {transaction.category}
+                </TableCell>
                 <TableCell>
                   {statusHandler({ status: transaction.status })}
                 </TableCell>
@@ -73,8 +76,12 @@ export function TransactionsTable({ organization }: { organization: string }) {
                     currency: 'BRL',
                   })}
                 </TableCell>
-                <TableCell className="flex items-center justify-end">
+                <TableCell className="flex items-center justify-end gap-2">
                   <TransactionOptions transaction={transaction} />
+                  <Button size="icon" variant="destructive">
+                    <Trash2 className="size-4" />
+                    <span className="sr-only">Delete transaction</span>
+                  </Button>
                 </TableCell>
               </TableRow>
             )
@@ -87,13 +94,13 @@ export function TransactionsTable({ organization }: { organization: string }) {
               <div className="flex flex-col justify-center gap-4 text-sm font-semibold">
                 <span className="text-primary text-sm font-medium">
                   Subtotal{' '}
-                  <span className="text-muted-foreground font-normal">
+                  <span className="text-muted-foreground text-xs font-normal">
                     (per page)
                   </span>
                 </span>
                 <span className="text-primary text-sm font-medium">
                   Total{' '}
-                  <span className="text-muted-foreground font-normal">
+                  <span className="text-muted-foreground text-xs font-normal">
                     (per page)
                   </span>
                 </span>
