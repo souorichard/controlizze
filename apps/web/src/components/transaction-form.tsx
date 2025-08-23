@@ -37,6 +37,7 @@ export function TransactionForm({ organization }: { organization: string }) {
   const queryClient = useQueryClient()
 
   const {
+    watch,
     control,
     register,
     handleSubmit,
@@ -72,6 +73,10 @@ export function TransactionForm({ organization }: { organization: string }) {
     reset()
   }
 
+  const type = watch('type')
+
+  console.log(type)
+
   return (
     <form
       onSubmit={handleSubmit(handleUpsertTransaction)}
@@ -88,28 +93,6 @@ export function TransactionForm({ organization }: { organization: string }) {
         {errors.description && (
           <span className="text-destructive block text-xs">
             {errors.description.message}
-          </span>
-        )}
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="category">Category</Label>
-        <Controller
-          control={control}
-          name="category"
-          render={({ field }) => {
-            return (
-              <CategorySelect
-                value={field.value}
-                onValueChange={field.onChange}
-                className="w-full"
-              />
-            )
-          }}
-        />
-        {errors.category && (
-          <span className="text-destructive block text-xs">
-            {errors.category.message}
           </span>
         )}
       </div>
@@ -136,6 +119,29 @@ export function TransactionForm({ organization }: { organization: string }) {
         {errors.type && (
           <span className="text-destructive block text-xs">
             {errors.type.message}
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="category">Category</Label>
+        <Controller
+          control={control}
+          name="category"
+          render={({ field }) => {
+            return (
+              <CategorySelect
+                value={field.value}
+                onValueChange={field.onChange}
+                type={type}
+                className="w-full"
+              />
+            )
+          }}
+        />
+        {errors.category && (
+          <span className="text-destructive block text-xs">
+            {errors.category.message}
           </span>
         )}
       </div>
