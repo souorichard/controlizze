@@ -50,7 +50,9 @@ export async function ProfileButton() {
 
         {currentOrganization && (
           <DropdownMenuItem className="md:hidden" asChild>
-            <Link href={`/organizations/${currentOrganization}/profile`}>
+            <Link
+              href={`/organizations/${currentOrganization}/transactions/new`}
+            >
               <CirclePlus className="text-primary size-4" />
               Create transaction
             </Link>

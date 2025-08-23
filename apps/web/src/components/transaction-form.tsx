@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -32,12 +33,15 @@ const upsertTransactionSchema = z.object({
 
 export type UpsertTransactionFormData = z.infer<typeof upsertTransactionSchema>
 
-export function TransactionForm() {
+export function TransactionForm({ organization }: { organization: string }) {
+  const queryClient = useQueryClient()
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors, isLoading },
+    reset,
   } = useForm<UpsertTransactionFormData>({
     resolver: zodResolver(upsertTransactionSchema),
   })
@@ -63,7 +67,9 @@ export function TransactionForm() {
       return
     }
 
+    queryClient.invalidateQueries({ queryKey: ['transactions', organization] })
     toast.success(message)
+    reset()
   }
 
   return (

@@ -60,6 +60,7 @@ export function OrganizationForm() {
     register,
     handleSubmit,
     formState: { errors, isLoading },
+    reset,
   } = useForm<UpsertOrganizationFormData>({
     resolver: zodResolver(upsertOrganizationSchema),
   })
@@ -82,6 +83,7 @@ export function OrganizationForm() {
     }
 
     toast.success(message)
+    reset()
   }
 
   return (

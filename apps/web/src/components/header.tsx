@@ -27,9 +27,13 @@ export async function Header() {
 
       <div className="flex items-center gap-4">
         {currentOrganization && (
-          <Button size="sm" className="hidden md:inline-flex">
-            <CirclePlus className="size-4" />
-            New transaction
+          <Button size="sm" className="hidden md:inline-flex" asChild>
+            <Link
+              href={`/organizations/${currentOrganization}/transactions/new`}
+            >
+              <CirclePlus className="size-4" />
+              New transaction
+            </Link>
           </Button>
         )}
 
