@@ -112,15 +112,25 @@ export function TransactionsTable({ organization }: { organization: string }) {
                 <span className="text-primary text-sm font-medium">
                   Total{' '}
                   <span className="text-muted-foreground text-xs font-normal">
-                    (per page)
+                    (in general)
                   </span>
                 </span>
               </div>
             </TableCell>
             <TableCell colSpan={1}>
               <div className="flex flex-col items-end justify-center gap-4 text-sm font-semibold">
-                <span>R$ 14.580,00</span>
-                <span>R$ 204.190,00</span>
+                <span>
+                  {data?.subtotal.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </span>
+                <span>
+                  {data?.total.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </span>
               </div>
             </TableCell>
             <TableCell colSpan={1} />

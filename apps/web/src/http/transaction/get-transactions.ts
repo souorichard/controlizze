@@ -15,6 +15,8 @@ interface GetTransactionsResponse {
     }
     createdAt: string
   }[]
+  subtotal: number
+  total: number
 }
 
 export async function getTransactions(organization: string) {

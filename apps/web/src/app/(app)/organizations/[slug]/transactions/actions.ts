@@ -55,7 +55,9 @@ export async function createTransactionAction({
 export async function getTransactionsAction() {
   const currentOrganization = await getCurrentOrganization()
 
-  const { transactions } = await getTransactions(currentOrganization!)
+  const { transactions, subtotal, total } = await getTransactions(
+    currentOrganization!,
+  )
 
   const transactionsWithFormattedAmount = transactions.map((transaction) => ({
     ...transaction,
@@ -64,6 +66,8 @@ export async function getTransactionsAction() {
 
   return {
     transactions: transactionsWithFormattedAmount,
+    subtotal: centsToReal(subtotal),
+    total: centsToReal(total),
   }
 }
 
