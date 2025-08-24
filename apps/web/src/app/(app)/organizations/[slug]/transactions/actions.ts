@@ -52,12 +52,21 @@ export async function createTransactionAction({
   }
 }
 
-export async function getTransactionsAction() {
+interface GetTransactionsActionProps {
+  page: string | null
+  // perPage?: string | null
+}
+
+export async function getTransactionsAction({
+  page,
+}: GetTransactionsActionProps) {
   const currentOrganization = await getCurrentOrganization()
 
-  const { transactions, subtotal, total } = await getTransactions(
-    currentOrganization!,
-  )
+  const { transactions, pageSubtotal, totalAmount, totalCount } =
+    await getTransactions({
+      organization: currentOrganization!,
+      page: page ?? '1',
+    })
 
   const transactionsWithFormattedAmount = transactions.map((transaction) => ({
     ...transaction,
@@ -66,8 +75,9 @@ export async function getTransactionsAction() {
 
   return {
     transactions: transactionsWithFormattedAmount,
-    subtotal: centsToReal(subtotal),
-    total: centsToReal(total),
+    pageSubtotal: centsToReal(pageSubtotal),
+    totalAmount: centsToReal(totalAmount),
+    totalCount,
   }
 }
 

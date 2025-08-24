@@ -1,5 +1,11 @@
 import { api } from '../api-client'
 
+interface GetTransactionsRequest {
+  organization: string
+  page?: string | null
+  perPage?: string | null
+}
+
 interface GetTransactionsResponse {
   transactions: {
     id: string
@@ -15,17 +21,28 @@ interface GetTransactionsResponse {
     }
     createdAt: string
   }[]
-  subtotal: number
-  total: number
+  pageSubtotal: number
+  totalAmount: number
+  totalCount: number
 }
 
-export async function getTransactions(organization: string) {
+export async function getTransactions({
+  organization,
+  page,
+  perPage,
+}: GetTransactionsRequest) {
+  const pageNumber = page ?? '1'
+  const perPageNumber = perPage ?? '10'
+
   const response = await api
-    .get(`organizations/${organization}/transactions`, {
-      next: {
-        tags: [`${organization}/transactions`],
+    .get(
+      `organizations/${organization}/transactions?page=${pageNumber}&perPage=${perPageNumber}`,
+      {
+        next: {
+          tags: [`${organization}/transactions`],
+        },
       },
-    })
+    )
     .json<GetTransactionsResponse>()
 
   return response

@@ -49,8 +49,9 @@ export async function getTransations(app: FastifyInstance) {
                   createdAt: z.date(),
                 }),
               ),
-              subtotal: z.number(),
-              total: z.number(),
+              pageSubtotal: z.number(),
+              totalAmount: z.number(),
+              totalCount: z.number(),
             }),
           },
         },
@@ -71,45 +72,52 @@ export async function getTransations(app: FastifyInstance) {
           )
         }
 
-        const [rawTransactions, totalGeneral] = await Promise.all([
-          prisma.transacion.findMany({
-            select: {
-              id: true,
-              description: true,
-              category: true,
-              type: true,
-              status: true,
-              amount: true,
-              organizationId: true,
-              owner: {
-                select: {
-                  id: true,
-                  name: true,
-                  avatarUrl: true,
+        const [rawTransactions, transactionsCount, totalGeneral] =
+          await Promise.all([
+            prisma.transacion.findMany({
+              select: {
+                id: true,
+                description: true,
+                category: true,
+                type: true,
+                status: true,
+                amount: true,
+                organizationId: true,
+                owner: {
+                  select: {
+                    id: true,
+                    name: true,
+                    avatarUrl: true,
+                  },
                 },
+                createdAt: true,
               },
-              createdAt: true,
-            },
-            where: {
-              organizationId: organization.id,
-            },
-            orderBy: {
-              createdAt: 'desc',
-            },
-            skip: (page - 1) * perPage,
-            take: perPage,
-          }),
+              where: {
+                organizationId: organization.id,
+              },
+              orderBy: {
+                createdAt: 'desc',
+              },
+              skip: (page - 1) * perPage,
+              take: perPage,
+            }),
 
-          prisma.transacion.aggregate({
-            _sum: {
-              amount: true,
-            },
-            where: {
-              organizationId: organization.id,
-              status: { not: 'CANCELLED' },
-            },
-          }),
-        ])
+            prisma.transacion.count({
+              where: {
+                organizationId: organization.id,
+              },
+            }),
+
+            prisma.transacion.aggregate({
+              _sum: {
+                amount: true,
+              },
+              where: {
+                organizationId: organization.id,
+                status: { not: 'CANCELLED' },
+              },
+            }),
+          ])
 
         const formattedTransactions = rawTransactions.map((transaction) => ({
           ...transaction,
@@ -120,10 +128,13 @@ export async function getTransations(app: FastifyInstance) {
           .filter((transaction) => transaction.status !== 'CANCELLED')
           .reduce((acc, transaction) => acc + transaction.amount, 0)
 
+        const total = Number(totalGeneral._sum.amount ?? 0)
+
         return {
           transactions: formattedTransactions,
-          subtotal,
-          total: Number(totalGeneral._sum.amount ?? 0),
+          pageSubtotal: subtotal,
+          totalAmount: total,
+          totalCount: transactionsCount,
         }
       },
     )

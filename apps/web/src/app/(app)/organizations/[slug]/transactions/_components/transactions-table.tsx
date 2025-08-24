@@ -4,7 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { AlertCircle, Trash2 } from 'lucide-react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
+import { Pagination } from '@/components/pagination'
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,116 +29,146 @@ import { TransactionOptions } from './transaction-options'
 dayjs.extend(relativeTime)
 
 export function TransactionsTable({ organization }: { organization: string }) {
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  const searchParams = useSearchParams()
+
+  const page = searchParams.get('page') ?? '1'
+  const perPage = searchParams.get('page') ?? '10'
+
   const { data, isPending } = useQuery({
-    queryKey: ['transactions', organization],
-    queryFn: getTransactionsAction,
+    queryKey: ['transactions', organization, page],
+    queryFn: getTransactionsAction.bind(null, { page }),
   })
 
+  function handlePaginate(page: number) {
+    const params = new URLSearchParams(searchParams)
+
+    params.set('page', page.toString())
+
+    replace(`${pathname}?${params.toString()}`)
+  }
+
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[160px]">Created at</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead className="w-[120px]">Type</TableHead>
-            <TableHead className="w-[160px]">Category</TableHead>
-            <TableHead className="w-[160px]">Status</TableHead>
-            <TableHead className="w-[132px] text-right">Amount</TableHead>
-            <TableHead className="w-[120px]" />
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isPending && <TransactionsTableSkeleton />}
-
-          {data?.transactions.length === 0 && (
+    <div className="space-y-3">
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={7} className="h-20">
-                <div className="flex items-center justify-center gap-2">
-                  <AlertCircle className="text-primary size-4" />
-                  No transactions.
-                </div>
-              </TableCell>
+              <TableHead className="w-[160px]">Created at</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead className="w-[120px]">Type</TableHead>
+              <TableHead className="w-[160px]">Category</TableHead>
+              <TableHead className="w-[160px]">Status</TableHead>
+              <TableHead className="w-[132px] text-right">Amount</TableHead>
+              <TableHead className="w-[120px]" />
             </TableRow>
-          )}
+          </TableHeader>
+          <TableBody>
+            {isPending && <TransactionsTableSkeleton />}
 
-          {data?.transactions.map((transaction) => {
-            return (
-              <TableRow key={transaction.id}>
-                <TableCell>{dayjs(transaction.createdAt).fromNow()}</TableCell>
-                <TableCell>{transaction.description}</TableCell>
-                <TableCell>{typeHandler({ type: transaction.type })}</TableCell>
-                <TableCell className="max-w-[160px] truncate">
-                  {transaction.category}
-                </TableCell>
-                <TableCell>
-                  {statusHandler({ status: transaction.status })}
-                </TableCell>
-                <TableCell className="text-right font-medium">
-                  {transaction.amount.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </TableCell>
-                <TableCell className="flex items-center justify-end gap-2">
-                  <TransactionOptions transaction={transaction} />
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button size="icon" variant="destructive">
-                        <Trash2 className="size-4" />
-                        <span className="sr-only">Delete transaction</span>
-                      </Button>
-                    </AlertDialogTrigger>
-
-                    <DeleteTransactionDialog
-                      organization={organization}
-                      transactionId={transaction.id}
-                    />
-                  </AlertDialog>
+            {data?.transactions.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className="h-20">
+                  <div className="flex items-center justify-center gap-2">
+                    <AlertCircle className="text-primary size-4" />
+                    No transactions.
+                  </div>
                 </TableCell>
               </TableRow>
-            )
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={4} />
-            <TableCell colSpan={1}>
-              <div className="flex flex-col justify-center gap-4 text-sm font-semibold">
-                <span className="text-primary text-sm font-medium">
-                  Subtotal{' '}
-                  <span className="text-muted-foreground text-xs font-normal">
-                    (per page)
+            )}
+
+            {data?.transactions.map((transaction) => {
+              return (
+                <TableRow key={transaction.id}>
+                  <TableCell>
+                    {dayjs(transaction.createdAt).fromNow()}
+                  </TableCell>
+                  <TableCell>{transaction.description}</TableCell>
+                  <TableCell>
+                    {typeHandler({ type: transaction.type })}
+                  </TableCell>
+                  <TableCell className="max-w-[160px] truncate">
+                    {transaction.category}
+                  </TableCell>
+                  <TableCell>
+                    {statusHandler({ status: transaction.status })}
+                  </TableCell>
+                  <TableCell className="text-right font-medium">
+                    {transaction.amount.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </TableCell>
+                  <TableCell className="flex items-center justify-end gap-2">
+                    <TransactionOptions transaction={transaction} />
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button size="icon" variant="destructive">
+                          <Trash2 className="size-4" />
+                          <span className="sr-only">Delete transaction</span>
+                        </Button>
+                      </AlertDialogTrigger>
+
+                      <DeleteTransactionDialog
+                        organization={organization}
+                        transactionId={transaction.id}
+                      />
+                    </AlertDialog>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={4} />
+              <TableCell colSpan={1}>
+                <div className="flex flex-col justify-center gap-4 text-sm font-semibold">
+                  <span className="text-primary text-sm font-medium">
+                    Subtotal{' '}
+                    <span className="text-muted-foreground text-xs font-normal">
+                      (per page)
+                    </span>
                   </span>
-                </span>
-                <span className="text-primary text-sm font-medium">
-                  Total{' '}
-                  <span className="text-muted-foreground text-xs font-normal">
-                    (in general)
+                  <span className="text-primary text-sm font-medium">
+                    Total{' '}
+                    <span className="text-muted-foreground text-xs font-normal">
+                      (in general)
+                    </span>
                   </span>
-                </span>
-              </div>
-            </TableCell>
-            <TableCell colSpan={1}>
-              <div className="flex flex-col items-end justify-center gap-4 text-sm font-semibold">
-                <span>
-                  {data?.subtotal.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </span>
-                <span>
-                  {data?.total.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </span>
-              </div>
-            </TableCell>
-            <TableCell colSpan={1} />
-          </TableRow>
-        </TableFooter>
-      </Table>
+                </div>
+              </TableCell>
+              <TableCell colSpan={1}>
+                <div className="flex flex-col items-end justify-center gap-4 text-sm font-semibold">
+                  <span>
+                    {data?.pageSubtotal.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }) ?? 'R$ 0,00'}
+                  </span>
+                  <span>
+                    {data?.totalAmount.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }) ?? 'R$ 0,00'}
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell colSpan={1} />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+
+      {data && (
+        <Pagination
+          page={Number(page)}
+          perPage={Number(perPage)}
+          total={data?.totalCount}
+          onPageChange={handlePaginate}
+        />
+      )}
     </div>
   )
 }
