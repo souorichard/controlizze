@@ -11,8 +11,6 @@ export async function transferOrganization({
   organization,
   transferToUserId,
 }: TransferOrganizationRequest): Promise<TransferOrganizationResponse> {
-  console.log({ transferToUserId })
-
   const response = await api
     .patch(`organizations/${organization}/owner`, {
       json: {

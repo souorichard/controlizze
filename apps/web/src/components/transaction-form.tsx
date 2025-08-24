@@ -54,6 +54,8 @@ export function TransactionForm({ organization }: { organization: string }) {
     status,
     amount,
   }: UpsertTransactionFormData) {
+    console.log(amount)
+
     const { success, message } = await createTransactionAction({
       description,
       category,
@@ -74,8 +76,6 @@ export function TransactionForm({ organization }: { organization: string }) {
   }
 
   const type = watch('type')
-
-  console.log(type)
 
   return (
     <form
@@ -175,10 +175,42 @@ export function TransactionForm({ organization }: { organization: string }) {
 
       <div className="space-y-1.5">
         <Label htmlFor="amount">Amount</Label>
-        <Input
+        {/* <Input
           id="amount"
           placeholder="Enter an amount"
           {...register('amount')}
+        /> */}
+        <Controller
+          control={control}
+          name="amount"
+          render={({ field }) => {
+            function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+              // get only numbers
+              const rawValue = e.target.value.replace(/\D/g, '')
+
+              // divide by 100 to get the correct value
+              const numericValue = Number(rawValue) / 100
+
+              // send numeric value to form without R$
+              field.onChange(numericValue.toString())
+            }
+
+            return (
+              <Input
+                id="amount"
+                placeholder="R$ 0,00"
+                value={
+                  field.value
+                    ? Number(field.value).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })
+                    : ''
+                }
+                onChange={handleChange}
+              />
+            )
+          }}
         />
 
         {errors.amount && (

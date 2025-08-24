@@ -8,6 +8,7 @@ import { createTransaction } from '@/http/transaction/create-transaction'
 import { deleteTransaction } from '@/http/transaction/delete-transaction'
 import { getTransactions } from '@/http/transaction/get-transactions'
 import { ActionResponse } from '@/interfaces/action-response'
+import { centsToReal, realToCents } from '@/utils/coin-converter'
 
 export async function createTransactionAction({
   description,
@@ -19,13 +20,15 @@ export async function createTransactionAction({
   const currentOrganization = await getCurrentOrganization()
 
   try {
+    const formattedAmount = realToCents(Number(amount))
+
     await createTransaction({
       organization: currentOrganization!,
       description,
       category,
       type,
       status,
-      amount: Number(amount),
+      amount: formattedAmount,
     })
   } catch (error) {
     if (error instanceof HTTPError) {
@@ -54,8 +57,13 @@ export async function getTransactionsAction() {
 
   const { transactions } = await getTransactions(currentOrganization!)
 
+  const transactionsWithFormattedAmount = transactions.map((transaction) => ({
+    ...transaction,
+    amount: centsToReal(transaction.amount),
+  }))
+
   return {
-    transactions,
+    transactions: transactionsWithFormattedAmount,
   }
 }
 
