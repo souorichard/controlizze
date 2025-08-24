@@ -12,34 +12,34 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 
-import { removeMemberAction } from '../../actions'
+import { deleteTransactionAction } from '../../actions'
 
-interface RemoveMemberDialogProps {
+interface DeleteTransactionDialogProps {
   organization: string
-  memberId: string
+  transactionId: string
 }
 
-export function RemoveMemberDialog({
+export function DeleteTransactionDialog({
   organization,
-  memberId,
-}: RemoveMemberDialogProps) {
+  transactionId,
+}: DeleteTransactionDialogProps) {
   const queryClient = useQueryClient()
 
-  async function handleRemoveMember() {
-    await removeMemberAction({ memberId })
+  async function handleDeleteTransaction() {
+    await deleteTransactionAction({ transactionId })
 
-    queryClient.invalidateQueries({ queryKey: ['members', organization] })
+    queryClient.invalidateQueries({ queryKey: ['transactions', organization] })
   }
 
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          Are you sure you want to remove this member?
+          Are you sure you want to delete this transaction?
         </AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. The user will no longer be part of this
-          organization.
+          This action cannot be undone. This will permanently delete the
+          transaction from our organization.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
@@ -47,7 +47,7 @@ export function RemoveMemberDialog({
         <Button
           type="submit"
           variant="destructive"
-          onClick={handleRemoveMember}
+          onClick={handleDeleteTransaction}
         >
           Confirm
         </Button>

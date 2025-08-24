@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { AlertCircle, Trash2 } from 'lucide-react'
 
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -17,6 +18,7 @@ import {
 } from '@/components/ui/table'
 
 import { getTransactionsAction } from '../actions'
+import { DeleteTransactionDialog } from './dialogs/delete-transaction-dialog'
 import { statusHandler } from './functions/status-handler'
 import { typeHandler } from './functions/type-handler'
 import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
@@ -78,10 +80,19 @@ export function TransactionsTable({ organization }: { organization: string }) {
                 </TableCell>
                 <TableCell className="flex items-center justify-end gap-2">
                   <TransactionOptions transaction={transaction} />
-                  <Button size="icon" variant="destructive">
-                    <Trash2 className="size-4" />
-                    <span className="sr-only">Delete transaction</span>
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="icon" variant="destructive">
+                        <Trash2 className="size-4" />
+                        <span className="sr-only">Delete transaction</span>
+                      </Button>
+                    </AlertDialogTrigger>
+
+                    <DeleteTransactionDialog
+                      organization={organization}
+                      transactionId={transaction.id}
+                    />
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             )
