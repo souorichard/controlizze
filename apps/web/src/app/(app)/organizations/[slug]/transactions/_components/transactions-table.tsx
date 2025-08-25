@@ -25,6 +25,7 @@ import { statusHandler } from './functions/status-handler'
 import { typeHandler } from './functions/type-handler'
 import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
 import { TransactionOptions } from './transaction-options'
+import { TransactionsFilter } from './transactions-filter'
 
 dayjs.extend(relativeTime)
 
@@ -51,6 +52,8 @@ export function TransactionsTable({ organization }: { organization: string }) {
 
   return (
     <div className="space-y-3">
+      <TransactionsFilter />
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

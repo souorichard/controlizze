@@ -66,7 +66,7 @@ export function TransactionForm({
       category: initialData?.category ?? '',
       type: initialData?.type ?? 'EXPENSE',
       status: initialData?.status ?? 'PENDING',
-      amount: String(initialData?.amount) ?? '',
+      amount: initialData?.amount ? String(initialData.amount) : '',
     },
   })
 
