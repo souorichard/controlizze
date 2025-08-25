@@ -101,7 +101,10 @@ export function TransactionsTable({ organization }: { organization: string }) {
                     })}
                   </TableCell>
                   <TableCell className="flex items-center justify-end gap-2">
-                    <TransactionOptions transaction={transaction} />
+                    <TransactionOptions
+                      organization={organization}
+                      transaction={transaction}
+                    />
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button size="icon" variant="destructive">

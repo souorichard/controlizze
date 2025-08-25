@@ -5,6 +5,7 @@ import { auth, getCurrentOrganization } from '@/auth/auth'
 import { getInitials } from '@/utils/get-initials'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Button } from './ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,8 +21,11 @@ export async function ProfileButton() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Menu className="size-6" />
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <Menu className="size-6 cursor-pointer" />
+          <span className="sr-only">Open user menu</span>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <div className="flex items-center gap-3 p-2 outline-none">

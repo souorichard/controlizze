@@ -1,4 +1,4 @@
-import { CirclePlus } from 'lucide-react'
+import { CirclePlus, UserPlus2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -39,7 +39,13 @@ export async function Header() {
 
         <Separator orientation="vertical" className="!h-5" />
 
-        <ProfileButton />
+        <div className="flex items-center gap-2">
+          <Button size="icon" variant="ghost">
+            <UserPlus2 className="size-4" />
+            <span className="sr-only">Pending invites</span>
+          </Button>
+          <ProfileButton />
+        </div>
       </div>
     </header>
   )

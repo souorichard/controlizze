@@ -3,5 +3,5 @@ export function centsToReal(cents: number): number {
 }
 
 export function realToCents(real: number): number {
-  return real * 100
+  return Math.round(real * 100)
 }

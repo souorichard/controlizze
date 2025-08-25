@@ -7,10 +7,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
 
-import { createTransactionAction } from '@/app/(app)/organizations/[slug]/transactions/actions'
+import {
+  createTransactionAction,
+  updateTransactionAction,
+} from '@/app/(app)/organizations/[slug]/transactions/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Transaction } from '@/interfaces/transaction'
 
 import { CategorySelect } from './category-select'
 import {
@@ -33,7 +37,19 @@ const upsertTransactionSchema = z.object({
 
 export type UpsertTransactionFormData = z.infer<typeof upsertTransactionSchema>
 
-export function TransactionForm({ organization }: { organization: string }) {
+interface TransactionFormProps {
+  organization: string
+  transactionId?: string
+  initialData?: Transaction
+  isUpdating?: boolean
+}
+
+export function TransactionForm({
+  organization,
+  transactionId,
+  initialData,
+  isUpdating,
+}: TransactionFormProps) {
   const queryClient = useQueryClient()
 
   const {
@@ -45,6 +61,13 @@ export function TransactionForm({ organization }: { organization: string }) {
     reset,
   } = useForm<UpsertTransactionFormData>({
     resolver: zodResolver(upsertTransactionSchema),
+    defaultValues: {
+      description: initialData?.description ?? '',
+      category: initialData?.category ?? '',
+      type: initialData?.type ?? 'EXPENSE',
+      status: initialData?.status ?? 'PENDING',
+      amount: String(initialData?.amount) ?? '',
+    },
   })
 
   async function handleUpsertTransaction({
@@ -54,15 +77,22 @@ export function TransactionForm({ organization }: { organization: string }) {
     status,
     amount,
   }: UpsertTransactionFormData) {
-    console.log(amount)
-
-    const { success, message } = await createTransactionAction({
-      description,
-      category,
-      type,
-      status,
-      amount,
-    })
+    const { success, message } = isUpdating
+      ? await updateTransactionAction({
+          transactionId: transactionId!,
+          description,
+          category,
+          type,
+          status,
+          amount,
+        })
+      : await createTransactionAction({
+          description,
+          category,
+          type,
+          status,
+          amount,
+        })
 
     if (!success) {
       toast.error(message)
@@ -72,7 +102,10 @@ export function TransactionForm({ organization }: { organization: string }) {
 
     queryClient.invalidateQueries({ queryKey: ['transactions', organization] })
     toast.success(message)
-    reset()
+
+    if (!initialData) {
+      reset()
+    }
   }
 
   const type = watch('type')
