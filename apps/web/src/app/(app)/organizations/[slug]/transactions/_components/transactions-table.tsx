@@ -21,6 +21,7 @@ import {
 
 import { getTransactionsAction } from '../actions'
 import { DeleteTransactionDialog } from './dialogs/delete-transaction-dialog'
+import { getTransactionsFilter } from './functions/get-transactions-filter'
 import { statusHandler } from './functions/status-handler'
 import { typeHandler } from './functions/type-handler'
 import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
@@ -34,12 +35,11 @@ export function TransactionsTable({ organization }: { organization: string }) {
   const { replace } = useRouter()
   const searchParams = useSearchParams()
 
-  const page = searchParams.get('page') ?? '1'
-  const perPage = searchParams.get('page') ?? '10'
+  const filters = getTransactionsFilter(searchParams)
 
   const { data, isPending } = useQuery({
-    queryKey: ['transactions', organization, page],
-    queryFn: getTransactionsAction.bind(null, { page }),
+    queryKey: ['transactions', organization, filters],
+    queryFn: getTransactionsAction.bind(null, filters),
   })
 
   function handlePaginate(page: number) {
@@ -169,8 +169,8 @@ export function TransactionsTable({ organization }: { organization: string }) {
 
       {data && (
         <Pagination
-          page={Number(page)}
-          perPage={Number(perPage)}
+          page={Number(filters.page)}
+          perPage={Number(filters.perPage)}
           total={data?.totalCount}
           onPageChange={handlePaginate}
         />

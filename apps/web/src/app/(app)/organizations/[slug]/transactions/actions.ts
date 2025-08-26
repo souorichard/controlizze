@@ -53,13 +53,22 @@ export async function createTransactionAction({
   }
 }
 
-interface GetTransactionsActionProps {
-  page: string | null
-  // perPage?: string | null
+export interface GetTransactionsActionProps {
+  page: string
+  perPage?: string
+  description?: string
+  type?: string
+  category?: string
+  status?: string
 }
 
 export async function getTransactionsAction({
   page,
+  // perPage,
+  description,
+  type,
+  category,
+  status,
 }: GetTransactionsActionProps) {
   const currentOrganization = await getCurrentOrganization()
 
@@ -67,6 +76,11 @@ export async function getTransactionsAction({
     await getTransactions({
       organization: currentOrganization!,
       page: page ?? '1',
+      // perPage: perPage ?? '10',
+      description,
+      type,
+      category,
+      status,
     })
 
   const transactionsWithFormattedAmount = transactions.map((transaction) => ({

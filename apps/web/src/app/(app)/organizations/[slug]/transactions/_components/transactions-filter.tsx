@@ -171,17 +171,16 @@ export function TransactionsFilter() {
         }}
       />
 
-      {hasAnyFilter && (
-        <Button
-          type="submit"
-          variant="ghost"
-          className="w-full lg:w-auto"
-          onClick={handleClearFilter}
-        >
-          <X className="size-4" />
-          Remove
-        </Button>
-      )}
+      <Button
+        type="submit"
+        variant="ghost"
+        className="w-full lg:w-auto"
+        onClick={handleClearFilter}
+        disabled={!hasAnyFilter}
+      >
+        <X className="size-4" />
+        Remove
+      </Button>
 
       <Button type="submit" variant="secondary" className="w-full lg:w-auto">
         <Funnel className="size-4" />
