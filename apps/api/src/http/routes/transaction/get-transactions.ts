@@ -25,6 +25,10 @@ export async function getTransations(app: FastifyInstance) {
           querystring: z.object({
             page: z.coerce.number().default(1),
             perPage: z.coerce.number().default(10),
+            description: z.string().optional(),
+            type: z.string().optional(),
+            category: z.string().optional(),
+            status: z.string().optional(),
           }),
           response: {
             200: z.object({
@@ -58,7 +62,8 @@ export async function getTransations(app: FastifyInstance) {
       },
       async (request) => {
         const { slug } = request.params
-        const { page, perPage } = request.query
+        const { page, perPage, description, type, category, status } =
+          request.query
 
         const userId = await request.getCurrentUserId()
         const { organization, membership } =
@@ -94,6 +99,19 @@ export async function getTransations(app: FastifyInstance) {
               },
               where: {
                 organizationId: organization.id,
+                description: {
+                  contains: description,
+                  mode: 'insensitive',
+                },
+                type: {
+                  equals: type as 'EXPENSE' | 'REVENUE',
+                },
+                category: {
+                  equals: category,
+                },
+                status: {
+                  equals: status as 'PENDING' | 'COMPLETED' | 'CANCELLED',
+                },
               },
               orderBy: {
                 createdAt: 'desc',
