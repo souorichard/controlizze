@@ -3,12 +3,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Funnel, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useDebounce } from 'use-debounce'
 import { z } from 'zod/v4'
 
 import { CategorySelect } from '@/components/category-select'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import {
   Select,
   SelectContent,
@@ -17,8 +24,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { getTransactionsFilter } from './functions/get-transactions-filter'
+
 const transactionsFiltersSchema = z.object({
-  description: z.string().optional(),
   type: z.string().optional(),
   category: z.string().optional(),
   status: z.string().optional(),
@@ -31,16 +39,30 @@ export function TransactionsFilter() {
   const { replace } = useRouter()
   const searchParams = useSearchParams()
 
-  const description = searchParams.get('description')
-  const type = searchParams.get('type')
-  const category = searchParams.get('category')
-  const status = searchParams.get('status')
+  const { description, type, category, status } =
+    getTransactionsFilter(searchParams)
 
-  const { watch, control, register, handleSubmit, reset } =
+  const [search, setSearch] = useState(description ?? '')
+  const [debouncedSearch] = useDebounce(search, 500)
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (debouncedSearch) {
+      params.set('description', debouncedSearch)
+    } else {
+      params.delete('description')
+    }
+
+    params.delete('page')
+
+    replace(`${pathname}?${params.toString()}`)
+  }, [debouncedSearch, pathname, replace])
+
+  const { watch, control, handleSubmit, reset } =
     useForm<TransactionsFiltersData>({
       resolver: zodResolver(transactionsFiltersSchema),
       defaultValues: {
-        description: description ?? '',
         type: type ?? '',
         category: category ?? '',
         status: status ?? '',
@@ -48,18 +70,11 @@ export function TransactionsFilter() {
     })
 
   function handleSetFilter({
-    description,
     type,
     category,
     status,
   }: TransactionsFiltersData) {
     const params = new URLSearchParams(searchParams)
-
-    if (description) {
-      params.set('description', description)
-    } else {
-      params.delete('description')
-    }
 
     if (type) {
       params.set('type', type)
@@ -85,13 +100,11 @@ export function TransactionsFilter() {
   function handleClearFilter() {
     const params = new URLSearchParams(searchParams)
 
-    params.delete('description')
     params.delete('type')
     params.delete('category')
     params.delete('status')
 
     reset({
-      description: '',
       type: '',
       category: '',
       status: '',
@@ -100,92 +113,109 @@ export function TransactionsFilter() {
 
   const typeValue = watch('type') as 'EXPENSE' | 'REVENUE' | undefined
 
-  const hasAnyFilter = !!(
-    description ||
-    type ||
-    category ||
-    status ||
-    typeValue
-  )
+  const hasAnyPopoverFilter = !!(type || category || status)
 
   return (
-    <form
-      onSubmit={handleSubmit(handleSetFilter)}
-      className="flex w-full flex-col items-center gap-2 lg:flex-row"
-    >
+    <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
       <Input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         placeholder="Search description"
-        className="lg:flex-1"
-        {...register('description')}
+        className="lg:max-w-[500px] lg:flex-1"
       />
 
-      <Controller
-        control={control}
-        name="type"
-        render={({ field }) => {
-          return (
-            <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="w-full lg:w-[160px]">
-                <SelectValue placeholder="Select a type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="EXPENSE">Expense</SelectItem>
-                <SelectItem value="REVENUE">Revenue</SelectItem>
-              </SelectContent>
-            </Select>
-          )
-        }}
-      />
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="w-full lg:ml-auto lg:w-auto">
+            <Funnel className="size-4" />
+            Filters
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="end">
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="leading-none font-medium">Filters</h4>
+              <p className="text-muted-foreground text-sm">
+                Set the filters for your transactions.
+              </p>
+            </div>
 
-      <Controller
-        control={control}
-        name="category"
-        render={({ field }) => {
-          return (
-            <CategorySelect
-              value={field.value}
-              onValueChange={field.onChange}
-              type={typeValue}
-              className="w-full lg:w-[220px]"
-            />
-          )
-        }}
-      />
+            <form
+              onSubmit={handleSubmit(handleSetFilter)}
+              className="grid gap-2"
+            >
+              <Controller
+                control={control}
+                name="type"
+                render={({ field }) => {
+                  return (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="EXPENSE">Expense</SelectItem>
+                        <SelectItem value="REVENUE">Revenue</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )
+                }}
+              />
 
-      <Controller
-        control={control}
-        name="status"
-        render={({ field }) => {
-          return (
-            <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="w-full lg:w-[160px]">
-                <SelectValue placeholder="Select a status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
-              </SelectContent>
-            </Select>
-          )
-        }}
-      />
+              <Controller
+                control={control}
+                name="category"
+                render={({ field }) => {
+                  return (
+                    <CategorySelect
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      type={typeValue}
+                      className="w-full"
+                    />
+                  )
+                }}
+              />
 
-      <Button
-        type="submit"
-        variant="ghost"
-        className="w-full lg:w-auto"
-        onClick={handleClearFilter}
-        disabled={!hasAnyFilter}
-      >
-        <X className="size-4" />
-        Remove
-      </Button>
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => {
+                  return (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="PENDING">Pending</SelectItem>
+                        <SelectItem value="COMPLETED">Completed</SelectItem>
+                        <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )
+                }}
+              />
 
-      <Button type="submit" variant="secondary" className="w-full lg:w-auto">
-        <Funnel className="size-4" />
-        Apply
-      </Button>
-    </form>
+              {hasAnyPopoverFilter && (
+                <Button
+                  type="submit"
+                  variant="ghost"
+                  className="w-full"
+                  onClick={handleClearFilter}
+                >
+                  <X className="size-4" />
+                  Remove
+                </Button>
+              )}
+
+              <Button type="submit" className="w-full">
+                <Funnel className="size-4" />
+                Apply
+              </Button>
+            </form>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }
