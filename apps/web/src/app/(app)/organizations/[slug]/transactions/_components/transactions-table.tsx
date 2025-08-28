@@ -21,12 +21,13 @@ import {
 
 import { getTransactionsAction } from '../actions'
 import { DeleteTransactionDialog } from './dialogs/delete-transaction-dialog'
+import { LiveDescriptionFilter } from './filters/live-description-filter'
+import { SelectFiltersPopover } from './filters/select-filters-popover'
 import { getTransactionsFilter } from './functions/get-transactions-filter'
 import { statusHandler } from './functions/status-handler'
 import { typeHandler } from './functions/type-handler'
 import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
 import { TransactionOptions } from './transaction-options'
-import { TransactionsFilter } from './transactions-filter'
 
 dayjs.extend(relativeTime)
 
@@ -52,7 +53,10 @@ export function TransactionsTable({ organization }: { organization: string }) {
 
   return (
     <div className="space-y-3">
-      <TransactionsFilter />
+      <div className="flex w-full flex-col items-start gap-2 lg:flex-row">
+        <LiveDescriptionFilter />
+        <SelectFiltersPopover />
+      </div>
 
       <div className="rounded-md border">
         <Table>
