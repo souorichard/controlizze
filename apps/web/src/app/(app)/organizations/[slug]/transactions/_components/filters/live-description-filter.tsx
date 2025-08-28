@@ -52,7 +52,7 @@ export function LiveDescriptionFilter() {
       if (!formDescription) {
         params.delete('description')
 
-        replace(`${pathname}`)
+        replace(`${pathname}?${params.toString()}`)
 
         return
       }
