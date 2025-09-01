@@ -29,6 +29,9 @@ export function RevokeInviteDialog({
     await revokeInviteAction(inviteId)
 
     queryClient.invalidateQueries({ queryKey: ['invites', organization] })
+    queryClient.invalidateQueries({
+      queryKey: ['pending-invites'],
+    })
   }
 
   return (

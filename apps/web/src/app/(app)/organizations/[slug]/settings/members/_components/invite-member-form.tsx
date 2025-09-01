@@ -47,6 +47,9 @@ export function InviteMemberForm({ organization }: { organization: string }) {
     }
 
     queryClient.invalidateQueries({ queryKey: ['invites', organization] })
+    queryClient.invalidateQueries({
+      queryKey: ['pending-invites'],
+    })
     toast.success(message)
     reset()
   }

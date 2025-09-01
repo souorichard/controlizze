@@ -1,4 +1,4 @@
-import { CirclePlus, UserPlus2 } from 'lucide-react'
+import { CirclePlus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -6,6 +6,7 @@ import controlizzeIcon from '@/assets/controlizze/icon.svg'
 import { getCurrentOrganization } from '@/auth/auth'
 
 import { OrganizationSwitcher } from './organization-switcher'
+import { PendingInvites } from './pending-invites'
 import { ProfileButton } from './profile-button'
 import { Button } from './ui/button'
 import { Separator } from './ui/separator'
@@ -40,10 +41,7 @@ export async function Header() {
         <Separator orientation="vertical" className="!h-5" />
 
         <div className="flex items-center gap-2">
-          <Button size="icon" variant="ghost">
-            <UserPlus2 className="size-4" />
-            <span className="sr-only">Pending invites</span>
-          </Button>
+          <PendingInvites />
           <ProfileButton />
         </div>
       </div>

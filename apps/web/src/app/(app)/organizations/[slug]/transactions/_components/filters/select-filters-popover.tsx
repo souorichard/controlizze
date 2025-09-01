@@ -101,7 +101,9 @@ export function SelectFiltersPopover() {
       <PopoverContent align="end">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="leading-none font-medium">Filters</h4>
+            <h4 className="text-sm leading-none font-medium lg:text-base">
+              Filters
+            </h4>
             <p className="text-muted-foreground text-sm">
               Set the filters for your transactions.
             </p>

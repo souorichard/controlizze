@@ -75,7 +75,7 @@ export function LiveDescriptionFilter() {
   }, [debouncedSearch, pathname, replace, searchParams, trigger])
 
   return (
-    <div className="space-y-1.5 lg:max-w-[500px] lg:flex-1">
+    <div className="w-full space-y-1.5 lg:max-w-[500px] lg:flex-1">
       <Input placeholder="Search description..." {...register('description')} />
       {errors.description && (
         <span className="text-destructive block text-xs">
