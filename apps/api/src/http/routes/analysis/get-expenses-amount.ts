@@ -14,7 +14,7 @@ export async function getExpensesAmount(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/organizations/:slug/analytics',
+      '/organizations/:slug/analysis/expenses-amount',
       {
         schema: {
           tags: ['Analysis'],
@@ -100,7 +100,7 @@ export async function getExpensesAmount(app: FastifyInstance) {
         return {
           amount: totalExpensesAmount,
           diffFromLastMonth: diffFromLastMonth
-            ? Number(diffFromLastMonth.toFixed(2))
+            ? Number(diffFromLastMonth.toFixed(1))
             : 0,
         }
       },

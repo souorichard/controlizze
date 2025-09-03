@@ -12,7 +12,7 @@ import {
 } from 'fastify-type-provider-zod'
 
 import { errorHandler } from './error-handler'
-import { getExpensesAmount } from './routes/analytics/get-expenses-amount'
+import { getExpensesAmount } from './routes/analysis/get-expenses-amount'
 import { authenticateWithGithub } from './routes/auth/authenticate-with-github'
 import { authenticateWithGoogle } from './routes/auth/authenticate-with-google'
 import { authenticateWithPassword } from './routes/auth/autheticate-with-password'
