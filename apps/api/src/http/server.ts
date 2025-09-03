@@ -13,6 +13,7 @@ import {
 
 import { errorHandler } from './error-handler'
 import { getExpensesAmount } from './routes/analysis/get-expenses-amount'
+import { getRevenuesAmount } from './routes/analysis/get-revenues-amount'
 import { authenticateWithGithub } from './routes/auth/authenticate-with-github'
 import { authenticateWithGoogle } from './routes/auth/authenticate-with-google'
 import { authenticateWithPassword } from './routes/auth/autheticate-with-password'
@@ -127,6 +128,7 @@ app.register(revokeInvite)
 app.register(getPendingInvites)
 
 app.register(getExpensesAmount)
+app.register(getRevenuesAmount)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log('HTTP server running!')

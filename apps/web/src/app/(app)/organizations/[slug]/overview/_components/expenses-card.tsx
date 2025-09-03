@@ -37,10 +37,11 @@ export function ExpensesCard({ organization }: { organization: string }) {
               <span
                 className={cn(
                   '',
-                  data?.diffFromLastMonth === 0 && 'text-foreground',
-                  data?.diffFromLastMonth < 0
-                    ? 'text-green-500'
-                    : 'text-destructive',
+                  data?.diffFromLastMonth === 0
+                    ? 'text-foreground'
+                    : data?.diffFromLastMonth > 0
+                      ? 'text-green-500'
+                      : 'text-destructive',
                 )}
               >
                 {data.diffFromLastMonth > 0
