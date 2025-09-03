@@ -22,7 +22,7 @@ export default async function OverviewPage() {
       <div className="flex flex-col gap-4">
         <div className="grid items-center gap-4 lg:grid-cols-3">
           <ExpensesCard organization={currentOrganization!} />
-          <RevenuesCard />
+          <RevenuesCard organization={currentOrganization!} />
           <BalanceCard />
         </div>
         <TransactionPerPeriodCard />

@@ -101,6 +101,7 @@ export function TransactionForm({
     }
 
     queryClient.invalidateQueries({ queryKey: ['transactions', organization] })
+    queryClient.invalidateQueries({ queryKey: ['analysis', organization] })
     toast.success(message)
 
     if (!initialData) {

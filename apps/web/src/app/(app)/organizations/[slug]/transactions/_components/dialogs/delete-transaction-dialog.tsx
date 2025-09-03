@@ -29,6 +29,7 @@ export function DeleteTransactionDialog({
     await deleteTransactionAction({ transactionId })
 
     queryClient.invalidateQueries({ queryKey: ['transactions', organization] })
+    queryClient.invalidateQueries({ queryKey: ['analysis', organization] })
   }
 
   return (

@@ -10,7 +10,7 @@ import { AmountsCardSkeleton } from './skeletons/amounts-card-skeleton'
 
 export function ExpensesCard({ organization }: { organization: string }) {
   const { data, isLoading } = useQuery({
-    queryKey: ['expenses', organization],
+    queryKey: ['analysis', organization, 'expenses'],
     queryFn: getExpensesAmountAction,
   })
 
@@ -39,7 +39,7 @@ export function ExpensesCard({ organization }: { organization: string }) {
                   '',
                   data?.diffFromLastMonth === 0
                     ? 'text-foreground'
-                    : data?.diffFromLastMonth > 0
+                    : data?.diffFromLastMonth < 0
                       ? 'text-green-500'
                       : 'text-destructive',
                 )}
