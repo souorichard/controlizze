@@ -12,6 +12,7 @@ import {
 } from 'fastify-type-provider-zod'
 
 import { errorHandler } from './error-handler'
+import { getExpensesAmount } from './routes/analytics/get-expenses-amount'
 import { authenticateWithGithub } from './routes/auth/authenticate-with-github'
 import { authenticateWithGoogle } from './routes/auth/authenticate-with-google'
 import { authenticateWithPassword } from './routes/auth/autheticate-with-password'
@@ -124,6 +125,8 @@ app.register(acceptInvite)
 app.register(rejectInvite)
 app.register(revokeInvite)
 app.register(getPendingInvites)
+
+app.register(getExpensesAmount)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log('HTTP server running!')
