@@ -4,6 +4,7 @@ import { getCurrentOrganization } from '@/auth/auth'
 import { getExpensesAmount } from '@/http/analysis/get-expenses-amount'
 import { getRevenuesAmount } from '@/http/analysis/get-revenues-amount'
 import { getTotalBalanceAmount } from '@/http/analysis/get-total-balance-amount'
+import { getTransactionsPerPeriod } from '@/http/analysis/get-transactions-per-period'
 import { centsToReal } from '@/utils/coin-converter'
 
 export async function getExpensesAmountAction() {
@@ -43,4 +44,32 @@ export async function getTotalBalanceAmountAction() {
     amount: centsToReal(totalBalanceAmount.amount),
     diffFromLastMonth: totalBalanceAmount.diffFromLastMonth,
   }
+}
+
+interface GetTransactionsPerPeriodActionProps {
+  from?: string
+  to?: string
+}
+
+export async function getTransactionsPerPeriodAction({
+  from,
+  to,
+}: GetTransactionsPerPeriodActionProps) {
+  const currentOrganization = await getCurrentOrganization()
+
+  const dailyTransactions = await getTransactionsPerPeriod({
+    organization: currentOrganization!,
+    from,
+    to,
+  })
+
+  const formattedDailyTransactions = dailyTransactions.transactions.map(
+    (transaction) => ({
+      ...transaction,
+      expenses: centsToReal(transaction.expenses),
+      revenues: centsToReal(transaction.revenues),
+    }),
+  )
+
+  return formattedDailyTransactions
 }

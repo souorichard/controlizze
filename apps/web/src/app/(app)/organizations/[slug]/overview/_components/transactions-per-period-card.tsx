@@ -1,11 +1,14 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { CircleAlert, Loader2, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
+import { Button } from '@/components/ui/button'
 import {
   ChartConfig,
   ChartContainer,
@@ -15,122 +18,144 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { DateRangePicker } from '@/components/ui/date-range-picker'
+import { Separator } from '@/components/ui/separator'
+
+import { getTransactionsPerPeriodAction } from '../actions'
 
 dayjs.extend(relativeTime)
 
-const chartData = [
-  { date: '2024-04-01', expense: 222, revenue: 150 },
-  { date: '2024-04-02', expense: 97, revenue: 180 },
-  { date: '2024-04-03', expense: 167, revenue: 120 },
-  { date: '2024-04-04', expense: 242, revenue: 260 },
-  { date: '2024-04-05', expense: 373, revenue: 290 },
-  { date: '2024-04-06', expense: 301, revenue: 340 },
-  { date: '2024-04-07', expense: 245, revenue: 180 },
-  { date: '2024-04-08', expense: 409, revenue: 320 },
-  { date: '2024-04-09', expense: 59, revenue: 110 },
-  { date: '2024-04-10', expense: 261, revenue: 190 },
-  { date: '2024-04-11', expense: 327, revenue: 350 },
-  { date: '2024-04-12', expense: 292, revenue: 210 },
-  { date: '2024-04-13', expense: 342, revenue: 380 },
-  { date: '2024-04-14', expense: 137, revenue: 220 },
-  { date: '2024-04-15', expense: 120, revenue: 170 },
-  { date: '2024-04-16', expense: 138, revenue: 190 },
-  { date: '2024-04-17', expense: 446, revenue: 360 },
-  { date: '2024-04-18', expense: 364, revenue: 410 },
-  { date: '2024-04-19', expense: 243, revenue: 180 },
-  { date: '2024-04-20', expense: 89, revenue: 150 },
-  { date: '2024-04-21', expense: 137, revenue: 200 },
-  { date: '2024-04-22', expense: 224, revenue: 170 },
-  { date: '2024-04-23', expense: 138, revenue: 230 },
-  { date: '2024-04-24', expense: 387, revenue: 290 },
-  { date: '2024-04-25', expense: 215, revenue: 250 },
-  { date: '2024-04-26', expense: 75, revenue: 130 },
-  { date: '2024-04-27', expense: 383, revenue: 420 },
-  { date: '2024-04-28', expense: 122, revenue: 180 },
-  { date: '2024-04-29', expense: 315, revenue: 240 },
-  { date: '2024-04-30', expense: 454, revenue: 380 },
-  { date: '2024-05-01', expense: 165, revenue: 220 },
-  { date: '2024-05-02', expense: 293, revenue: 310 },
-  { date: '2024-05-03', expense: 247, revenue: 190 },
-  { date: '2024-05-04', expense: 385, revenue: 420 },
-  { date: '2024-05-05', expense: 481, revenue: 390 },
-  { date: '2024-05-06', expense: 498, revenue: 520 },
-  { date: '2024-05-07', expense: 388, revenue: 300 },
-  { date: '2024-05-08', expense: 149, revenue: 210 },
-  { date: '2024-05-09', expense: 227, revenue: 180 },
-  { date: '2024-05-10', expense: 293, revenue: 330 },
-  { date: '2024-05-11', expense: 335, revenue: 270 },
-  { date: '2024-05-12', expense: 197, revenue: 240 },
-  { date: '2024-05-13', expense: 197, revenue: 160 },
-  { date: '2024-05-14', expense: 448, revenue: 490 },
-  { date: '2024-05-15', expense: 473, revenue: 380 },
-  { date: '2024-05-16', expense: 338, revenue: 400 },
-  { date: '2024-05-17', expense: 499, revenue: 420 },
-  { date: '2024-05-18', expense: 315, revenue: 350 },
-  { date: '2024-05-19', expense: 235, revenue: 180 },
-  { date: '2024-05-20', expense: 177, revenue: 230 },
-  { date: '2024-05-21', expense: 82, revenue: 140 },
-  { date: '2024-05-22', expense: 81, revenue: 120 },
-  { date: '2024-05-23', expense: 252, revenue: 290 },
-  { date: '2024-05-24', expense: 294, revenue: 220 },
-  { date: '2024-05-25', expense: 201, revenue: 250 },
-  { date: '2024-05-26', expense: 213, revenue: 170 },
-  { date: '2024-05-27', expense: 420, revenue: 460 },
-  { date: '2024-05-28', expense: 233, revenue: 190 },
-  { date: '2024-05-29', expense: 78, revenue: 130 },
-  { date: '2024-05-30', expense: 340, revenue: 280 },
-  { date: '2024-05-31', expense: 178, revenue: 230 },
-  { date: '2024-06-01', expense: 178, revenue: 200 },
-  { date: '2024-06-02', expense: 470, revenue: 410 },
-  { date: '2024-06-03', expense: 103, revenue: 160 },
-  { date: '2024-06-04', expense: 439, revenue: 380 },
-  { date: '2024-06-05', expense: 88, revenue: 140 },
-  { date: '2024-06-06', expense: 294, revenue: 250 },
-  { date: '2024-06-07', expense: 323, revenue: 370 },
-  { date: '2024-06-08', expense: 385, revenue: 320 },
-  { date: '2024-06-09', expense: 438, revenue: 480 },
-  { date: '2024-06-10', expense: 155, revenue: 200 },
-  { date: '2024-06-11', expense: 92, revenue: 150 },
-  { date: '2024-06-12', expense: 492, revenue: 420 },
-  { date: '2024-06-13', expense: 81, revenue: 130 },
-  { date: '2024-06-14', expense: 426, revenue: 380 },
-  { date: '2024-06-15', expense: 307, revenue: 350 },
-  { date: '2024-06-16', expense: 371, revenue: 310 },
-  { date: '2024-06-17', expense: 475, revenue: 520 },
-  { date: '2024-06-18', expense: 107, revenue: 170 },
-  { date: '2024-06-19', expense: 341, revenue: 290 },
-  { date: '2024-06-20', expense: 408, revenue: 450 },
-  { date: '2024-06-21', expense: 169, revenue: 210 },
-  { date: '2024-06-22', expense: 317, revenue: 270 },
-  { date: '2024-06-23', expense: 480, revenue: 530 },
-  { date: '2024-06-24', expense: 132, revenue: 180 },
-  { date: '2024-06-25', expense: 141, revenue: 190 },
-  { date: '2024-06-26', expense: 434, revenue: 380 },
-  { date: '2024-06-27', expense: 448, revenue: 490 },
-  { date: '2024-06-28', expense: 149, revenue: 200 },
-  { date: '2024-06-29', expense: 103, revenue: 160 },
-  { date: '2024-06-30', expense: 446, revenue: 400 },
-]
+// const chartData = [
+//   { date: '2024-04-01', expenses: 222, revenues: 150 },
+//   { date: '2024-04-02', expenses: 97, revenues: 180 },
+//   { date: '2024-04-03', expenses: 167, revenues: 120 },
+//   { date: '2024-04-04', expenses: 242, revenues: 260 },
+//   { date: '2024-04-05', expenses: 373, revenues: 290 },
+//   { date: '2024-04-06', expenses: 301, revenues: 340 },
+//   { date: '2024-04-07', expenses: 245, revenues: 180 },
+//   { date: '2024-04-08', expenses: 409, revenues: 320 },
+//   { date: '2024-04-09', expenses: 59, revenues: 110 },
+//   { date: '2024-04-10', expenses: 261, revenues: 190 },
+//   { date: '2024-04-11', expenses: 327, revenues: 350 },
+//   { date: '2024-04-12', expenses: 292, revenues: 210 },
+//   { date: '2024-04-13', expenses: 342, revenues: 380 },
+//   { date: '2024-04-14', expenses: 137, revenues: 220 },
+//   { date: '2024-04-15', expenses: 120, revenues: 170 },
+//   { date: '2024-04-16', expenses: 138, revenues: 190 },
+//   { date: '2024-04-17', expenses: 446, revenues: 360 },
+//   { date: '2024-04-18', expenses: 364, revenues: 410 },
+//   { date: '2024-04-19', expenses: 243, revenues: 180 },
+//   { date: '2024-04-20', expenses: 89, revenues: 150 },
+//   { date: '2024-04-21', expenses: 137, revenues: 200 },
+//   { date: '2024-04-22', expenses: 224, revenues: 170 },
+//   { date: '2024-04-23', expenses: 138, revenues: 230 },
+//   { date: '2024-04-24', expenses: 387, revenues: 290 },
+//   { date: '2024-04-25', expenses: 215, revenues: 250 },
+//   { date: '2024-04-26', expenses: 75, revenues: 130 },
+//   { date: '2024-04-27', expenses: 383, revenues: 420 },
+//   { date: '2024-04-28', expenses: 122, revenues: 180 },
+//   { date: '2024-04-29', expenses: 315, revenues: 240 },
+//   { date: '2024-04-30', expenses: 454, revenues: 380 },
+//   { date: '2024-05-01', expenses: 165, revenues: 220 },
+//   { date: '2024-05-02', expenses: 293, revenues: 310 },
+//   { date: '2024-05-03', expenses: 247, revenues: 190 },
+//   { date: '2024-05-04', expenses: 385, revenues: 420 },
+//   { date: '2024-05-05', expenses: 481, revenues: 390 },
+//   { date: '2024-05-06', expenses: 498, revenues: 520 },
+//   { date: '2024-05-07', expenses: 388, revenues: 300 },
+//   { date: '2024-05-08', expenses: 149, revenues: 210 },
+//   { date: '2024-05-09', expenses: 227, revenues: 180 },
+//   { date: '2024-05-10', expenses: 293, revenues: 330 },
+//   { date: '2024-05-11', expenses: 335, revenues: 270 },
+//   { date: '2024-05-12', expenses: 197, revenues: 240 },
+//   { date: '2024-05-13', expenses: 197, revenues: 160 },
+//   { date: '2024-05-14', expenses: 448, revenues: 490 },
+//   { date: '2024-05-15', expenses: 473, revenues: 380 },
+//   { date: '2024-05-16', expenses: 338, revenues: 400 },
+//   { date: '2024-05-17', expenses: 499, revenues: 420 },
+//   { date: '2024-05-18', expenses: 315, revenues: 350 },
+//   { date: '2024-05-19', expenses: 235, revenues: 180 },
+//   { date: '2024-05-20', expenses: 177, revenues: 230 },
+//   { date: '2024-05-21', expenses: 82, revenues: 140 },
+//   { date: '2024-05-22', expenses: 81, revenues: 120 },
+//   { date: '2024-05-23', expenses: 252, revenues: 290 },
+//   { date: '2024-05-24', expenses: 294, revenues: 220 },
+//   { date: '2024-05-25', expenses: 201, revenues: 250 },
+//   { date: '2024-05-26', expenses: 213, revenues: 170 },
+//   { date: '2024-05-27', expenses: 420, revenues: 460 },
+//   { date: '2024-05-28', expenses: 233, revenues: 190 },
+//   { date: '2024-05-29', expenses: 78, revenues: 130 },
+//   { date: '2024-05-30', expenses: 340, revenues: 280 },
+//   { date: '2024-05-31', expenses: 178, revenues: 230 },
+//   { date: '2024-06-01', expenses: 178, revenues: 200 },
+//   { date: '2024-06-02', expenses: 470, revenues: 410 },
+//   { date: '2024-06-03', expenses: 103, revenues: 160 },
+//   { date: '2024-06-04', expenses: 439, revenues: 380 },
+//   { date: '2024-06-05', expenses: 88, revenues: 140 },
+//   { date: '2024-06-06', expenses: 294, revenues: 250 },
+//   { date: '2024-06-07', expenses: 323, revenues: 370 },
+//   { date: '2024-06-08', expenses: 385, revenues: 320 },
+//   { date: '2024-06-09', expenses: 438, revenues: 480 },
+//   { date: '2024-06-10', expenses: 155, revenues: 200 },
+//   { date: '2024-06-11', expenses: 92, revenues: 150 },
+//   { date: '2024-06-12', expenses: 492, revenues: 420 },
+//   { date: '2024-06-13', expenses: 81, revenues: 130 },
+//   { date: '2024-06-14', expenses: 426, revenues: 380 },
+//   { date: '2024-06-15', expenses: 307, revenues: 350 },
+//   { date: '2024-06-16', expenses: 371, revenues: 310 },
+//   { date: '2024-06-17', expenses: 475, revenues: 520 },
+//   { date: '2024-06-18', expenses: 107, revenues: 170 },
+//   { date: '2024-06-19', expenses: 341, revenues: 290 },
+//   { date: '2024-06-20', expenses: 408, revenues: 450 },
+//   { date: '2024-06-21', expenses: 169, revenues: 210 },
+//   { date: '2024-06-22', expenses: 317, revenues: 270 },
+//   { date: '2024-06-23', expenses: 480, revenues: 530 },
+//   { date: '2024-06-24', expenses: 132, revenues: 180 },
+//   { date: '2024-06-25', expenses: 141, revenues: 190 },
+//   { date: '2024-06-26', expenses: 434, revenues: 380 },
+//   { date: '2024-06-27', expenses: 448, revenues: 490 },
+//   { date: '2024-06-28', expenses: 149, revenues: 200 },
+//   { date: '2024-06-29', expenses: 103, revenues: 160 },
+//   { date: '2024-06-30', expenses: 446, revenues: 400 },
+// ]
 
 const chartConfig = {
-  visitors: {
+  transactions: {
     label: 'Transactions',
   },
-  expense: {
-    label: 'Expense',
+  expenses: {
+    label: 'Expenses',
     color: 'var(--chart-1)',
   },
-  revenue: {
-    label: 'Revenue',
+  revenues: {
+    label: 'Revenues',
     color: 'var(--chart-2)',
   },
 } satisfies ChartConfig
 
-export function TransactionPerPeriodCard() {
+export function TransactionPerPeriodCard({
+  organization,
+}: {
+  organization: string
+}) {
   const [period, setPeriod] = useState<DateRange | undefined>({
     from: dayjs().subtract(7, 'days').toDate(),
-    to: new Date(),
+    to: dayjs().toDate(),
   })
+
+  const { data: dailyTransactionsPerPeriod, error } = useQuery({
+    queryKey: ['analysis', organization, period],
+    queryFn: getTransactionsPerPeriodAction.bind(null, {
+      from: period?.from?.toISOString(),
+      to: period?.to?.toISOString(),
+    }),
+  })
+
+  function handleResetPeriod() {
+    setPeriod({
+      from: dayjs().subtract(7, 'days').toDate(),
+      to: dayjs().toDate(),
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6 rounded-md border px-5 py-4">
@@ -147,82 +172,118 @@ export function TransactionPerPeriodCard() {
         </div>
       </div>
 
-      <ChartContainer
-        config={chartConfig}
-        className="aspect-auto h-[250px] w-full"
-      >
-        <AreaChart data={chartData}>
-          <defs>
-            <linearGradient id="fillExpense" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="5%"
-                stopColor="var(--color-expense)"
-                stopOpacity={0.8}
-              />
-              <stop
-                offset="95%"
-                stopColor="var(--color-expense)"
-                stopOpacity={0.1}
-              />
-            </linearGradient>
-            <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="5%"
-                stopColor="var(--color-revenue)"
-                stopOpacity={0.8}
-              />
-              <stop
-                offset="95%"
-                stopColor="var(--color-revenue)"
-                stopOpacity={0.1}
-              />
-            </linearGradient>
-          </defs>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="date"
-            tickLine={false}
-            axisLine={false}
-            tickMargin={8}
-            minTickGap={32}
-            tickFormatter={(value) => {
-              const date = new Date(value)
-              return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-              })
-            }}
-          />
-          <ChartTooltip
-            cursor={false}
-            content={
-              <ChartTooltipContent
-                labelFormatter={(value) => {
-                  const date = dayjs(value).format('MMM DD')
+      {dailyTransactionsPerPeriod ? (
+        <>
+          {dailyTransactionsPerPeriod.length > 0 ? (
+            <ChartContainer
+              config={chartConfig}
+              className="aspect-auto h-[250px] w-full"
+            >
+              <AreaChart data={dailyTransactionsPerPeriod}>
+                <defs>
+                  <linearGradient id="fillExpenses" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-expenses)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-expenses)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                  <linearGradient id="fillRevenues" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-revenues)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-revenues)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  minTickGap={32}
+                  tickFormatter={(value) => {
+                    const date = new Date(value)
+                    return date.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  }}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(value) => {
+                        const date = dayjs(value).format('MMM DD')
 
-                  return date
-                }}
-                indicator="dot"
-              />
-            }
-          />
-          <Area
-            dataKey="expense"
-            type="natural"
-            fill="url(#fillRevenue)"
-            stroke="var(--color-revenue)"
-            stackId="a"
-          />
-          <Area
-            dataKey="revenue"
-            type="natural"
-            fill="url(#fillExpense)"
-            stroke="var(--color-expense)"
-            stackId="a"
-          />
-          <ChartLegend content={<ChartLegendContent />} />
-        </AreaChart>
-      </ChartContainer>
+                        return date
+                      }}
+                      indicator="dot"
+                      className="w-40"
+                    />
+                  }
+                />
+                <Area
+                  dataKey="expenses"
+                  type="natural"
+                  fill="url(#fillExpenses)"
+                  stroke="var(--color-expenses)"
+                  stackId="a"
+                />
+                <Area
+                  dataKey="revenues"
+                  type="natural"
+                  fill="url(#fillRevenues)"
+                  stroke="var(--color-revenues)"
+                  stackId="a"
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+              </AreaChart>
+            </ChartContainer>
+          ) : (
+            <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
+              <div className="flex items-center gap-2">
+                <CircleAlert className="text-primary size-4" />
+                <span className="text-sm">No transactions.</span>
+              </div>
+              <Separator className="!w-[60px]" />
+              <Button size="xs" variant="link" onClick={handleResetPeriod}>
+                Show results from the last 7 days
+              </Button>
+            </div>
+          )}
+        </>
+      ) : error ? (
+        <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
+          <div className="flex items-center gap-2">
+            <XCircle className="text-destructive size-4" />
+            <span className="text-sm">Something went wrong.</span>
+          </div>
+          <Separator className="!w-[60px]" />
+          <Button size="xs" variant="link" onClick={handleResetPeriod}>
+            Show results from the last 7 days
+          </Button>
+        </div>
+      ) : (
+        <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
+          <div className="flex items-center gap-2">
+            <Loader2 className="text-primary size-4 animate-spin" />
+            {/* <span className="text-sm">Loading...</span> */}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
