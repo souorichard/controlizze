@@ -1,13 +1,12 @@
-import dayjs from 'dayjs'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { UnauthorizedError } from '../_errors/unauthorized-error'
+import { getTotalRevenues } from './functions/get-total-revenues'
 
 export async function getRevenuesAmount(app: FastifyInstance) {
   app
@@ -46,49 +45,8 @@ export async function getRevenuesAmount(app: FastifyInstance) {
           )
         }
 
-        const today = dayjs()
-        const currentMonth = today.startOf('month')
-        const lastMonth = today.subtract(1, 'month').startOf('month')
-
-        const [totalRevenues, totalRevenuesLastMonth] = await Promise.all([
-          prisma.transacion.aggregate({
-            _sum: {
-              amount: true,
-            },
-            where: {
-              organizationId: organization.id,
-              type: 'REVENUE',
-              status: {
-                not: 'CANCELLED',
-              },
-              createdAt: {
-                gte: currentMonth.toDate(),
-              },
-            },
-          }),
-
-          prisma.transacion.aggregate({
-            _sum: {
-              amount: true,
-            },
-            where: {
-              organizationId: organization.id,
-              type: 'REVENUE',
-              status: {
-                not: 'CANCELLED',
-              },
-              createdAt: {
-                gte: lastMonth.toDate(),
-                lt: currentMonth.toDate(),
-              },
-            },
-          }),
-        ])
-
-        const totalRevenuesAmount = Number(totalRevenues._sum.amount ?? 0)
-        const totalRevenuesLastMonthAmount = Number(
-          totalRevenuesLastMonth._sum.amount ?? 0,
-        )
+        const { totalRevenuesAmount, totalRevenuesLastMonthAmount } =
+          await getTotalRevenues(organization.id)
 
         const diffFromLastMonth =
           totalRevenuesAmount && totalRevenuesLastMonthAmount

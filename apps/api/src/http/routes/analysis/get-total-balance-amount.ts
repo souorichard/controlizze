@@ -7,17 +7,18 @@ import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 import { getTotalExpenses } from './functions/get-total-expenses'
+import { getTotalRevenues } from './functions/get-total-revenues'
 
-export async function getExpensesAmount(app: FastifyInstance) {
+export async function getTotalBalanceAmount(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/organizations/:slug/analysis/expenses-amount',
+      '/organizations/:slug/analysis/balance-amount',
       {
         schema: {
           tags: ['Analysis'],
-          summary: 'Get expenses amount.',
+          summary: 'Get total balance amount.',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -48,15 +49,24 @@ export async function getExpensesAmount(app: FastifyInstance) {
         const { totalExpensesAmount, totalExpensesLastMonthAmount } =
           await getTotalExpenses(organization.id)
 
+        const { totalRevenuesAmount, totalRevenuesLastMonthAmount } =
+          await getTotalRevenues(organization.id)
+
+        const totalBalanceAmount =
+          (totalExpensesAmount - totalRevenuesAmount) * -1
+
+        const totalBalanceLastMonthAmount =
+          (totalExpensesLastMonthAmount - totalRevenuesLastMonthAmount) * -1
+
         const diffFromLastMonth =
-          totalExpensesAmount && totalExpensesLastMonthAmount
-            ? ((totalExpensesAmount - totalExpensesLastMonthAmount) /
-                totalExpensesLastMonthAmount) *
+          totalBalanceAmount && totalBalanceLastMonthAmount
+            ? ((totalBalanceAmount - totalBalanceLastMonthAmount) /
+                totalBalanceLastMonthAmount) *
               100
             : 0
 
         return {
-          amount: totalExpensesAmount,
+          amount: totalBalanceAmount,
           diffFromLastMonth: diffFromLastMonth
             ? Number(diffFromLastMonth.toFixed(1))
             : 0,
