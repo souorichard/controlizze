@@ -30,10 +30,10 @@ const chartConfig = {
 
 export function RevenueCategoriesCard() {
   return (
-    <div className="flex flex-col gap-4 rounded-md border px-5 py-4">
+    <div className="flex flex-col gap-6 rounded-md border px-5 py-4">
       <div className="space-y-1">
         <p className="text-sm font-semibold">Revenue categories</p>
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-xs lg:text-sm">
           See categories of your revenues and their total amount.
         </p>
       </div>

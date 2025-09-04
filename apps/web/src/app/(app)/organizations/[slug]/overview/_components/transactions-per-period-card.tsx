@@ -133,11 +133,11 @@ export function TransactionPerPeriodCard() {
   })
 
   return (
-    <div className="flex flex-col gap-4 rounded-md border px-5 py-4">
+    <div className="flex flex-col gap-6 rounded-md border px-5 py-4">
       <div className="flex items-center justify-between gap-3">
         <div className="space-y-1">
           <p className="text-sm font-semibold">Transactions per period</p>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground text-xs lg:text-sm">
             See your transactions per period for each type.
           </p>
         </div>
