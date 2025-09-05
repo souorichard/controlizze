@@ -79,7 +79,7 @@ export async function getTransations(app: FastifyInstance) {
 
         const [rawTransactions, transactionsCount, totalGeneral] =
           await Promise.all([
-            prisma.transacion.findMany({
+            prisma.transaction.findMany({
               select: {
                 id: true,
                 description: true,
@@ -120,13 +120,26 @@ export async function getTransations(app: FastifyInstance) {
               take: perPage,
             }),
 
-            prisma.transacion.count({
+            prisma.transaction.count({
               where: {
                 organizationId: organization.id,
+                description: {
+                  contains: description,
+                  mode: 'insensitive',
+                },
+                type: {
+                  equals: type as 'EXPENSE' | 'REVENUE',
+                },
+                category: {
+                  equals: category,
+                },
+                status: {
+                  equals: status as 'PENDING' | 'COMPLETED' | 'CANCELLED',
+                },
               },
             }),
 
-            prisma.transacion.aggregate({
+            prisma.transaction.aggregate({
               _sum: {
                 amount: true,
               },

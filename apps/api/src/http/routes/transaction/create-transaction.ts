@@ -57,7 +57,7 @@ export async function createTransation(app: FastifyInstance) {
 
         const { description, category, type, status, amount } = request.body
 
-        const transaction = await prisma.transacion.create({
+        const transaction = await prisma.transaction.create({
           data: {
             description,
             category,

@@ -48,7 +48,7 @@ export async function updateTransation(app: FastifyInstance) {
         const { organization, membership } =
           await request.getUserMembership(slug)
 
-        const transaction = await prisma.transacion.findUnique({
+        const transaction = await prisma.transaction.findUnique({
           where: {
             id: transactionId,
             organizationId: organization.id,
@@ -71,7 +71,7 @@ export async function updateTransation(app: FastifyInstance) {
 
         const { description, category, type, status, amount } = request.body
 
-        await prisma.transacion.update({
+        await prisma.transaction.update({
           where: {
             id: transactionId,
           },

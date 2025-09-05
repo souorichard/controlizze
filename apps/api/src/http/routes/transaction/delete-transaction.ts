@@ -37,7 +37,7 @@ export async function deleteTransation(app: FastifyInstance) {
         const { organization, membership } =
           await request.getUserMembership(slug)
 
-        const transaction = await prisma.transacion.findUnique({
+        const transaction = await prisma.transaction.findUnique({
           where: {
             id: transactionId,
             organizationId: organization.id,
@@ -58,7 +58,7 @@ export async function deleteTransation(app: FastifyInstance) {
           )
         }
 
-        await prisma.transacion.delete({
+        await prisma.transaction.delete({
           where: {
             id: transactionId,
           },

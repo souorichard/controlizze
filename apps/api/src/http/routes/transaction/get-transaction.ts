@@ -63,7 +63,7 @@ export async function getTransation(app: FastifyInstance) {
           )
         }
 
-        const transaction = await prisma.transacion.findUnique({
+        const transaction = await prisma.transaction.findUnique({
           select: {
             id: true,
             description: true,

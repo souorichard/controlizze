@@ -8,7 +8,7 @@ export async function getTotalExpenses(organizationId: string) {
   const lastMonth = today.subtract(1, 'month').startOf('month')
 
   const [totalExpenses, totalExpensesLastMonth] = await Promise.all([
-    prisma.transacion.aggregate({
+    prisma.transaction.aggregate({
       _sum: {
         amount: true,
       },
@@ -24,7 +24,7 @@ export async function getTotalExpenses(organizationId: string) {
       },
     }),
 
-    prisma.transacion.aggregate({
+    prisma.transaction.aggregate({
       _sum: {
         amount: true,
       },
