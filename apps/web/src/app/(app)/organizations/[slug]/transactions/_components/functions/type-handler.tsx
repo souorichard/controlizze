@@ -1,5 +1,7 @@
 import { TrendingDown, TrendingUp } from 'lucide-react'
 
+import { Badge } from '@/components/ui/badge'
+
 interface TypeHandlerProps {
   type: 'EXPENSE' | 'REVENUE'
 }
@@ -8,17 +10,17 @@ export function typeHandler({ type }: TypeHandlerProps) {
   switch (type) {
     case 'EXPENSE':
       return (
-        <span className="flex items-center gap-2">
-          <TrendingDown className="size-4 rounded-full text-red-600" />
+        <Badge>
+          <TrendingDown className="text-red-500" />
           Expense
-        </span>
+        </Badge>
       )
     case 'REVENUE':
       return (
-        <span className="flex items-center gap-2">
-          <TrendingUp className="size-4 rounded-full text-green-600" />
+        <Badge>
+          <TrendingUp className="text-green-500" />
           Revenue
-        </span>
+        </Badge>
       )
   }
 }

@@ -23,9 +23,9 @@ export default async function OverviewPage() {
         <div className="grid items-center gap-4 lg:grid-cols-3">
           <ExpensesCard organization={currentOrganization!} />
           <RevenuesCard organization={currentOrganization!} />
-          <BalanceCard />
+          <BalanceCard organization={currentOrganization!} />
         </div>
-        <TransactionPerPeriodCard />
+        <TransactionPerPeriodCard organization={currentOrganization!} />
         <div className="grid items-center gap-4 lg:grid-cols-2">
           <ExpenseCategoriesCard />
           <RevenueCategoriesCard />
