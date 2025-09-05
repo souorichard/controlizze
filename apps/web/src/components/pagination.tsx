@@ -59,7 +59,7 @@ export function Pagination({
             variant="outline"
             className="size-8"
             onClick={() => onPageChange(page + 1)}
-            disabled={pages <= page + 1}
+            disabled={pages <= page}
           >
             <ChevronRight className="h-4 w-4" />
             <span className="sr-only">Next page</span>
@@ -69,7 +69,7 @@ export function Pagination({
             variant="outline"
             className="hidden size-8 lg:flex"
             onClick={() => onPageChange(totalPages)}
-            disabled={pages <= page + 1}
+            disabled={pages <= page}
           >
             <ChevronsRight className="h-4 w-4" />
             <span className="sr-only">Last page</span>
