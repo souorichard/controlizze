@@ -1,5 +1,11 @@
+import { Metadata } from 'next'
+
 import { getCurrentOrganization } from '@/auth/auth'
 import { TransactionForm } from '@/components/transaction-form'
+
+export const metadata: Metadata = {
+  title: 'Transactions: Create',
+}
 
 export default async function CreateTransactionPage() {
   const currentOrganization = await getCurrentOrganization()

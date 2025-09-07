@@ -20,7 +20,7 @@ export default async function Home() {
       <HeaderContainer className="pb-5">
         <Header />
       </HeaderContainer>
-      <MainContainer className="flex flex-1 flex-col items-center justify-center gap-12">
+      <MainContainer className="flex flex-1 flex-col items-center justify-center gap-12 bg-[url(../assets/home-bg.png)] bg-cover bg-center">
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="bg-primary/10 mb-2 flex items-center justify-center rounded-full p-3 lg:p-4">
             <Building2 className="text-primary size-8 lg:size-10" />

@@ -30,7 +30,7 @@ export async function Header() {
         {currentOrganization && (
           <Button size="sm" className="hidden md:inline-flex" asChild>
             <Link
-              href={`/organizations/${currentOrganization}/transactions/new`}
+              href={`/organizations/${currentOrganization}/create-transaction`}
             >
               <CirclePlus className="size-4" />
               New transaction

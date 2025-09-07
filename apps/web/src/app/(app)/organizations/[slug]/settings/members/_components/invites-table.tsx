@@ -63,7 +63,11 @@ export function InvitesTable({ organization }: { organization: string }) {
                   <div className="flex items-center justify-end">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button size="icon" variant="destructive">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="text-destructive hover:text-destructive"
+                        >
                           <Trash2 className="size-4" />
                           <span className="sr-only">Revoke invite</span>
                         </Button>

@@ -1,3 +1,5 @@
+import { Metadata } from 'next'
+
 import {
   Container,
   HeaderContainer,
@@ -5,6 +7,10 @@ import {
 } from '@/components/container'
 import { Header } from '@/components/header'
 import { OrganizationForm } from '@/components/organization-form'
+
+export const metadata: Metadata = {
+  title: 'Organizations: Create',
+}
 
 export default function CreateOrganizationPage() {
   return (

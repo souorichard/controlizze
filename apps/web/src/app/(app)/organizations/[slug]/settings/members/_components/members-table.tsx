@@ -151,7 +151,8 @@ export function MembersTable({
                           <AlertDialogTrigger asChild>
                             <Button
                               size="icon"
-                              variant="destructive"
+                              variant="outline"
+                              className="text-destructive hover:text-destructive"
                               disabled={
                                 member.userId === membership.userId ||
                                 member.userId === organization.ownerId

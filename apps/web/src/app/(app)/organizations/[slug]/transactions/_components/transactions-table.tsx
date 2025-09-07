@@ -114,7 +114,11 @@ export function TransactionsTable({ organization }: { organization: string }) {
                     />
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button size="icon" variant="destructive">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="text-destructive hover:text-destructive"
+                        >
                           <Trash2 className="size-4" />
                           <span className="sr-only">Delete transaction</span>
                         </Button>
