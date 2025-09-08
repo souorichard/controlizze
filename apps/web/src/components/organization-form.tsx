@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
@@ -54,7 +55,13 @@ export type UpsertOrganizationFormData = z.infer<
   typeof upsertOrganizationSchema
 >
 
-export function OrganizationForm() {
+interface OrganizationFormProps {
+  dialogState?: (state: boolean) => void
+}
+
+export function OrganizationForm({ dialogState }: OrganizationFormProps) {
+  const router = useRouter()
+
   const {
     control,
     register,
@@ -84,6 +91,12 @@ export function OrganizationForm() {
 
     toast.success(message)
     reset()
+
+    if (dialogState) {
+      dialogState(false)
+    }
+
+    router.back()
   }
 
   return (

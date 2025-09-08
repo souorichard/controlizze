@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
@@ -42,6 +43,7 @@ interface TransactionFormProps {
   transactionId?: string
   initialData?: Transaction
   isUpdating?: boolean
+  dialogState?: (state: boolean) => void
 }
 
 export function TransactionForm({
@@ -49,8 +51,11 @@ export function TransactionForm({
   transactionId,
   initialData,
   isUpdating,
+  dialogState,
 }: TransactionFormProps) {
   const queryClient = useQueryClient()
+
+  const router = useRouter()
 
   const {
     watch,
@@ -104,9 +109,13 @@ export function TransactionForm({
     queryClient.invalidateQueries({ queryKey: ['analysis', organization] })
     toast.success(message)
 
-    if (!initialData) {
+    if (!initialData && dialogState) {
       reset()
+
+      dialogState(false)
     }
+
+    router.back()
   }
 
   const type = watch('type')
