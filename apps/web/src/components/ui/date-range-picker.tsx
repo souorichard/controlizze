@@ -54,12 +54,28 @@ export function DateRangePicker({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
-            initialFocus
+            max={14}
+            autoFocus
             mode="range"
-            defaultMonth={date?.from}
             selected={date}
             onSelect={onDateChange}
             numberOfMonths={2}
+            defaultMonth={date?.from}
+            // disabled={(day) => day > dayjs().toDate()}
+            disabled={(day) => {
+              const today = dayjs().toDate()
+
+              // disable future days
+              if (day > today) return true
+
+              // disables days that would exceed 14 days if a "from" is already selected
+              if (date?.from) {
+                const maxDay = dayjs(date.from).add(14, 'day').toDate()
+                return day > maxDay
+              }
+
+              return false
+            }}
           />
         </PopoverContent>
       </Popover>
