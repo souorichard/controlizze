@@ -6,6 +6,7 @@ import { getOrganization } from '@/http/organization/get-organization'
 
 import { DeleteOrganizationForm } from './_components/delete-organization-form'
 import { LeaveOrganizationForm } from './_components/leave-organization-form'
+import { OrganizationAvatarForm } from './_components/organization-avatar-form'
 import { OrganizationDomainForm } from './_components/organization-domain-form'
 import { OrganizationNameForm } from './_components/organization-name-form'
 
@@ -34,6 +35,13 @@ export default async function GeneralPage() {
       {canUpdateOrganization && (
         <>
           <OrganizationDomainForm initialData={organization} />
+          <Separator />
+        </>
+      )}
+
+      {canUpdateOrganization && (
+        <>
+          <OrganizationAvatarForm />
           <Separator />
         </>
       )}
