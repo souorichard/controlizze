@@ -2,7 +2,7 @@ import { env } from '@controlizze/env'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { fastify } from 'fastify'
 import {
   jsonSchemaTransform,
@@ -23,6 +23,8 @@ import { createAccount } from './routes/auth/create-account'
 import { getProfile } from './routes/auth/get-profile'
 import { requestPasswordRecover } from './routes/auth/request-password-recover'
 import { resetPassword } from './routes/auth/reset-password'
+import { updateProfileEmail } from './routes/auth/update-profile-email'
+import { updateProfileName } from './routes/auth/update-profile-name'
 import { acceptInvite } from './routes/invite/accept-invite'
 import { createInvite } from './routes/invite/create-invite'
 import { getInvite } from './routes/invite/get-invite'
@@ -81,14 +83,16 @@ app.register(fastifySwagger, {
   },
   transform: jsonSchemaTransform,
 })
+app.register(scalarFastifyApiReference, {
+  routePrefix: '/docs',
+  configuration: {
+    theme: 'kepler',
+  },
+})
 
 // JWT
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
-})
-
-app.register(fastifySwaggerUi, {
-  routePrefix: '/docs',
 })
 
 // Routes
@@ -99,6 +103,8 @@ app.register(authenticateWithGoogle)
 app.register(requestPasswordRecover)
 app.register(resetPassword)
 app.register(getProfile)
+app.register(updateProfileName)
+app.register(updateProfileEmail)
 
 app.register(createOrganization)
 app.register(getMembership)

@@ -24,6 +24,7 @@ export async function getProfile(app: FastifyInstance) {
                 name: z.string().nullable(),
                 email: z.email(),
                 avatarUrl: z.url().nullable(),
+                canChangeEmail: z.boolean(),
               }),
             }),
           },
@@ -37,6 +38,7 @@ export async function getProfile(app: FastifyInstance) {
             id: true,
             name: true,
             email: true,
+            hashPassword: true,
             avatarUrl: true,
           },
           where: {
@@ -48,7 +50,15 @@ export async function getProfile(app: FastifyInstance) {
           throw new NotFoundError('User not found.')
         }
 
-        return { user }
+        return {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            avatarUrl: user.avatarUrl,
+            canChangeEmail: !!user.hashPassword,
+          },
+        }
       },
     )
 }

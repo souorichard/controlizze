@@ -3,6 +3,7 @@ import { hasZodFastifySchemaValidationErrors } from 'fastify-type-provider-zod'
 
 import { BadRequestError } from './routes/_errors/bad-request-error'
 import { ConflictError } from './routes/_errors/conflict-error'
+import { ForbiddenError } from './routes/_errors/forbidden-error'
 import { NotFoundError } from './routes/_errors/not-found-error'
 import { UnauthorizedError } from './routes/_errors/unauthorized-error'
 
@@ -42,6 +43,10 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
 
   if (error instanceof UnauthorizedError) {
     return reply.status(401).send({ message: error.message })
+  }
+
+  if (error instanceof ForbiddenError) {
+    return reply.status(403).send({ message: error.message })
   }
 
   console.error(error)
