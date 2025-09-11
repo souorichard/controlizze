@@ -6,6 +6,7 @@ interface GetOrganizationsResponse {
     name: string
     slug: string
     avatarUrl: string | null
+    role: 'ADMIN' | 'MEMBER' | 'BILLING'
   }[]
 }
 
