@@ -2,11 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ComponentProps } from 'react'
+import { ComponentProps, PropsWithChildren } from 'react'
 
-interface SettingsNavLinkProps extends ComponentProps<typeof Link> {}
+export function Sidebar({ children }: PropsWithChildren) {
+  return (
+    <nav className="bg-secondary/25 flex gap-1 rounded-md p-1 lg:w-[16rem] lg:flex-col lg:bg-transparent lg:p-0">
+      {children}
+    </nav>
+  )
+}
 
-export function SettingsNavLink(props: SettingsNavLinkProps) {
+interface SidebarLinkProps extends ComponentProps<typeof Link> {}
+
+export function SidebarLink(props: SidebarLinkProps) {
   const pathname = usePathname()
 
   const isCurrent = pathname === props.href.toString()

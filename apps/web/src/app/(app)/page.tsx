@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'Home',
 }
 
-export default async function Home() {
+export default async function HomePage() {
   return (
     <Container className="flex min-h-screen flex-col">
       <HeaderContainer className="pb-5">
