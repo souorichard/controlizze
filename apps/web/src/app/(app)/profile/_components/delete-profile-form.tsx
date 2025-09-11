@@ -1,5 +1,8 @@
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+
+import { DeleteProfileDialog } from './dialogs/delete-profile-dialog'
 
 export function DeleteProfileForm() {
   return (
@@ -17,15 +20,18 @@ export function DeleteProfileForm() {
         </p>
       </div>
 
-      <form action="">
-        <Button
-          type="submit"
-          variant="destructive"
-          className="w-full lg:w-auto"
-        >
-          Delete profile
-        </Button>
-      </form>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            type="submit"
+            variant="destructive"
+            className="w-full lg:w-fit"
+          >
+            Delete profile
+          </Button>
+        </AlertDialogTrigger>
+        <DeleteProfileDialog />
+      </AlertDialog>
     </div>
   )
 }

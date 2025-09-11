@@ -3,6 +3,7 @@
 import { HTTPError } from 'ky'
 import { revalidateTag } from 'next/cache'
 
+import { deleteProfile } from '@/http/auth/delete-profile'
 import { updateProfileEmail } from '@/http/auth/update-profile-email'
 import { updateProfileName } from '@/http/auth/update-profile-name'
 import { ActionResponse } from '@/interfaces/action-response'
@@ -65,5 +66,30 @@ export async function updateProfileEmailAction({
   return {
     success: true,
     message: 'Successfully updated profile email.',
+  }
+}
+
+export async function deleteProfileAction() {
+  try {
+    await deleteProfile()
+  } catch (error) {
+    if (error instanceof HTTPError) {
+      const { message } = await error.response.json()
+
+      return {
+        success: false,
+        message,
+      }
+    }
+
+    return {
+      success: false,
+      message: 'Internal server error.',
+    }
+  }
+
+  return {
+    success: true,
+    message: 'Successfully deleted profile.',
   }
 }
