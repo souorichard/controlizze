@@ -7,7 +7,7 @@ import { z } from 'zod/v4'
 
 import { Button } from '@/components/ui/button'
 
-export const organizationAvatarSchema = z.object({
+export const profileAvatarSchema = z.object({
   avatar: z
     .custom<File>((value) => value instanceof File, 'Select an image.')
     .refine((file) => file.size <= 2 * 1024 * 1024, 'Maximum size: 2MB.')
@@ -17,11 +17,7 @@ export const organizationAvatarSchema = z.object({
     ),
 })
 
-export type OrganizationAvatarFormData = z.infer<
-  typeof organizationAvatarSchema
->
-
-export function OrganizationAvatarForm() {
+export function ProfileAvatarForm() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [preview, setPreview] = useState<string | null>(null)
@@ -38,7 +34,7 @@ export function OrganizationAvatarForm() {
       return
     }
 
-    const response = organizationAvatarSchema.safeParse({ avatar: file })
+    const response = profileAvatarSchema.safeParse({ avatar: file })
 
     if (!response.success) {
       toast.error(response.error.issues[0].message)
@@ -61,7 +57,7 @@ export function OrganizationAvatarForm() {
   return (
     <div className="grid grid-rows-[auto_auto] items-center gap-6 lg:grid-cols-2 lg:grid-rows-none lg:gap-10">
       <div className="space-y-2">
-        <h2 className="font-semibold">Organization avatar</h2>
+        <h2 className="font-semibold">Profile avatar</h2>
         <p className="text-muted-foreground text-sm">
           Recommended 400x400px, PNG, JPG or JPEG.
         </p>
