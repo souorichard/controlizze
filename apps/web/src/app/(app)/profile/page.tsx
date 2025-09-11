@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 
 import { Separator } from '@/components/ui/separator'
+import { getProfile } from '@/http/auth/get-profile'
 
 import { DeleteProfileForm } from './_components/delete-profile-form'
 import { ProfileAvatarForm } from './_components/profile-avatar-form'
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
   title: 'Profile',
 }
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const { user } = await getProfile()
+
   return (
     <main className="w-full space-y-8">
-      <ProfileNameForm />
+      <ProfileNameForm initialData={user?.name ?? ''} />
       <Separator />
 
       <ProfileEmailForm />
