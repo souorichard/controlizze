@@ -20,6 +20,7 @@ import { authenticateWithGithub } from './routes/auth/authenticate-with-github'
 import { authenticateWithGoogle } from './routes/auth/authenticate-with-google'
 import { authenticateWithPassword } from './routes/auth/autheticate-with-password'
 import { createAccount } from './routes/auth/create-account'
+import { deleteProfile } from './routes/auth/delete-profile'
 import { getProfile } from './routes/auth/get-profile'
 import { requestPasswordRecover } from './routes/auth/request-password-recover'
 import { resetPassword } from './routes/auth/reset-password'
@@ -105,6 +106,7 @@ app.register(resetPassword)
 app.register(getProfile)
 app.register(updateProfileName)
 app.register(updateProfileEmail)
+app.register(deleteProfile)
 
 app.register(createOrganization)
 app.register(getMembership)
