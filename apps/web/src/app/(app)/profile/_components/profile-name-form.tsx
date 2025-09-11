@@ -24,7 +24,7 @@ export function ProfileNameForm({ initialData }: ProfileNameFormProps) {
   const { register, handleSubmit } = useForm<ProfileNameFormData>({
     resolver: zodResolver(profileNameForm),
     defaultValues: {
-      name: initialData,
+      name: initialData ?? '',
     },
   })
 

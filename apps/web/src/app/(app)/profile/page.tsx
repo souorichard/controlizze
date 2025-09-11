@@ -20,7 +20,10 @@ export default async function ProfilePage() {
       <ProfileNameForm initialData={user?.name ?? ''} />
       <Separator />
 
-      <ProfileEmailForm />
+      <ProfileEmailForm
+        initialData={user?.email}
+        canUpdated={user.canChangeEmail}
+      />
       <Separator />
 
       <ProfileAvatarForm />

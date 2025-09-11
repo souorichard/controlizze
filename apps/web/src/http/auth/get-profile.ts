@@ -6,6 +6,7 @@ interface GetProfileResponse {
     name: string | null
     email: string
     avatarUrl: string | null
+    canChangeEmail: boolean
   }
 }
 

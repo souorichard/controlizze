@@ -6,6 +6,7 @@ import { auth } from '@/http/middlewares/auth'
 import { NotFoundError } from '@/http/routes/_errors/not-found-error'
 import { prisma } from '@/lib/prisma'
 
+import { ConflictError } from '../_errors/conflict-error'
 import { ForbiddenError } from '../_errors/forbidden-error'
 
 export async function updateProfileEmail(app: FastifyInstance) {
@@ -32,11 +33,19 @@ export async function updateProfileEmail(app: FastifyInstance) {
 
         const { email } = request.body
 
-        const user = await prisma.user.findUnique({
-          where: {
-            id: userId,
-          },
-        })
+        const [user, userFromEmail] = await Promise.all([
+          prisma.user.findUnique({
+            where: {
+              id: userId,
+            },
+          }),
+
+          prisma.user.findUnique({
+            where: {
+              email,
+            },
+          }),
+        ])
 
         if (!user) {
           throw new NotFoundError('User not found.')
@@ -46,6 +55,10 @@ export async function updateProfileEmail(app: FastifyInstance) {
           throw new ForbiddenError(
             'Only users with password authentication can change e-mail.',
           )
+        }
+
+        if (userFromEmail) {
+          throw new ConflictError('User with same e-mail already exists.')
         }
 
         await prisma.user.update({
