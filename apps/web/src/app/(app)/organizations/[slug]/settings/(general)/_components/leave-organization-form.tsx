@@ -1,11 +1,9 @@
-// import { ability } from '@/auth/auth'
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 
-export async function LeaveOrganizationForm() {
-  // const permissions = await ability()
+import { LeaveOrganizationDialog } from './dialogs/leave-organization-dialog'
 
-  const canLeaveOrganization = true
-
+export function LeaveOrganizationForm({ canLeave }: { canLeave: boolean }) {
   return (
     <div className="grid grid-rows-[auto_auto] items-center gap-6 lg:grid-cols-2 lg:grid-rows-none lg:gap-10">
       <div className="space-y-2">
@@ -16,16 +14,19 @@ export async function LeaveOrganizationForm() {
         </p>
       </div>
 
-      <form>
-        <Button
-          type="submit"
-          variant="secondary"
-          className="w-full lg:w-auto"
-          disabled={canLeaveOrganization}
-        >
-          Leave organization
-        </Button>
-      </form>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            variant="secondary"
+            className="w-full lg:w-fit"
+            disabled={!canLeave}
+          >
+            Leave organization
+          </Button>
+        </AlertDialogTrigger>
+
+        <LeaveOrganizationDialog />
+      </AlertDialog>
     </div>
   )
 }

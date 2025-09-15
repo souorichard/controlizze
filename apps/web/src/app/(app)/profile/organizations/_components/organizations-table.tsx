@@ -1,10 +1,8 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { Undo2 } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -38,7 +36,7 @@ export default function OrganizationsTable() {
             <TableRow>
               <TableHead>Organization</TableHead>
               <TableHead className="w-[200px]">Role</TableHead>
-              <TableHead className="w-[140px] text-center" />
+              {/* <TableHead className="w-[140px] text-center" /> */}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -66,18 +64,25 @@ export default function OrganizationsTable() {
                   <TableCell>
                     <span>{organization.role}</span>
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <div className="flex items-center justify-end gap-1">
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Undo2 className="size-4" />
-                        <span className="sr-only">Leave organization</span>
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="text-destructive hover:text-destructive"
+                            disabled={!canLeave}
+                          >
+                            <Undo2 className="size-4" />
+                            <span className="sr-only">Leave organization</span>
+                          </Button>
+                        </AlertDialogTrigger>
+
+                        <LeaveOrganizationDialog />
+                      </AlertDialog>
                     </div>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               )
             })}

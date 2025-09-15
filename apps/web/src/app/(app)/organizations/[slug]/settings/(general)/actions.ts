@@ -1,9 +1,11 @@
 'use server'
 
 import { HTTPError } from 'ky'
+import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { getCurrentOrganization } from '@/auth/auth'
+import { leaveOrganization } from '@/http/organization/leave-organization'
 import { deleteOrganization } from '@/http/organization/shutdown-organization'
 import { updateOrganizationDomain } from '@/http/organization/update-organization-domain'
 import { updateOrganizationName } from '@/http/organization/update-organization-name'
@@ -76,32 +78,41 @@ export async function updateOrganizationDomainAction({
   }
 }
 
+export async function leaveOrganizationAction() {
+  const currentOrganization = await getCurrentOrganization()
+
+  try {
+    await leaveOrganization(currentOrganization!)
+
+    revalidateTag('organizations')
+  } catch (error) {
+    if (error instanceof HTTPError) {
+      const { message } = await error.response.json()
+
+      return {
+        success: false,
+        message,
+      }
+    }
+
+    return {
+      success: false,
+      message: 'Internal server error.',
+    }
+  }
+
+  return {
+    success: true,
+    message: 'Successfully leaved organization.',
+  }
+}
+
 export async function deleteOrganizationAction() {
   const currentOrganization = await getCurrentOrganization()
 
   await deleteOrganization({
     organization: currentOrganization!,
   })
-
-  // try {
-  //   await deleteOrganization({
-  //     organization: currentOrganization!,
-  //   })
-  // } catch (error) {
-  //   if (error instanceof HTTPError) {
-  //     const { message } = await error.response.json()
-
-  //     return {
-  //       success: false,
-  //       message,
-  //     }
-  //   }
-
-  //   return {
-  //     success: false,
-  //     message: 'Internal server error.',
-  //   }
-  // }
 
   redirect('/')
 }

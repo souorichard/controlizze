@@ -17,11 +17,15 @@ export const permissions: Record<Role, PermissionsByRole> = {
     can(['update', 'transfer_ownership'], 'Organization', {
       ownerId: { $eq: user.id },
     })
+
+    cannot('leave', 'Organization')
+    can('leave', 'Organization', { ownerId: { $ne: user.id } })
   },
   MEMBER(user, { can }) {
     can('get', 'User')
 
     can('get', 'Organization')
+    can('leave', 'Organization')
 
     can(['create', 'get'], 'Transaction')
     can(['update', 'delete'], 'Transaction', { ownerId: { $eq: user.id } })
@@ -30,6 +34,8 @@ export const permissions: Record<Role, PermissionsByRole> = {
   },
   BILLING(_, { can }) {
     can('manage', 'Billing')
+
+    can('leave', 'Organization')
 
     can('get', 'Analysis')
   },

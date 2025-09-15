@@ -1,3 +1,4 @@
+import { organizationSchema } from '@controlizze/auth'
 import { Metadata } from 'next'
 
 import { ability, getCurrentOrganization } from '@/auth/auth'
@@ -23,6 +24,10 @@ export default async function GeneralPage() {
 
   const { organization } = await getOrganization(currentOrganization!)
 
+  const authOrganization = organizationSchema.parse(organization)
+
+  const canLeaveOrganization = permissions?.can('leave', authOrganization)
+
   return (
     <main className="w-full space-y-8">
       {canUpdateOrganization && (
@@ -46,7 +51,7 @@ export default async function GeneralPage() {
         </>
       )}
 
-      <LeaveOrganizationForm />
+      <LeaveOrganizationForm canLeave={canLeaveOrganization!} />
 
       {canDeleteOrganization && (
         <>
