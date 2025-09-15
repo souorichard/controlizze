@@ -1,7 +1,8 @@
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-import { deleteOrganizationAction } from '../actions'
+import { DeleteOrganizationDialog } from './dialogs/delete-organization-dialog'
 
 export function DeleteOrganizationForm() {
   return (
@@ -18,15 +19,19 @@ export function DeleteOrganizationForm() {
         </p>
       </div>
 
-      <form action={deleteOrganizationAction}>
-        <Button
-          type="submit"
-          variant="destructive"
-          className="w-full lg:w-auto"
-        >
-          Delete organization
-        </Button>
-      </form>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            type="submit"
+            variant="destructive"
+            className="w-full lg:w-fit"
+          >
+            Delete organization
+          </Button>
+        </AlertDialogTrigger>
+
+        <DeleteOrganizationDialog />
+      </AlertDialog>
     </div>
   )
 }

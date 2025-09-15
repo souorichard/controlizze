@@ -85,6 +85,7 @@ export async function leaveOrganizationAction() {
     await leaveOrganization(currentOrganization!)
 
     revalidateTag('organizations')
+    redirect('/')
   } catch (error) {
     if (error instanceof HTTPError) {
       const { message } = await error.response.json()
