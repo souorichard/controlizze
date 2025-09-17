@@ -20,6 +20,7 @@ model User {
   email        String   @unique
   hashPassword String?  @map("hash_password")
   avatarUrl    String?  @map("avatar_url")
+  avatarKey    String?  @map("avatar_key")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -109,6 +110,7 @@ model Organization {
   domain                    String?  @unique
   shouldAttachUsersByDomain Boolean  @default(false) @map("should_attach_users_by_domain")
   avatarUrl                 String?  @map("avatar_url")
+  avatarKey                 String?  @map("avatar_key")
   createdAt                 DateTime @default(now()) @map("created_at")
   updatedAt                 DateTime @updatedAt @map("updated_at")
 
