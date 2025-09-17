@@ -3,6 +3,8 @@
 import { getCurrentOrganization } from '@/auth/auth'
 import { getExpensesAmount } from '@/http/analysis/get-expenses-amount'
 import { getRevenuesAmount } from '@/http/analysis/get-revenues-amount'
+import { getTopExpenseCategories } from '@/http/analysis/get-top-expense-categories'
+import { getTopRevenueCategories } from '@/http/analysis/get-top-revenue-categories'
 import { getTotalBalanceAmount } from '@/http/analysis/get-total-balance-amount'
 import { getTransactionsPerPeriod } from '@/http/analysis/get-transactions-per-period'
 import { centsToReal } from '@/utils/coin-converter'
@@ -72,4 +74,38 @@ export async function getTransactionsPerPeriodAction({
   )
 
   return formattedDailyTransactions
+}
+
+export async function getTopExpenseCategoriesAction() {
+  const currentOrganization = await getCurrentOrganization()
+
+  const topExpenseCategories = await getTopExpenseCategories({
+    organization: currentOrganization!,
+  })
+
+  const formattedTopExpenseCategories = topExpenseCategories.categories.map(
+    (category) => ({
+      ...category,
+      amount: centsToReal(category.amount),
+    }),
+  )
+
+  return formattedTopExpenseCategories
+}
+
+export async function getTopRevenueCategoriesAction() {
+  const currentOrganization = await getCurrentOrganization()
+
+  const topRevenueCategories = await getTopRevenueCategories({
+    organization: currentOrganization!,
+  })
+
+  const formattedTopRevenueCategories = topRevenueCategories.categories.map(
+    (category) => ({
+      ...category,
+      amount: centsToReal(category.amount),
+    }),
+  )
+
+  return formattedTopRevenueCategories
 }

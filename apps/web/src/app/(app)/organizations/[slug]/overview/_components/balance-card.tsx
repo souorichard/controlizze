@@ -53,7 +53,7 @@ export function BalanceCard({ organization }: { organization: string }) {
                   : data.diffFromLastMonth}
                 %
               </span>{' '}
-              more than last month
+              compared to last month
             </p>
           </>
         ) : (

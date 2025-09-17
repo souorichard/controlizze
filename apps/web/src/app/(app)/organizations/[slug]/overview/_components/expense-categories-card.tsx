@@ -1,5 +1,7 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
+import { CircleAlert, Loader2 } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
 
 import {
@@ -16,14 +18,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 
-const chartData = [
-  { category: 'January', amount: 186 },
-  { category: 'February', amount: 305 },
-  { category: 'March', amount: 237 },
-  { category: 'April', amount: 73 },
-  { category: 'May', amount: 209 },
-  { category: 'June', amount: 214 },
-]
+import { getTopExpenseCategoriesAction } from '../actions'
 
 const chartConfig = {
   amount: {
@@ -35,7 +30,16 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ExpenseCategoriesCard() {
+export function ExpenseCategoriesCard({
+  organization,
+}: {
+  organization: string
+}) {
+  const { data: topExpenseCategories, isPending } = useQuery({
+    queryKey: ['analysis', organization, 'top-expense-categories'],
+    queryFn: getTopExpenseCategoriesAction,
+  })
+
   return (
     <Card>
       <CardHeader className="flex flex-col gap-1">
@@ -45,53 +49,74 @@ export function ExpenseCategoriesCard() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              right: 16,
-            }}
-          >
-            <CartesianGrid horizontal={false} />
-            <YAxis
-              dataKey="category"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-              hide
-            />
-            <XAxis dataKey="amount" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Bar
-              dataKey="amount"
+        {isPending && (
+          <div className="flex h-[300px] w-full flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <Loader2 className="text-primary size-5 animate-spin" />
+              {/* <span className="text-sm">Loading...</span> */}
+            </div>
+          </div>
+        )}
+
+        {topExpenseCategories?.length === 0 && (
+          <div className="flex h-[300px] w-full flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <CircleAlert className="text-primary size-5" />
+              <span className="text-sm">No categories.</span>
+            </div>
+          </div>
+        )}
+
+        {topExpenseCategories && (
+          <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <BarChart
+              accessibilityLayer
+              data={topExpenseCategories}
               layout="vertical"
-              fill="var(--color-amount)"
-              radius={4}
+              margin={{
+                right: 16,
+              }}
             >
-              <LabelList
+              <CartesianGrid horizontal={false} />
+              <YAxis
                 dataKey="category"
-                position="insideLeft"
-                offset={8}
-                className="fill-(--color-label)"
-                fontSize={12}
+                type="category"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
+                hide
               />
-              <LabelList
+              <XAxis dataKey="amount" type="number" hide />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="line" />}
+              />
+              <Bar
                 dataKey="amount"
-                position="right"
-                offset={8}
-                className="fill-foreground"
-                fontSize={12}
-              />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+                layout="vertical"
+                fill="var(--color-amount)"
+                radius={4}
+              >
+                <LabelList
+                  dataKey="category"
+                  position="insideLeft"
+                  offset={8}
+                  className="fill-(--color-label)"
+                  fontSize={12}
+                />
+                <LabelList
+                  dataKey="amount"
+                  position="right"
+                  offset={8}
+                  className="fill-foreground"
+                  formatter={(value: number) => value.toLocaleString()}
+                  fontSize={12}
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        )}
       </CardContent>
     </Card>
   )
