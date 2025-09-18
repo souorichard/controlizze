@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  CreateBucketCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3'
 import { env } from '@controlizze/env'
 
 const isLocal = env.APP_ENV === 'development'
@@ -10,6 +14,7 @@ const s3 = new S3Client({
     accessKeyId: env.AWS_ACCESS_KEY_ID,
     secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
   },
+  forcePathStyle: isLocal,
 })
 
 export async function uploadAvatar(
@@ -17,6 +22,8 @@ export async function uploadAvatar(
   key: string,
   contentType: string,
 ) {
+  await s3.send(new CreateBucketCommand({ Bucket: env.AWS_S3_BUCKET }))
+
   await s3.send(
     new PutObjectCommand({
       Bucket: env.AWS_S3_BUCKET,
@@ -28,8 +35,8 @@ export async function uploadAvatar(
   )
 
   if (isLocal) {
-    return `http://localhost:4566/${key}`
+    return `http://localhost:4566/${env.AWS_S3_BUCKET}/${key}`
   }
 
-  return `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+  return `https://${env.AWS_S3_BUCKET}.s3.${env.AWS_REGION}.amazonaws.com/${key}`
 }

@@ -1,6 +1,7 @@
 import { env } from '@controlizze/env'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import fastifyMultipart from '@fastify/multipart'
 import fastifySwagger from '@fastify/swagger'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import fastify from 'fastify'
@@ -59,6 +60,11 @@ export function buildApp() {
   // JWT
   app.register(fastifyJwt, {
     secret: env.JWT_SECRET,
+  })
+
+  // Multipart
+  app.register(fastifyMultipart, {
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
   })
 
   registerRoutes(app)

@@ -9,3 +9,12 @@ services:
       POSTGRES_USER: "docker"
       POSTGRES_PASSWORD: "docker"
       POSTGRES_DB: "controlizze"
+  
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data

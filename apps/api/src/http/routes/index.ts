@@ -14,6 +14,8 @@ import { deleteProfile } from './auth/delete-profile'
 import { getProfile } from './auth/get-profile'
 import { requestPasswordRecover } from './auth/request-password-recover'
 import { resetPassword } from './auth/reset-password'
+import { uploadProfileAvatar } from './auth/storage/upload-profile-avatar'
+import { updateProfileAvatar } from './auth/update-profile-avatar'
 import { updateProfileEmail } from './auth/update-profile-email'
 import { updateProfileName } from './auth/update-profile-name'
 import { acceptInvite } from './invite/accept-invite'
@@ -32,8 +34,10 @@ import { getOrganization } from './organization/get-organization'
 import { getOrganizations } from './organization/get-organizations'
 import { leaveOrganization } from './organization/leave-organization'
 import { shutdownOrganization } from './organization/shutdown-organization'
+import { uploadOrganizationAvatar } from './organization/storage/upload-organization-avatar'
 import { transferOrganization } from './organization/transfer-organization'
 import { updateOrganization } from './organization/update-organization'
+import { updateOrganizationAvatar } from './organization/update-organization-avatar'
 import { updateOrganizationDomain } from './organization/update-organization-domain'
 import { updateOrganizationName } from './organization/update-organization-name'
 import { changeTransationStatus } from './transaction/change-transaction-status'
@@ -54,6 +58,7 @@ export async function registerRoutes(app: FastifyInstance) {
   app.register(getProfile)
   app.register(updateProfileName)
   app.register(updateProfileEmail)
+  app.register(updateProfileAvatar)
   app.register(deleteProfile)
 
   // Organization
@@ -64,6 +69,7 @@ export async function registerRoutes(app: FastifyInstance) {
   app.register(updateOrganization)
   app.register(updateOrganizationName)
   app.register(updateOrganizationDomain)
+  app.register(updateOrganizationAvatar)
   app.register(shutdownOrganization)
   app.register(transferOrganization)
   app.register(leaveOrganization)
@@ -97,4 +103,8 @@ export async function registerRoutes(app: FastifyInstance) {
   app.register(getTransactionsPerPeriod)
   app.register(getTopExpenseCategories)
   app.register(getTopRevenueCategories)
+
+  // Storage
+  app.register(uploadProfileAvatar)
+  app.register(uploadOrganizationAvatar)
 }
