@@ -5,48 +5,97 @@ import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { getInitials } from '@/utils/get-initials'
 
-export const profileAvatarSchema = z.object({
-  avatar: z
+import { updateProfileAvatarAction } from '../actions'
+
+const profileAvatarSchema = z.object({
+  file: z
     .custom<File>((value) => value instanceof File, 'Select an image.')
-    .refine((file) => file.size <= 2 * 1024 * 1024, 'Maximum size: 2MB.')
+    .refine((file) => file.size <= 5 * 1024 * 1024, 'Maximum size: 5MB.')
     .refine(
-      (file) => ['image/png', 'image/jpeg'].includes(file.type),
-      'Invalid format (PNG ou JPG).',
+      (file) => ['image/png', 'image/jpg', 'image/jpeg'].includes(file.type),
+      'Invalid format (PNG, JPG, JPEG).',
     ),
 })
 
-export function ProfileAvatarForm() {
+export type ProfileAvatarFormData = z.infer<typeof profileAvatarSchema>
+
+interface ProfileAvatarFormProps {
+  initialData: {
+    name: string | null
+    avatarUrl: string | null
+  }
+}
+
+export function ProfileAvatarForm({ initialData }: ProfileAvatarFormProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const [preview, setPreview] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(
+    initialData?.avatarUrl ?? null,
+  )
 
   function handleClick() {
     inputRef.current?.click()
   }
 
-  function handleUploadImage(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
+  function handleSetPreview(event: React.ChangeEvent<HTMLInputElement>) {
+    const selectedFile = event.target.files?.[0]
 
-    if (!file) {
+    if (!selectedFile) {
       toast.error('Select an image.')
       return
     }
 
-    const response = profileAvatarSchema.safeParse({ avatar: file })
+    if (preview) {
+      URL.revokeObjectURL(preview)
+    }
 
-    if (!response.success) {
-      toast.error(response.error.issues[0].message)
+    const responseValidation = profileAvatarSchema.safeParse({
+      file: selectedFile,
+    })
+
+    if (!responseValidation.success) {
+      toast.error(responseValidation.error.issues[0].message)
       return
     }
 
-    const url = URL.createObjectURL(file)
+    const selectedFileUrl = URL.createObjectURL(selectedFile)
 
-    setPreview(url)
+    setFile(selectedFile)
+    setPreview(selectedFileUrl)
+
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
+  }
+
+  async function handleUploadImage() {
+    if (!file) {
+      toast.error('Select an image first.')
+      return
+    }
+
+    const { success, message, savedUrl } = await updateProfileAvatarAction({
+      file,
+    })
+
+    if (!success) {
+      toast.error(message)
+      return
+    }
+
+    toast.success(message)
+
+    setFile(null)
+    setPreview(savedUrl!)
   }
 
   function handleRemoveImage() {
+    setFile(null)
     setPreview(null)
 
     if (inputRef.current) {
@@ -73,7 +122,11 @@ export function ProfileAvatarForm() {
             alt="Image preview"
           />
         ) : (
-          <div className="size-14 rounded-full border" />
+          <Avatar className="size-14">
+            <AvatarFallback>
+              {getInitials(initialData?.name ?? 'Undefined')}
+            </AvatarFallback>
+          </Avatar>
         )}
 
         <div className="flex flex-col items-center gap-2 lg:flex-row">
@@ -81,19 +134,19 @@ export function ProfileAvatarForm() {
             ref={inputRef}
             type="file"
             accept="image/png, image/jpeg, image/jpg"
-            onChange={handleUploadImage}
+            onChange={handleSetPreview}
             className="hidden"
           />
           <Button
             type="button"
             variant="outline"
             className="w-full lg:w-auto"
-            onClick={handleClick}
+            onClick={file ? handleUploadImage : handleClick}
           >
-            Select image
+            {file ? 'Save image' : 'Select image'}
           </Button>
 
-          {preview && (
+          {file && (
             <Button
               type="button"
               variant="ghost"

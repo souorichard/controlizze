@@ -46,7 +46,7 @@ export default async function GeneralPage() {
 
       {canUpdateOrganization && (
         <>
-          <OrganizationAvatarForm />
+          <OrganizationAvatarForm initialData={organization} />
           <Separator />
         </>
       )}

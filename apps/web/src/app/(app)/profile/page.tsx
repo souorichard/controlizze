@@ -26,7 +26,9 @@ export default async function ProfilePage() {
       />
       <Separator />
 
-      <ProfileAvatarForm />
+      <ProfileAvatarForm
+        initialData={{ name: user?.name, avatarUrl: user?.avatarUrl }}
+      />
       <Separator />
 
       <DeleteProfileForm />

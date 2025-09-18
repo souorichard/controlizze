@@ -53,11 +53,11 @@ export async function uploadOrganizationAvatar(app: FastifyInstance) {
           throw new NotFoundError('Organization not found.')
         }
 
-        const allowedTypes = ['image/png', 'image/jpg']
+        const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg']
 
         if (!allowedTypes.includes(file.mimetype)) {
           throw new BadRequestError(
-            'Invalid file type. Only PNG and JPG are allowed.',
+            'Invalid file type. Only PNG, JPG, JPEG are allowed.',
           )
         }
 
