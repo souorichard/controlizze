@@ -8,27 +8,73 @@ export async function sendRecoverPasswordEmail(user: User, code: string) {
 
   const recoveryLink = `${env.NEXT_PUBLIC_WEB_URL}/auth/forgot-password/reset?code=${code}`
 
+  const html = `
+    <html>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+        <style>
+          body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', 'Arial', sans-serif;
+          }
+          a {
+            text-decoration: none;
+          }
+        </style>
+      </head>
+      <body>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #09090B; border: 1px solid #27272A; border-radius: 10px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                  <td align="center" style="padding: 32px 0; background-color: #27272740;">
+                    <img src="../../assets/controlizze/brand.svg" width="244" alt="Controlizze" style="display: block;">
+                  </td>
+                </tr>
+                <!-- Main content -->
+                <tr>
+                  <td style="padding: 32px 60px; color: #A1A1A1; font-size: 14px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td style="font-size: 16px; color: #FAFAFA; font-weight: normal;">
+                          Hello, <span style="font-weight: 600;">${user.name}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 8px; color: #A1A1A1; font-size: 14px;">
+                          You requested to recover password of your account in <span style="font-weight: 500; color: #FAFAFA;">Controlizze</span>. To recover your password, click on the link below:
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 28px;" align="center">
+                          <a href="${recoveryLink}" target="_blank" style="display: inline-block; width: 100%; height: 36px; line-height: 36px; background-color: #EFB100; color: #432004; font-weight: 600; text-align: center; border-radius: 6px;">
+                            Reset password
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 28px; font-size: 12px; text-align: center; color: #A1A1A1;">
+                          If you did not request to recover your password, please ignore this email
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `
+
   await resend.emails.send({
     from: 'Controlizze <no-reply@resend.dev>',
     to: [user.email],
     subject: 'Recover your password!',
-    html: `
-      <table width="80%" cellpadding="0" cellspacing="0" border="0" align="center" style="max-width:600px; border: 2px solid #e4e4e7; border-radius: 10px; font-family: Arial, sans-serif;">
-        <tr>
-          <td style="padding: 20px; text-align: center;">
-            <p style="font-size: 20px; font-weight: bold; margin: 0 0 16px 0; color: #111;">Hello, ${user.name}</p>
-            <p style="font-size: 16px; margin: 0 0 24px 0; color: #111;">
-              You requested to recover password of your account in <strong>Controlizze</strong>. To recover your password, click on the link below:
-            </p>
-            <a href="${recoveryLink}" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #efb100; color: #733e0a; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: 600; margin-bottom: 20px;">
-              Reset password
-            </a>
-            <p style="font-size: 12px; color: #9f9fa9; margin: 0;">
-              If you did not request to recover your password, please ignore this email.
-            </p>
-          </td>
-        </tr>
-      </table>
-    `,
+    html,
   })
 }
