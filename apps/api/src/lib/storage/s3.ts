@@ -22,7 +22,14 @@ export async function uploadAvatar(
   key: string,
   contentType: string,
 ) {
-  await s3.send(new CreateBucketCommand({ Bucket: env.AWS_S3_BUCKET }))
+  if (isLocal) {
+    try {
+      await s3.send(new CreateBucketCommand({ Bucket: env.AWS_S3_BUCKET }))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (err.name !== 'BucketAlreadyOwnedByYou') throw err
+    }
+  }
 
   await s3.send(
     new PutObjectCommand({

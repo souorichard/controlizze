@@ -4,6 +4,7 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
+import { sendInviteEmail } from '@/services/email/send-invite-email'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -106,8 +107,12 @@ export async function createInvite(app: FastifyInstance) {
           },
         })
 
+        const inviteId = invite.id
+
+        await sendInviteEmail(email, inviteId)
+
         return reply.status(201).send({
-          inviteId: invite.id,
+          inviteId,
         })
       },
     )
