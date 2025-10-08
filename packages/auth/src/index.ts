@@ -10,6 +10,7 @@ import type { User } from './models/user'
 import { permissions } from './permissions'
 import { analysisSubject } from './subjects/analysis'
 import { billingSubject } from './subjects/billing'
+import { categorySubject } from './subjects/category'
 import { inviteSubject } from './subjects/invite'
 import { organizationSubject } from './subjects/organization'
 import { transactionSubject } from './subjects/transaction'
@@ -23,6 +24,7 @@ export * from './roles'
 const appAbilitiesSchema = z.union([
   userSubject,
   organizationSubject,
+  categorySubject,
   transactionSubject,
   inviteSubject,
   billingSubject,

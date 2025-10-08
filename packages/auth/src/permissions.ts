@@ -21,14 +21,15 @@ export const permissions: Record<Role, PermissionsByRole> = {
     cannot('leave', 'Organization')
     can('leave', 'Organization', { ownerId: { $ne: user.id } })
   },
-  MEMBER(user, { can }) {
+  MEMBER(_, { can }) {
     can('get', 'User')
 
     can('get', 'Organization')
     can('leave', 'Organization')
 
-    can(['create', 'get'], 'Transaction')
-    can(['update', 'delete'], 'Transaction', { ownerId: { $eq: user.id } })
+    can('get', 'Category')
+
+    can('manage', 'Transaction')
 
     can('manage', 'Analysis')
   },
