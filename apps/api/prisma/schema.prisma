@@ -29,6 +29,7 @@ model User {
   invites            Invite[]
   member_on          Member[]
   owns_organizations Organization[]
+  owns_categories    Category[]
   owns_transactions  Transaction[]
 
   @@map("users")
@@ -119,14 +120,35 @@ model Organization {
 
   invites      Invite[]
   members      Member[]
+  categories   Category[]
   transactions Transaction[]
 
   @@map("organizations")
 }
 
-enum TransactionType {
+enum Type {
   EXPENSE
   REVENUE
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  color     String
+  type      Type     @default(EXPENSE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String       @map("organization_id")
+
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+
+  transactions Transaction[]
+
+  @@unique([name, type, organizationId])
+  @@map("categories")
 }
 
 enum TransactionStatus {
@@ -136,14 +158,17 @@ enum TransactionStatus {
 }
 
 model Transaction {
-  id          String            @id @default(uuid())
+  id          String @id @default(uuid())
   description String
-  type        TransactionType   @default(EXPENSE)
-  category    String
-  amount      BigInt
-  status      TransactionStatus @default(PENDING)
-  createdAt   DateTime          @default(now()) @map("created_at")
-  updatedAt   DateTime          @updatedAt @map("updated_at")
+  type        Type   @default(EXPENSE)
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @map("category_id")
+
+  amount    BigInt
+  status    TransactionStatus @default(PENDING)
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
 
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String       @map("organization_id")
