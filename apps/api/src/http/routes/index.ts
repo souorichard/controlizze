@@ -21,6 +21,7 @@ import { updateProfileName } from './auth/update-profile-name'
 import { createCategory } from './category/create-category'
 import { deleteCategory } from './category/delete-category'
 import { getCategories } from './category/get-categories'
+import { getCategory } from './category/get-category'
 import { updateCategory } from './category/update-category'
 import { acceptInvite } from './invite/accept-invite'
 import { createInvite } from './invite/create-invite'
@@ -81,6 +82,7 @@ export async function registerRoutes(app: FastifyInstance) {
   // Category
   app.register(createCategory)
   app.register(getCategories)
+  app.register(getCategory)
   app.register(updateCategory)
   app.register(deleteCategory)
 
