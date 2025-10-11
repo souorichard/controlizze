@@ -19,7 +19,9 @@ import { updateProfileAvatar } from './auth/update-profile-avatar'
 import { updateProfileEmail } from './auth/update-profile-email'
 import { updateProfileName } from './auth/update-profile-name'
 import { createCategory } from './category/create-category'
+import { deleteCategory } from './category/delete-category'
 import { getCategories } from './category/get-categories'
+import { updateCategory } from './category/update-category'
 import { acceptInvite } from './invite/accept-invite'
 import { createInvite } from './invite/create-invite'
 import { getInvite } from './invite/get-invite'
@@ -79,6 +81,8 @@ export async function registerRoutes(app: FastifyInstance) {
   // Category
   app.register(createCategory)
   app.register(getCategories)
+  app.register(updateCategory)
+  app.register(deleteCategory)
 
   // Transaction
   app.register(createTransation)
