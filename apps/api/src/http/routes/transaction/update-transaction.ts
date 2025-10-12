@@ -27,7 +27,7 @@ export async function updateTransation(app: FastifyInstance) {
           }),
           body: z.object({
             description: z.string(),
-            category: z.string(),
+            categoryId: z.uuid(),
             type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
             status: z.union([
               z.literal('PENDING'),
@@ -69,7 +69,7 @@ export async function updateTransation(app: FastifyInstance) {
           )
         }
 
-        const { description, category, type, status, amount } = request.body
+        const { description, categoryId, type, status, amount } = request.body
 
         await prisma.transaction.update({
           where: {
@@ -77,7 +77,7 @@ export async function updateTransation(app: FastifyInstance) {
           },
           data: {
             description,
-            category,
+            categoryId,
             type,
             status,
             amount,

@@ -67,7 +67,11 @@ export async function getTransation(app: FastifyInstance) {
           select: {
             id: true,
             description: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+              },
+            },
             type: true,
             status: true,
             amount: true,
@@ -93,6 +97,7 @@ export async function getTransation(app: FastifyInstance) {
         return {
           transaction: {
             ...transaction,
+            category: transaction.category.name,
             amount: Number(transaction.amount),
           },
         }

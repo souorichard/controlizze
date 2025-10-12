@@ -83,7 +83,11 @@ export async function getTransations(app: FastifyInstance) {
               select: {
                 id: true,
                 description: true,
-                category: true,
+                category: {
+                  select: {
+                    name: true,
+                  },
+                },
                 type: true,
                 status: true,
                 amount: true,
@@ -107,7 +111,9 @@ export async function getTransations(app: FastifyInstance) {
                   equals: type as 'EXPENSE' | 'REVENUE',
                 },
                 category: {
-                  equals: category,
+                  name: {
+                    equals: category,
+                  },
                 },
                 status: {
                   equals: status as 'PENDING' | 'COMPLETED' | 'CANCELLED',
@@ -131,7 +137,9 @@ export async function getTransations(app: FastifyInstance) {
                   equals: type as 'EXPENSE' | 'REVENUE',
                 },
                 category: {
-                  equals: category,
+                  name: {
+                    equals: category,
+                  },
                 },
                 status: {
                   equals: status as 'PENDING' | 'COMPLETED' | 'CANCELLED',
@@ -152,6 +160,7 @@ export async function getTransations(app: FastifyInstance) {
 
         const formattedTransactions = rawTransactions.map((transaction) => ({
           ...transaction,
+          category: transaction.category.name,
           amount: Number(transaction.amount),
         }))
 
