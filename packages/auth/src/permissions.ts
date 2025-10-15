@@ -27,7 +27,7 @@ export const permissions: Record<Role, PermissionsByRole> = {
     can('get', 'Organization')
     can('leave', 'Organization')
 
-    can('get', 'Category')
+    can('manage', 'Category')
 
     can('manage', 'Transaction')
 
