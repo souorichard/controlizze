@@ -7,3 +7,9 @@ export function getInitials(name: string): string {
 
   return initials
 }
+
+export function getTwiceInitialsLetters(name: string): string {
+  const letters = name.slice(0, 2).toUpperCase()
+
+  return letters
+}

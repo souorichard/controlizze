@@ -13,7 +13,12 @@ export default async function TransactionsPage() {
 
   return (
     <>
-      <h1 className="text-xl font-semibold md:text-2xl">Transactions</h1>
+      <div className="space-y-1">
+        <h1 className="text-xl font-semibold md:text-2xl">Transactions</h1>
+        <p className="text-muted-foreground">
+          View and manage your organization&apos;s transactions
+        </p>
+      </div>
       <div className="flex flex-col gap-6">
         <TransactionsTable organization={currentOrganization!} />
       </div>

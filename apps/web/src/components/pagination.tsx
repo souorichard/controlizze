@@ -24,7 +24,7 @@ export function Pagination({
   const totalPages = pages > 0 ? pages : 1
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex w-full items-center justify-between">
       <span className="text-muted-foreground text-sm">
         Total of {total} item(s)
       </span>
@@ -33,7 +33,7 @@ export function Pagination({
         <div className="flex items-center justify-center text-sm font-medium">
           Page {page} of {totalPages}
         </div>
-        <nav className="flex items-center space-x-2">
+        <nav className="flex items-center gap-2">
           <Button
             size="icon"
             variant="outline"

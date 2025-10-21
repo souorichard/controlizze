@@ -16,7 +16,12 @@ export default async function OverviewPage() {
 
   return (
     <>
-      <h1 className="text-xl font-semibold md:text-2xl">Overview</h1>
+      <div className="space-y-1">
+        <h1 className="text-xl font-semibold md:text-2xl">Overview</h1>
+        <p className="text-muted-foreground">
+          Summary of your organization&apos;s financial performance.
+        </p>
+      </div>
       <div className="flex flex-col gap-4">
         <div className="grid items-center gap-4 lg:grid-cols-3">
           <ExpensesCard organization={currentOrganization!} />
