@@ -25,7 +25,7 @@ import { LiveDescriptionFilter } from './filters/live-description-filter'
 import { SelectFiltersPopover } from './filters/select-filters-popover'
 import { getTransactionsFilter } from './functions/get-transactions-filter'
 import { statusHandler } from './functions/status-handler'
-import { typeHandler } from './functions/type-handler'
+// import { typeHandler } from './functions/type-handler'
 import { TransactionsTableSkeleton } from './skeletons/transactions-table-skeleton'
 import { TransactionOptions } from './transaction-options'
 
@@ -64,7 +64,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
             <TableRow>
               <TableHead className="w-[160px]">Created at</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead className="w-[120px]">Type</TableHead>
+              {/* <TableHead className="w-[120px]">Type</TableHead> */}
               <TableHead className="w-[160px]">Category</TableHead>
               <TableHead className="w-[160px]">Status</TableHead>
               <TableHead className="w-[132px] text-right">Amount</TableHead>
@@ -92,9 +92,9 @@ export function TransactionsTable({ organization }: { organization: string }) {
                     {dayjs(transaction.createdAt).fromNow()}
                   </TableCell>
                   <TableCell>{transaction.description}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {typeHandler({ type: transaction.type })}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell className="max-w-[160px] truncate">
                     {transaction.category}
                   </TableCell>
@@ -136,7 +136,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={4} />
+              <TableCell colSpan={3} />
               <TableCell colSpan={1}>
                 <div className="flex flex-col justify-center gap-4 text-sm font-semibold">
                   <span className="text-primary text-sm font-medium">

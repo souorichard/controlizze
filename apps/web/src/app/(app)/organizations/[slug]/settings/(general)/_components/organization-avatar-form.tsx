@@ -104,7 +104,7 @@ export function OrganizationAvatarForm({
 
   function handleRemoveImage() {
     setFile(null)
-    setPreview(null)
+    setPreview(initialData?.avatarUrl ?? null)
 
     if (inputRef.current) {
       inputRef.current.value = ''
@@ -120,7 +120,7 @@ export function OrganizationAvatarForm({
         </p>
       </div>
 
-      <div className="flex flex-col gap-5 lg:flex-row">
+      <div className="flex flex-col items-center gap-5 lg:flex-row">
         {preview ? (
           <Image
             src={preview}
