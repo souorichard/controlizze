@@ -67,7 +67,15 @@ export function SignInForm() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-5">
+    <div className="space-y-4 md:space-y-6">
+      <SocialSignInButtons disabled={isLoading} />
+
+      <div className="flex items-center gap-3">
+        <Separator className="flex-1" />
+        <p className="text-muted-foreground text-xs">OR CONTINUE WITH</p>
+        <Separator className="flex-1" />
+      </div>
+
       <form
         onSubmit={handleSubmit(handleSignIn)}
         className="space-y-4 md:space-y-5"
@@ -93,7 +101,7 @@ export function SignInForm() {
           <Input
             id="password"
             type="password"
-            placeholder="••••••"
+            placeholder="⁕⁕⁕⁕⁕⁕⁕⁕"
             {...register('password')}
           />
 
@@ -131,9 +139,9 @@ export function SignInForm() {
         </div>
       </form>
 
-      <Separator />
+      {/* <Separator />
 
-      <SocialSignInButtons disabled={isLoading} />
+      <SocialSignInButtons disabled={isLoading} /> */}
     </div>
   )
 }

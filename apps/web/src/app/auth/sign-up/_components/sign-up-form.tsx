@@ -65,7 +65,15 @@ export function SignUpForm() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-5">
+    <div className="space-y-4 md:space-y-6">
+      <SocialSignInButtons disabled={isLoading} />
+
+      <div className="flex items-center gap-3">
+        <Separator className="flex-1" />
+        <p className="text-muted-foreground text-xs">OR CONTINUE WITH</p>
+        <Separator className="flex-1" />
+      </div>
+
       <form
         onSubmit={handleSubmit(handleSignUp)}
         className="space-y-4 md:space-y-5"
@@ -107,7 +115,7 @@ export function SignUpForm() {
           <Input
             id="password"
             type="password"
-            placeholder="••••••"
+            placeholder="⁕⁕⁕⁕⁕⁕⁕⁕"
             {...register('password')}
           />
 
@@ -123,7 +131,7 @@ export function SignUpForm() {
           <Input
             id="confirmPassword"
             type="password"
-            placeholder="••••••"
+            placeholder="⁕⁕⁕⁕⁕⁕⁕⁕"
             {...register('confirmPassword')}
           />
 
@@ -134,6 +142,14 @@ export function SignUpForm() {
           )}
         </div>
 
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            'Create account'
+          )}
+        </Button>
+
         <div className="flex items-center justify-center gap-1 py-2 text-sm">
           <span className="text-muted-foreground">Already registered?</span>
           <Link
@@ -143,19 +159,7 @@ export function SignUpForm() {
             Sign in
           </Link>
         </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            'Create account'
-          )}
-        </Button>
       </form>
-
-      <Separator />
-
-      <SocialSignInButtons disabled={isLoading} />
     </div>
   )
 }
