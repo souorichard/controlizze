@@ -21,7 +21,7 @@ export async function Tabs() {
   return (
     <div className="mx-auto flex w-full max-w-7xl items-center gap-1 px-5">
       <NavLink
-        href={`/organizations/${currentOrganization}/overview`}
+        href={`/orgs/${currentOrganization}/overview`}
         className={linkClass}
       >
         <LayoutDashboard className="size-4" />
@@ -32,7 +32,7 @@ export async function Tabs() {
 
       {canGetTransactions && (
         <NavLink
-          href={`/organizations/${currentOrganization}/transactions`}
+          href={`/orgs/${currentOrganization}/transactions`}
           className={linkClass}
         >
           <ArrowLeftRight className="size-4" />
@@ -44,7 +44,7 @@ export async function Tabs() {
 
       {canGetCategories && (
         <NavLink
-          href={`/organizations/${currentOrganization}/categories`}
+          href={`/orgs/${currentOrganization}/categories`}
           className={linkClass}
         >
           <Tags className="size-4" />
@@ -56,7 +56,7 @@ export async function Tabs() {
 
       {(canUpdateOrganization || canGetMembers || canGetBilling) && (
         <NavLink
-          href={`/organizations/${currentOrganization}/settings`}
+          href={`/orgs/${currentOrganization}/settings`}
           className={linkClass}
         >
           <Settings className="size-4" />

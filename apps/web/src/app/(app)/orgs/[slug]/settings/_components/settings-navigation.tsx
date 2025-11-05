@@ -12,15 +12,13 @@ export async function SettingsNavigation() {
 
   return (
     <Sidebar>
-      <SidebarLink href={`/organizations/${currentOrganization}/settings`}>
+      <SidebarLink href={`/orgs/${currentOrganization}/settings`}>
         <Settings2 className="size-4" />
         General
       </SidebarLink>
 
       {canGetMembers && (
-        <SidebarLink
-          href={`/organizations/${currentOrganization}/settings/members`}
-        >
+        <SidebarLink href={`/orgs/${currentOrganization}/settings/members`}>
           <Users className="size-4" />
           Members
         </SidebarLink>
@@ -28,7 +26,7 @@ export async function SettingsNavigation() {
 
       {/* {canGetBilling && (
         <SidebarLink
-          href={`/organizations/${currentOrganization}/settings/billing`}
+          href={`/orgs/${currentOrganization}/settings/billing`}
         >
           <HandCoins className="size-4" />
           Billing

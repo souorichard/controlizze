@@ -9,7 +9,7 @@ export function ProfileNavigation() {
         <User className="size-4" />
         Profile
       </SidebarLink>
-      <SidebarLink href={`/profile/organizations`}>
+      <SidebarLink href={`/profile/orgs`}>
         <Building2 className="size-4" />
         Organizations
       </SidebarLink>

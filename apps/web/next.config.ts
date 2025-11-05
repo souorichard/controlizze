@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         hostname: 's3.amazonaws.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+      },
     ],
   },
 }

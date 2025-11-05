@@ -11,7 +11,7 @@ import { z } from 'zod/v4'
 import {
   createTransactionAction,
   updateTransactionAction,
-} from '@/app/(app)/organizations/[slug]/transactions/actions'
+} from '@/app/(app)/orgs/[slug]/transactions/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

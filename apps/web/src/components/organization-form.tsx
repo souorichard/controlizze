@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { createOrganizationAction } from '../app/(app)/organizations/actions'
+import { createOrganizationAction } from '../app/(app)/orgs/actions'
 
 const upsertOrganizationSchema = z
   .object({

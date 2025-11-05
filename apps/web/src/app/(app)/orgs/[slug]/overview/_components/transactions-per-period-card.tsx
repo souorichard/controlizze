@@ -214,7 +214,7 @@ export function TransactionPerPeriodCard({
       </CardContent>
       <CardFooter className="justify-end gap-3 py-2.5">
         <Button size="xs" variant="link" asChild>
-          <Link href={`/organizations/${organization}/transactions`}>
+          <Link href={`/orgs/${organization}/transactions`}>
             View all transactions
             <ArrowUpRight className="size-4" />
           </Link>
