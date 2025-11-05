@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -15,7 +15,9 @@ import { Label } from '@/components/ui/label'
 import { recoverPasswordAction } from '../actions'
 
 const recoverPasswordSchema = z.object({
-  email: z.email({ error: 'Please, provide a valid e-mail.' }),
+  email: z
+    .email({ error: 'Please, provide a valid e-mail.' })
+    .min(1, 'E-mail is required.'),
 })
 
 export type RecoverPasswordFormData = z.infer<typeof recoverPasswordSchema>
@@ -35,7 +37,7 @@ export function RecoverPasswordForm() {
     },
   })
 
-  async function handleRecoverPassword({ email }: RecoverPasswordFormData) {
+  async function onSubmit({ email }: RecoverPasswordFormData) {
     const { success, message } = await recoverPasswordAction({
       email,
     })
@@ -50,45 +52,44 @@ export function RecoverPasswordForm() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-5">
-      <form
-        onSubmit={handleSubmit(handleRecoverPassword)}
-        className="space-y-4 md:space-y-5"
-      >
+    <div className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label>E-mail</Label>
           <Input
-            id="email"
             type="email"
             placeholder="john@acme.com"
+            inputMode="email"
             {...register('email')}
           />
-
           {errors.email && (
-            <span className="text-destructive block text-xs">
+            <span className="text-destructive text-sm">
               {errors.email.message}
             </span>
           )}
         </div>
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
           {isLoading ? (
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2 className="size-5 animate-spin" />
           ) : (
-            'Recover password'
+            <>
+              Send password recovery e-mail
+              <ArrowRight className="size-5" />
+            </>
           )}
         </Button>
-
-        <div className="flex items-center justify-center gap-1 py-2 text-sm">
-          <span className="text-muted-foreground">Remeber your password?</span>
-          <Link
-            href="/auth/sign-in"
-            className="underline-offset-4 transition hover:underline"
-          >
-            Sign in
-          </Link>
-        </div>
       </form>
+
+      <p className="text-muted-foreground text-center text-xs">
+        Remember your password?{' '}
+        <Link
+          href="/auth/sign-in"
+          className="text-foreground underline-offset-4 hover:underline"
+        >
+          Sign in
+        </Link>
+      </p>
     </div>
   )
 }

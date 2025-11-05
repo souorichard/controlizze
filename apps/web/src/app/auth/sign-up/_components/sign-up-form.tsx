@@ -1,43 +1,41 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod/v4'
 
-import { SocialSignInButtons } from '@/components/auth/social-sign-in-buttons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 
+import { SocialButtons } from '../../_components/social-buttons'
 import { createAccountAction } from '../actions'
 
-const signUpSchema = z
-  .object({
-    name: z
-      .string()
-      .min(3, { error: 'Name must be at least 3 characters.' })
-      .refine((value) => value.split(' ').length > 1, {
-        message: 'Please, enter your full name.',
-      }),
-    email: z.email({ error: 'Please, provide a valid e-mail.' }),
-    password: z
-      .string()
-      .min(6, { error: 'Password must be at least 6 characters.' }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords must match.',
-    path: ['confirmPassword'],
-  })
+const signUpSchema = z.object({
+  name: z
+    .string()
+    .min(3, 'Name must be at least 3 characters long')
+    .min(1, 'Name is required'),
+  email: z
+    .email({ error: 'Invalid email address' })
+    .min(1, 'Email is required'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters long')
+    .min(1, 'Password is required'),
+})
 
 export type SignUpFormData = z.infer<typeof signUpSchema>
 
 export function SignUpForm() {
+  const [isVisible, setIsVisible] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -46,7 +44,7 @@ export function SignUpForm() {
     resolver: zodResolver(signUpSchema),
   })
 
-  async function handleSignUp({ name, email, password }: SignUpFormData) {
+  async function onSubmit({ name, email, password }: SignUpFormData) {
     const { success, message } = await createAccountAction({
       name,
       email,
@@ -65,8 +63,8 @@ export function SignUpForm() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6">
-      <SocialSignInButtons disabled={isLoading} />
+    <div className="space-y-6">
+      <SocialButtons isLoading={isLoading} />
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />
@@ -74,21 +72,12 @@ export function SignUpForm() {
         <Separator className="flex-1" />
       </div>
 
-      <form
-        onSubmit={handleSubmit(handleSignUp)}
-        className="space-y-4 md:space-y-5"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label>Name</Label>
-          <Input
-            id="name"
-            type="name"
-            placeholder="John Doe"
-            {...register('name')}
-          />
-
+          <Input type="name" placeholder="John Doe" {...register('name')} />
           {errors.name && (
-            <span className="text-destructive block text-xs">
+            <span className="text-destructive text-sm">
               {errors.name.message}
             </span>
           )}
@@ -97,14 +86,13 @@ export function SignUpForm() {
         <div className="space-y-1.5">
           <Label>E-mail</Label>
           <Input
-            id="email"
             type="email"
-            placeholder="john@example.com"
+            placeholder="john@acme.com"
+            inputMode="email"
             {...register('email')}
           />
-
           {errors.email && (
-            <span className="text-destructive block text-xs">
+            <span className="text-destructive text-sm">
               {errors.email.message}
             </span>
           )}
@@ -112,54 +100,55 @@ export function SignUpForm() {
 
         <div className="space-y-1.5">
           <Label>Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="⁕⁕⁕⁕⁕⁕⁕⁕"
-            {...register('password')}
-          />
-
+          <div className="relative">
+            <Input
+              type={isVisible ? 'text' : 'password'}
+              placeholder="⁕⁕⁕⁕⁕⁕⁕⁕"
+              className="pr-10"
+              {...register('password')}
+            />
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              className="absolute top-0 right-0"
+              onClick={() => setIsVisible(!isVisible)}
+            >
+              {isVisible ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
+            </Button>
+          </div>
           {errors.password && (
-            <span className="text-destructive block text-xs">
+            <span className="text-destructive text-sm">
               {errors.password.message}
             </span>
           )}
         </div>
 
-        <div className="space-y-1.5">
-          <Label>Confirm password</Label>
-          <Input
-            id="confirmPassword"
-            type="password"
-            placeholder="⁕⁕⁕⁕⁕⁕⁕⁕"
-            {...register('confirmPassword')}
-          />
-
-          {errors.confirmPassword && (
-            <span className="text-destructive block text-xs">
-              {errors.confirmPassword.message}
-            </span>
-          )}
-        </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" size="lg" className="w-full">
           {isLoading ? (
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2 className="size-5 animate-spin" />
           ) : (
-            'Create account'
+            <>
+              Create account
+              <ArrowRight className="size-5" />
+            </>
           )}
         </Button>
-
-        <div className="flex items-center justify-center gap-1 py-2 text-sm">
-          <span className="text-muted-foreground">Already registered?</span>
-          <Link
-            href="/auth/sign-in"
-            className="underline-offset-4 transition hover:underline"
-          >
-            Sign in
-          </Link>
-        </div>
       </form>
+
+      <p className="text-muted-foreground text-center text-xs">
+        Already have an accoun?{' '}
+        <Link
+          href="/auth/sign-in"
+          className="text-foreground underline-offset-4 hover:underline"
+        >
+          Sign in
+        </Link>
+      </p>
     </div>
   )
 }

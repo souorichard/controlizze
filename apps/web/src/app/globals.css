@@ -118,4 +118,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .bg-auth {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/freepik/auth-background.jpg');
+    background-position: bottom;
+    background-size: cover;
+  }
 }

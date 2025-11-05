@@ -5,7 +5,7 @@ import { resetPassword } from '@/http/auth/reset-password'
 import { ActionResponse } from '@/interfaces/action-response'
 
 import { RecoverPasswordFormData } from './_components/recover-password-form'
-import { ResetPasswordFormData } from './_components/reset-password-form'
+import { ResetPasswordFormData } from './reset/_components/reset-password-form'
 
 export async function recoverPasswordAction({
   email,

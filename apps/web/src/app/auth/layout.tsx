@@ -1,25 +1,26 @@
-import { redirect } from 'next/navigation'
+import Image from 'next/image'
 import { PropsWithChildren } from 'react'
 
-import { isAuthenticated } from '@/auth/auth'
+import logo from '@/assets/brand/logo.svg'
 
-export default async function AuthLayout({ children }: PropsWithChildren) {
-  if (await isAuthenticated()) {
-    redirect('/')
-  }
-
+export default function AuthLayout({ children }: PropsWithChildren) {
   return (
-    <div className="flex min-h-screen items-center justify-center px-8 py-12">
-      <div className="flex w-full max-w-md flex-col gap-6">
-        <div className="space-y-3 text-center">
-          <h1 className="text-xl font-bold md:text-2xl">
-            Take control of your finances
-          </h1>
-          <p className="text-muted-foreground text-sm font-medium text-pretty md:text-base">
-            Join our system and simplify your financial life with ease and
-            security
-          </p>
-        </div>
+    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
+      <div className="bg-auth hidden flex-col bg-cover bg-bottom p-12 lg:flex lg:justify-between">
+        <Image src={logo} alt="Controlizze logo" className="w-48" />
+
+        <p className="text-muted-foreground text-end text-xs">
+          Image designed by{' '}
+          <a
+            href="https://www.freepik.com"
+            target="_blank"
+            className="text-foreground underline-offset-4 hover:underline"
+          >
+            Freepik
+          </a>
+        </p>
+      </div>
+      <div className="flex items-center justify-center px-8 py-12 lg:px-12">
         {children}
       </div>
     </div>

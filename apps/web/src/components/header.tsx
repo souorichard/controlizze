@@ -2,7 +2,7 @@ import { CirclePlus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import controlizzeIcon from '@/assets/controlizze/icon.svg'
+import controlizzeIcon from '@/assets/brand/icon.svg'
 import { getCurrentOrganization } from '@/auth/auth'
 
 import { OrganizationSwitcher } from './organization-switcher'

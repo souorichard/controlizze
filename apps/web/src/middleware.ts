@@ -1,7 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import { getUrl } from './utils/get-url'
+
 export function middleware(request: NextRequest) {
+  const token = request.cookies.get('token')
   const { pathname } = request.nextUrl
+
+  if (pathname.includes('/auth') && token) {
+    return NextResponse.redirect(new URL(getUrl('/')))
+  }
+
+  if (pathname.includes('/orgs') && !token) {
+    return NextResponse.redirect(new URL(getUrl('/auth/sign-in')))
+  }
+
+  if (
+    pathname.includes('/reset') &&
+    !request.nextUrl.searchParams.get('code')
+  ) {
+    return NextResponse.redirect(new URL(getUrl('/auth/forgot-password')))
+  }
 
   const response = NextResponse.next()
 
@@ -17,14 +35,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }
