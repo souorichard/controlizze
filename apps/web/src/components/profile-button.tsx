@@ -1,7 +1,7 @@
-import { CirclePlus, LogOut, Menu, User } from 'lucide-react'
+import { LogOut, Menu, User } from 'lucide-react'
 import Link from 'next/link'
 
-import { auth, getCurrentOrganization } from '@/auth/auth'
+import { auth } from '@/auth/auth'
 import { getInitials } from '@/utils/get-initials'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
@@ -16,8 +16,6 @@ import {
 
 export async function ProfileButton() {
   const { user } = await auth()
-
-  const currentOrganization = await getCurrentOrganization()
 
   return (
     <DropdownMenu>
@@ -52,7 +50,7 @@ export async function ProfileButton() {
           </Link>
         </DropdownMenuItem>
 
-        {currentOrganization && (
+        {/* {currentOrganization && (
           <DropdownMenuItem className="md:hidden" asChild>
             <Link
               href={`/orgs/${currentOrganization}/transactions/new`}
@@ -61,7 +59,7 @@ export async function ProfileButton() {
               Create transaction
             </Link>
           </DropdownMenuItem>
-        )}
+        )} */}
 
         <DropdownMenuSeparator />
 

@@ -22,7 +22,7 @@ export default async function HomePage() {
       </HeaderContainer>
       <MainContainer className="flex flex-1 flex-col items-center justify-center gap-12 bg-[url(../assets/home-bg.png)] bg-cover bg-center xl:bg-auto">
         <div className="flex flex-col items-center gap-4 text-center">
-          <div className="bg-primary/10 mb-2 flex items-center justify-center rounded-full p-3 lg:p-4">
+          <div className="bg-primary/10 mb-2 flex items-center justify-center rounded-full p-3 lg:p-6">
             <Building2 className="text-primary size-8 lg:size-10" />
           </div>
           <h1 className="text-2xl font-semibold lg:text-4xl">
@@ -36,7 +36,7 @@ export default async function HomePage() {
         <Button size="lg" asChild>
           <Link href="/create-organization">
             Create organization
-            <ArrowRight className="size-4" />
+            <ArrowRight className="size-5" />
           </Link>
         </Button>
       </MainContainer>

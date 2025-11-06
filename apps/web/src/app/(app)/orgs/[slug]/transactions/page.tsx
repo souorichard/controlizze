@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 
 import { getCurrentOrganization } from '@/auth/auth'
 
+import { Filters } from './_components/filters'
 import { TransactionsTable } from './_components/transactions-table'
 
 export const metadata: Metadata = {
@@ -19,7 +20,8 @@ export default async function TransactionsPage() {
           View all transactions of this organization.
         </p>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
+        <Filters />
         <TransactionsTable organization={currentOrganization!} />
       </div>
     </>
