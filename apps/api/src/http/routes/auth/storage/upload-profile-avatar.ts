@@ -69,7 +69,7 @@ export async function uploadProfileAvatar(app: FastifyInstance) {
           .replace(/(png|jpg|jpeg|gif)$/i, '')
           .toLowerCase()
 
-        const key = `avatars/profiles/${createSlug(formattedFilename)}-${hash}`
+        const key = `profiles/${createSlug(formattedFilename)}-${hash}`
 
         const url = await uploadAvatar(buffer, key, file.mimetype)
 

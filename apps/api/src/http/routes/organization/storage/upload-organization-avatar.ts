@@ -72,7 +72,7 @@ export async function uploadOrganizationAvatar(app: FastifyInstance) {
           .replace(/(png|jpg|jpeg|gif)$/i, '')
           .toLowerCase()
 
-        const key = `avatars/${slug}/${createSlug(formattedFilename)}-${hash}`
+        const key = `${slug}/${createSlug(formattedFilename)}-${hash}`
 
         const url = await uploadAvatar(buffer, key, file.mimetype)
 
