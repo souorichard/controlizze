@@ -51,7 +51,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
 
   return (
     <div className="space-y-3">
-      <div className="rounded-md border">
+      <div className="border-muted/50 bg-muted/20 overflow-hidden rounded-md border-4">
         <Table>
           <TableHeader>
             <TableRow>

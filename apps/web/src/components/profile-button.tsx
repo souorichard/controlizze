@@ -1,4 +1,4 @@
-import { LogOut, Menu, User } from 'lucide-react'
+import { Building2, LogOut, Menu, User } from 'lucide-react'
 import Link from 'next/link'
 
 import { auth } from '@/auth/auth'
@@ -26,7 +26,7 @@ export async function ProfileButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <div className="flex items-center gap-3 p-2 outline-none">
+        <div className="mb-2 flex items-center gap-3 p-2 outline-none">
           <Avatar className="size-8">
             {user.avatarUrl && <AvatarImage src={user.avatarUrl as string} />}
             <AvatarFallback className="text-sm">
@@ -41,12 +41,19 @@ export async function ProfileButton() {
           </div>
         </div>
 
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
 
         <DropdownMenuItem asChild>
           <Link href={`/profile`}>
             <User className="text-muted-foreground size-4" />
             Profile
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href={`/profile/orgs`}>
+            <Building2 className="text-muted-foreground size-4" />
+            Organizations
           </Link>
         </DropdownMenuItem>
 
