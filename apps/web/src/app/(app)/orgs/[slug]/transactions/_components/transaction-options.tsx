@@ -1,6 +1,7 @@
 'use client'
 
 import { Copy, EllipsisVertical, SquarePen } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -29,6 +30,8 @@ export function TransactionOptions({
 }: TransactionOptionsProps) {
   function handleCopyTransactionId() {
     navigator.clipboard.writeText(transaction.id)
+
+    toast.success('Transaction ID copied to clipboard')
   }
 
   return (
@@ -66,7 +69,7 @@ export function TransactionOptions({
           <DialogTrigger asChild>
             <DropdownMenuItem>
               <SquarePen className="size-4" />
-              View details
+              Edit
             </DropdownMenuItem>
           </DialogTrigger>
         </DropdownMenuContent>

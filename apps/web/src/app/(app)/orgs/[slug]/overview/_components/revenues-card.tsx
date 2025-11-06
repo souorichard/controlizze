@@ -23,7 +23,7 @@ export function RevenuesCard({ organization }: { organization: string }) {
           {isLoading ? (
             <Loader2 className="text-primary size-5 animate-spin" />
           ) : (
-            <TrendingUp className="size-5 text-green-500" />
+            <TrendingUp className="size-5 text-emerald-500" />
           )}
         </div>
       </CardHeader>
@@ -40,11 +40,11 @@ export function RevenuesCard({ organization }: { organization: string }) {
             <p className="text-muted-foreground text-xs">
               <span
                 className={cn(
-                  '',
+                  'tracking-wide',
                   data?.diffFromLastMonth === 0
                     ? 'text-foreground'
                     : data?.diffFromLastMonth > 0
-                      ? 'text-green-500'
+                      ? 'text-emerald-500'
                       : 'text-destructive',
                 )}
               >

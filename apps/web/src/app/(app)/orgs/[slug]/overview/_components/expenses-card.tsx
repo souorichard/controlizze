@@ -40,11 +40,11 @@ export function ExpensesCard({ organization }: { organization: string }) {
             <p className="text-muted-foreground text-xs">
               <span
                 className={cn(
-                  '',
+                  'tracking-wide',
                   data?.diffFromLastMonth === 0
                     ? 'text-foreground'
                     : data?.diffFromLastMonth < 0
-                      ? 'text-green-500'
+                      ? 'text-emerald-500'
                       : 'text-destructive',
                 )}
               >

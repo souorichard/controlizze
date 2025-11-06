@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
 import { getTransactionsAction } from '../actions'
 import { DeleteTransactionDialog } from './dialogs/delete-transaction-dialog'
@@ -94,7 +95,14 @@ export function TransactionsTable({ organization }: { organization: string }) {
                   <TableCell>
                     {statusHandler({ status: transaction.status })}
                   </TableCell>
-                  <TableCell className="text-right font-medium">
+                  <TableCell
+                    className={cn(
+                      'text-right font-medium',
+                      transaction.type === 'EXPENSE'
+                        ? 'text-destructive'
+                        : 'text-emerald-500',
+                    )}
+                  >
                     {transaction.amount.toLocaleString('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
