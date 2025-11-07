@@ -49,20 +49,17 @@ export async function getTotalBalanceAmountAction() {
 }
 
 interface GetTransactionsPerPeriodActionProps {
-  from?: string
-  to?: string
+  lastMonths: string
 }
 
 export async function getTransactionsPerPeriodAction({
-  from,
-  to,
+  lastMonths,
 }: GetTransactionsPerPeriodActionProps) {
   const currentOrganization = await getCurrentOrganization()
 
   const dailyTransactions = await getTransactionsPerPeriod({
     organization: currentOrganization!,
-    from,
-    to,
+    lastMonths,
   })
 
   const formattedDailyTransactions = dailyTransactions.transactions.map(

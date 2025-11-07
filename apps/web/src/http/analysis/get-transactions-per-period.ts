@@ -1,11 +1,8 @@
-import dayjs from 'dayjs'
-
 import { api } from '../api-client'
 
 interface GetTransactionsPerPeriodRequest {
   organization: string
-  from?: string
-  to?: string
+  lastMonths?: string
 }
 
 interface GetTransactionsPerPeriodResponse {
@@ -18,12 +15,10 @@ interface GetTransactionsPerPeriodResponse {
 
 export async function getTransactionsPerPeriod({
   organization,
-  from,
-  to,
+  lastMonths,
 }: GetTransactionsPerPeriodRequest) {
   const searchParams = new URLSearchParams({
-    from: from ?? dayjs().subtract(7, 'days').toISOString(),
-    to: to ?? dayjs().toISOString(),
+    lastMonths: lastMonths ?? '1',
   })
 
   const response = await api

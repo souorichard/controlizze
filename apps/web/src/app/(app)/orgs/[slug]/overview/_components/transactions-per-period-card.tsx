@@ -6,7 +6,6 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { ArrowUpRight, CircleAlert, Loader2, XCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
-import { DateRange } from 'react-day-picker'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 import { Button } from '@/components/ui/button'
@@ -26,8 +25,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { DateRangePicker } from '@/components/ui/date-range-picker'
-import { Separator } from '@/components/ui/separator'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 import { getTransactionsPerPeriodAction } from '../actions'
 
@@ -52,25 +56,14 @@ export function TransactionPerPeriodCard({
 }: {
   organization: string
 }) {
-  const [period, setPeriod] = useState<DateRange | undefined>({
-    from: dayjs().subtract(14, 'days').toDate(),
-    to: dayjs().toDate(),
-  })
+  const [lastMonths, setLastMonths] = useState<string>('1')
 
   const { data: dailyTransactionsPerPeriod, error } = useQuery({
-    queryKey: ['analysis', organization, period],
+    queryKey: ['analysis', organization, lastMonths],
     queryFn: getTransactionsPerPeriodAction.bind(null, {
-      from: period?.from?.toISOString(),
-      to: period?.to?.toISOString(),
+      lastMonths,
     }),
   })
-
-  function handleResetPeriod() {
-    setPeriod({
-      from: dayjs().subtract(14, 'days').toDate(),
-      to: dayjs().toDate(),
-    })
-  }
 
   return (
     <Card>
@@ -83,7 +76,16 @@ export function TransactionPerPeriodCard({
         </div>
         <div className="hidden items-center gap-3 lg:flex">
           <span className="text-xs">Period</span>
-          <DateRangePicker date={period} onDateChange={setPeriod} />
+          <Select defaultValue="1" onValueChange={setLastMonths}>
+            <SelectTrigger>
+              <SelectValue placeholder="Last month" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">Last month</SelectItem>
+              <SelectItem value="3">Last 3 months</SelectItem>
+              <SelectItem value="6">Last 6 months</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </CardHeader>
       <CardContent>
@@ -185,10 +187,10 @@ export function TransactionPerPeriodCard({
                   <CircleAlert className="text-primary size-5" />
                   <span className="text-sm">No transactions.</span>
                 </div>
-                <Separator className="!w-[60px]" />
+                {/* <Separator className="!w-[60px]" />
                 <Button size="xs" variant="link" onClick={handleResetPeriod}>
                   Show results from the last 7 days
-                </Button>
+                </Button> */}
               </div>
             )}
           </>
@@ -198,10 +200,10 @@ export function TransactionPerPeriodCard({
               <XCircle className="text-destructive size-5" />
               <span className="text-sm">Something went wrong.</span>
             </div>
-            <Separator className="!w-[60px]" />
+            {/* <Separator className="!w-[60px]" />
             <Button size="xs" variant="link" onClick={handleResetPeriod}>
               Show results from the last 7 days
-            </Button>
+            </Button> */}
           </div>
         ) : (
           <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
