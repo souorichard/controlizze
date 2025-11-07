@@ -115,14 +115,17 @@ async function seed() {
   })
 
   await prisma.transaction.createMany({
-    data: Array.from({ length: 40 }, (_, i) => {
+    data: Array.from({ length: 80 }, (_, i) => {
       const type = faker.helpers.arrayElement([Type.EXPENSE, Type.REVENUE])
       const filteredCategories = createdCategories.filter(
         (category) => category.type === type,
       )
 
-      const daysAgo = faker.number.int({ min: 0, max: 29 })
-      const createdAt = dayjs().subtract(daysAgo, 'day').toDate()
+      const date = faker.date.recent({
+        days: 180,
+        refDate: dayjs().toDate(),
+      })
+      const createdAt = dayjs(date).toDate()
 
       return {
         description: faker.lorem.words(3),

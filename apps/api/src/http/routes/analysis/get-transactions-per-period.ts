@@ -7,7 +7,6 @@ import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
-import { BadRequestError } from '../_errors/bad-request-error'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function getTransactionsPerPeriod(app: FastifyInstance) {
@@ -25,8 +24,7 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
             slug: z.string(),
           }),
           querystring: z.object({
-            from: z.string().optional(),
-            to: z.string().optional(),
+            lastMonths: z.coerce.number().optional().default(3),
           }),
           response: {
             200: z.object({
@@ -43,7 +41,7 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
       },
       async (request) => {
         const { slug } = request.params
-        const { from, to } = request.query
+        const { lastMonths } = request.query
 
         const userId = await request.getCurrentUserId()
         const { organization, membership } =
@@ -57,18 +55,15 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
           )
         }
 
-        const startDate = from ? dayjs(from) : dayjs().subtract(7, 'd')
-        const endDate = to
-          ? dayjs(to)
-          : from
-            ? startDate.add(7, 'days')
-            : dayjs()
+        const startDate = dayjs().subtract(lastMonths, 'months')
+        const endDate = dayjs()
 
-        if (endDate.diff(startDate, 'days') > 14) {
-          throw new BadRequestError('You can only see the last 14 days.')
-        }
+        console.log({
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        })
 
-        const dailyTransactions = await prisma.$queryRaw<
+        const periodTransactions = await prisma.$queryRaw<
           { date: Date; revenues: number; expenses: number }[]
         >`
           SELECT 
@@ -77,20 +72,20 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
             SUM(CASE WHEN type = 'EXPENSE' THEN "amount" ELSE 0 END) as expenses
           FROM "transactions"
           WHERE "organization_id" = ${organization.id}
-            AND "created_at" BETWEEN ${startDate.startOf('day').toDate()} 
-            AND ${endDate.endOf('day').toDate()}
+            AND "created_at" BETWEEN ${startDate.startOf('month').toDate()} 
+            AND ${endDate.endOf('month').toDate()}
           GROUP BY DATE_TRUNC('day', "created_at")
           ORDER BY date ASC;
         `
 
-        const formattedDailyTransactions = dailyTransactions.map((item) => ({
+        const formattedPeriodTransactions = periodTransactions.map((item) => ({
           date: item.date,
           revenues: Number(item.revenues) || 0,
           expenses: Number(item.expenses) || 0,
         }))
 
         return {
-          transactions: formattedDailyTransactions,
+          transactions: formattedPeriodTransactions,
         }
       },
     )
