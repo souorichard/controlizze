@@ -4,6 +4,7 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
+import { createSlug } from '@/utils/create-slug'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { NotFoundError } from '../_errors/not-found-error'
@@ -69,6 +70,7 @@ export async function updateCategory(app: FastifyInstance) {
           },
           data: {
             name,
+            slug: createSlug(name),
             color,
             type,
           },

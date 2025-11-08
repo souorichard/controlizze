@@ -28,6 +28,7 @@ export async function getCategories(app: FastifyInstance) {
                 z.object({
                   id: z.uuid(),
                   name: z.string(),
+                  slug: z.string(),
                   color: z.string(),
                   type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
                   createdAt: z.date(),
@@ -53,13 +54,6 @@ export async function getCategories(app: FastifyInstance) {
         }
 
         const categories = await prisma.category.findMany({
-          select: {
-            id: true,
-            name: true,
-            color: true,
-            type: true,
-            createdAt: true,
-          },
           where: {
             organizationId: organization.id,
           },

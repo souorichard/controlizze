@@ -111,7 +111,7 @@ export async function getTransations(app: FastifyInstance) {
                   equals: type as 'EXPENSE' | 'REVENUE',
                 },
                 category: {
-                  name: {
+                  slug: {
                     equals: category,
                   },
                 },
@@ -137,7 +137,7 @@ export async function getTransations(app: FastifyInstance) {
                   equals: type as 'EXPENSE' | 'REVENUE',
                 },
                 category: {
-                  name: {
+                  slug: {
                     equals: category,
                   },
                 },

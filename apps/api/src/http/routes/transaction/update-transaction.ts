@@ -27,7 +27,7 @@ export async function updateTransation(app: FastifyInstance) {
           }),
           body: z.object({
             description: z.string(),
-            categoryId: z.uuid(),
+            category: z.string(),
             type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
             status: z.union([
               z.literal('PENDING'),
@@ -69,7 +69,26 @@ export async function updateTransation(app: FastifyInstance) {
           )
         }
 
-        const { description, categoryId, type, status, amount } = request.body
+        const {
+          description,
+          category: categorySlug,
+          type,
+          status,
+          amount,
+        } = request.body
+
+        const category = await prisma.category.findUnique({
+          where: {
+            slug_type: {
+              slug: categorySlug,
+              type,
+            },
+          },
+        })
+
+        if (!category) {
+          throw new NotFoundError('Category not found.')
+        }
 
         await prisma.transaction.update({
           where: {
@@ -77,7 +96,7 @@ export async function updateTransation(app: FastifyInstance) {
           },
           data: {
             description,
-            categoryId,
+            categoryId: category.id,
             type,
             status,
             amount,

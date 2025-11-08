@@ -6,6 +6,7 @@ import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
+import { NotFoundError } from '../_errors/not-found-error'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function createTransation(app: FastifyInstance) {
@@ -24,7 +25,7 @@ export async function createTransation(app: FastifyInstance) {
           }),
           body: z.object({
             description: z.string(),
-            categoryId: z.uuid(),
+            category: z.string(),
             type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
             status: z.union([
               z.literal('PENDING'),
@@ -55,12 +56,31 @@ export async function createTransation(app: FastifyInstance) {
           )
         }
 
-        const { description, categoryId, type, status, amount } = request.body
+        const {
+          description,
+          category: categorySlug,
+          type,
+          status,
+          amount,
+        } = request.body
+
+        const category = await prisma.category.findUnique({
+          where: {
+            slug_type: {
+              slug: categorySlug,
+              type,
+            },
+          },
+        })
+
+        if (!category) {
+          throw new NotFoundError('Category not found.')
+        }
 
         const transaction = await prisma.transaction.create({
           data: {
             description,
-            categoryId,
+            categoryId: category.id,
             type,
             status,
             amount,

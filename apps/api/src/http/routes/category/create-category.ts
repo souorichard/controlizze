@@ -4,6 +4,7 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
+import { createSlug } from '@/utils/create-slug'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { ConflictError } from '../_errors/conflict-error'
@@ -54,8 +55,10 @@ export async function createCategory(app: FastifyInstance) {
 
         const categoryWithSameName = await prisma.category.findUnique({
           where: {
-            name_type_organizationId: {
+            name,
+            name_slug_type_organizationId: {
               name,
+              slug: createSlug(name),
               type,
               organizationId: organization.id,
             },
@@ -69,6 +72,7 @@ export async function createCategory(app: FastifyInstance) {
         const category = await prisma.category.create({
           data: {
             name,
+            slug: createSlug(name),
             color,
             type,
             organizationId: organization.id,

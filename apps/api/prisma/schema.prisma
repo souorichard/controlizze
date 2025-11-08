@@ -134,6 +134,7 @@ enum Type {
 model Category {
   id        String   @id @default(uuid())
   name      String
+  slug      String
   color     String
   type      Type     @default(EXPENSE)
   createdAt DateTime @default(now()) @map("created_at")
@@ -147,7 +148,8 @@ model Category {
 
   transactions Transaction[]
 
-  @@unique([name, type, organizationId])
+  @@unique([slug, type])
+  @@unique([name, slug, type, organizationId])
   @@map("categories")
 }
 

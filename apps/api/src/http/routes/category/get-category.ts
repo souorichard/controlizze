@@ -53,13 +53,6 @@ export async function getCategory(app: FastifyInstance) {
         }
 
         const category = await prisma.category.findUnique({
-          select: {
-            id: true,
-            name: true,
-            color: true,
-            type: true,
-            createdAt: true,
-          },
           where: {
             id: categoryId,
             organizationId: organization.id,
