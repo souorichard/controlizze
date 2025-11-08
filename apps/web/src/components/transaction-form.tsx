@@ -28,8 +28,10 @@ import {
 
 const upsertTransactionSchema = z.object({
   description: z.string().min(1, 'Description is required'),
+  type: z.enum(['EXPENSE', 'REVENUE'], {
+    error: 'Type is required',
+  }),
   category: z.string({ error: 'Category is required' }),
-  type: z.enum(['EXPENSE', 'REVENUE'], { error: 'Type is required' }),
   status: z.enum(['PENDING', 'COMPLETED', 'CANCELLED'], {
     error: 'Status is required',
   }),
@@ -69,8 +71,8 @@ export function TransactionForm({
     defaultValues: {
       description: initialData?.description ?? '',
       category: initialData?.category ?? '',
-      type: initialData?.type ?? 'EXPENSE',
-      status: initialData?.status ?? 'PENDING',
+      type: initialData?.type,
+      status: initialData?.status,
       amount: initialData?.amount ? String(initialData.amount) : '',
     },
   })
@@ -129,7 +131,7 @@ export function TransactionForm({
         <Label htmlFor="name">Description</Label>
         <Input
           id="name"
-          placeholder="Enter a description"
+          placeholder="Enter description"
           {...register('description')}
         />
 
@@ -149,7 +151,7 @@ export function TransactionForm({
             return (
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a type" />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="EXPENSE">Expense</SelectItem>
@@ -198,7 +200,7 @@ export function TransactionForm({
             return (
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a status" />
+                  <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="PENDING">Pending</SelectItem>

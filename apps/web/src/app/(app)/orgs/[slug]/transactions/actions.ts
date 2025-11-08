@@ -13,8 +13,8 @@ import { centsToReal, realToCents } from '@/utils/coin-converter'
 
 export async function createTransactionAction({
   description,
-  category,
   type,
+  category,
   status,
   amount,
 }: UpsertTransactionFormData): Promise<ActionResponse> {

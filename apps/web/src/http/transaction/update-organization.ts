@@ -4,8 +4,8 @@ interface UpdateTransactionRequest {
   organization: string
   transactionId: string
   description: string
-  category: string
   type: 'EXPENSE' | 'REVENUE'
+  category: string
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED'
   amount: number
 }
@@ -16,8 +16,8 @@ export async function updateTransaction({
   organization,
   transactionId,
   description,
-  category,
   type,
+  category,
   status,
   amount,
 }: UpdateTransactionRequest): Promise<UpdateTransactionResponse> {
@@ -25,8 +25,8 @@ export async function updateTransaction({
     .put(`organizations/${organization}/transactions/${transactionId}`, {
       json: {
         description,
-        category,
         type,
+        category,
         status,
         amount,
       },

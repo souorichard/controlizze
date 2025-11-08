@@ -3,8 +3,8 @@ import { api } from '../api-client'
 interface CreateTransactionRequest {
   organization: string
   description: string
-  category: string
   type: 'EXPENSE' | 'REVENUE'
+  category: string
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED'
   amount: number
 }
@@ -16,8 +16,8 @@ interface CreateTransactionResponse {
 export async function createTransaction({
   organization,
   description,
-  category,
   type,
+  category,
   status,
   amount,
 }: CreateTransactionRequest): Promise<CreateTransactionResponse> {
@@ -25,8 +25,8 @@ export async function createTransaction({
     .post(`organizations/${organization}/transactions`, {
       json: {
         description,
-        category,
         type,
+        category,
         status,
         amount,
       },
