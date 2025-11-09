@@ -71,8 +71,8 @@ export function TransactionForm({
     defaultValues: {
       description: initialData?.description ?? '',
       category: initialData?.category ?? '',
-      type: initialData?.type,
-      status: initialData?.status,
+      type: initialData?.type ?? 'EXPENSE',
+      status: initialData?.status ?? 'PENDING',
       amount: initialData?.amount ? String(initialData.amount) : '',
     },
   })

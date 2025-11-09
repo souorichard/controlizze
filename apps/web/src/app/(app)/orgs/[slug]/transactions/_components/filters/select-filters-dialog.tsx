@@ -3,16 +3,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Funnel, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod/v4'
 
 import { CategorySelect } from '@/components/category-select'
 import { Button } from '@/components/ui/button'
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -31,22 +36,23 @@ const transactionsFilterSchema = z.object({
 
 export type TransactionsFilterData = z.infer<typeof transactionsFilterSchema>
 
-export function SelectFiltersPopover() {
+export function SelectFiltersDialog() {
   const pathname = usePathname()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
 
+  const [isOpen, setIsOpen] = useState(false)
+
   const { type, category, status } = getTransactionsFilter(searchParams)
 
-  const { watch, control, handleSubmit, reset } =
-    useForm<TransactionsFilterData>({
-      resolver: zodResolver(transactionsFilterSchema),
-      defaultValues: {
-        type: type ?? '',
-        category: category ?? '',
-        status: status ?? '',
-      },
-    })
+  const { watch, control, handleSubmit } = useForm<TransactionsFilterData>({
+    resolver: zodResolver(transactionsFilterSchema),
+    defaultValues: {
+      type: type ?? 'EXPENSE',
+      category: category ?? '',
+      status: status ?? 'PENDING',
+    },
+  })
 
   function handleSetFilter({ type, category, status }: TransactionsFilterData) {
     const params = new URLSearchParams(searchParams)
@@ -69,6 +75,8 @@ export function SelectFiltersPopover() {
       params.delete('status')
     }
 
+    setIsOpen(false)
+
     replace(`${pathname}?${params.toString()}`)
   }
 
@@ -79,11 +87,9 @@ export function SelectFiltersPopover() {
     params.delete('category')
     params.delete('status')
 
-    reset({
-      type: '',
-      category: '',
-      status: '',
-    })
+    setIsOpen(false)
+
+    replace(`${pathname}?${params.toString()}`)
   }
 
   const typeValue = watch('type') as 'EXPENSE' | 'REVENUE' | undefined
@@ -91,25 +97,24 @@ export function SelectFiltersPopover() {
   const hasAnyPopoverFilter = !!(type || category || status)
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
         <Button variant="outline" className="w-full lg:ml-auto lg:w-auto">
           <Funnel className="size-4" />
           Filters
         </Button>
-      </PopoverTrigger>
-      <PopoverContent align="end">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="text-sm leading-none font-medium lg:text-base">
-              Filters
-            </h4>
-            <p className="text-muted-foreground text-sm">
-              Set the filters for your transactions.
-            </p>
-          </div>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Filters</DialogTitle>
+          <DialogDescription>
+            Set the filters for your transactions
+          </DialogDescription>
+        </DialogHeader>
 
-          <form onSubmit={handleSubmit(handleSetFilter)} className="grid gap-2">
+        <form onSubmit={handleSubmit(handleSetFilter)} className="grid gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="type">Type</Label>
             <Controller
               control={control}
               name="type"
@@ -117,7 +122,7 @@ export function SelectFiltersPopover() {
                 return (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a type" />
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="EXPENSE">Expense</SelectItem>
@@ -127,7 +132,10 @@ export function SelectFiltersPopover() {
                 )
               }}
             />
+          </div>
 
+          <div className="space-y-1.5">
+            <Label htmlFor="category">Category</Label>
             <Controller
               control={control}
               name="category"
@@ -142,7 +150,10 @@ export function SelectFiltersPopover() {
                 )
               }}
             />
+          </div>
 
+          <div className="space-y-1.5">
+            <Label htmlFor="status">Status</Label>
             <Controller
               control={control}
               name="status"
@@ -150,7 +161,7 @@ export function SelectFiltersPopover() {
                 return (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a status" />
+                      <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="PENDING">Pending</SelectItem>
@@ -161,10 +172,12 @@ export function SelectFiltersPopover() {
                 )
               }}
             />
+          </div>
 
+          <div className="space-y-2">
             {hasAnyPopoverFilter && (
               <Button
-                type="submit"
+                type="button"
                 variant="ghost"
                 className="w-full"
                 onClick={handleClearFilter}
@@ -178,9 +191,9 @@ export function SelectFiltersPopover() {
               <Funnel className="size-4" />
               Apply
             </Button>
-          </form>
-        </div>
-      </PopoverContent>
-    </Popover>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
