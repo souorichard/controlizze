@@ -90,7 +90,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
                     {typeHandler({ type: transaction.type })}
                   </TableCell> */}
                   <TableCell className="max-w-[160px] truncate">
-                    {transaction.category}
+                    {transaction.category.name}
                   </TableCell>
                   <TableCell>
                     {statusHandler({ status: transaction.status })}

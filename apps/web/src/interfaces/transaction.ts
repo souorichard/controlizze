@@ -2,7 +2,10 @@ export interface Transaction {
   id: string
   description: string
   type: 'EXPENSE' | 'REVENUE'
-  category: string
+  category: {
+    name: string
+    slug: string
+  }
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED'
   amount: number
   owner: {

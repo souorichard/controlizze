@@ -70,7 +70,7 @@ export function TransactionForm({
     resolver: zodResolver(upsertTransactionSchema),
     defaultValues: {
       description: initialData?.description ?? '',
-      category: initialData?.category ?? '',
+      category: initialData?.category.slug ?? '',
       type: initialData?.type ?? 'EXPENSE',
       status: initialData?.status ?? 'PENDING',
       amount: initialData?.amount ? String(initialData.amount) : '',
@@ -115,9 +115,9 @@ export function TransactionForm({
       reset()
 
       dialogState(false)
-    }
 
-    router.back()
+      router.back()
+    }
   }
 
   const type = watch('type')

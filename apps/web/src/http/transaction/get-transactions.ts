@@ -14,7 +14,10 @@ interface GetTransactionsResponse {
   transactions: {
     id: string
     description: string
-    category: string
+    category: {
+      name: string
+      slug: string
+    }
     type: 'EXPENSE' | 'REVENUE'
     status: 'PENDING' | 'COMPLETED' | 'CANCELLED'
     amount: number
