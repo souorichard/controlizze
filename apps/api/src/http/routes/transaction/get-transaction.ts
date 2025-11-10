@@ -29,7 +29,10 @@ export async function getTransation(app: FastifyInstance) {
               transaction: z.object({
                 id: z.uuid(),
                 description: z.string(),
-                category: z.string(),
+                category: z.object({
+                  name: z.string(),
+                  slug: z.string(),
+                }),
                 type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
                 status: z.union([
                   z.literal('PENDING'),
@@ -70,6 +73,7 @@ export async function getTransation(app: FastifyInstance) {
             category: {
               select: {
                 name: true,
+                slug: true,
               },
             },
             type: true,
@@ -97,7 +101,6 @@ export async function getTransation(app: FastifyInstance) {
         return {
           transaction: {
             ...transaction,
-            category: transaction.category.name,
             amount: Number(transaction.amount),
           },
         }

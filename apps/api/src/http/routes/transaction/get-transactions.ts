@@ -36,7 +36,10 @@ export async function getTransations(app: FastifyInstance) {
                 z.object({
                   id: z.uuid(),
                   description: z.string(),
-                  category: z.string(),
+                  category: z.object({
+                    name: z.string(),
+                    slug: z.string(),
+                  }),
                   type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
                   status: z.union([
                     z.literal('PENDING'),
@@ -86,6 +89,7 @@ export async function getTransations(app: FastifyInstance) {
                 category: {
                   select: {
                     name: true,
+                    slug: true,
                   },
                 },
                 type: true,
@@ -160,7 +164,6 @@ export async function getTransations(app: FastifyInstance) {
 
         const formattedTransactions = rawTransactions.map((transaction) => ({
           ...transaction,
-          category: transaction.category.name,
           amount: Number(transaction.amount),
         }))
 
