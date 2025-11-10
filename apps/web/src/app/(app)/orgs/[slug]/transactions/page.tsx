@@ -17,7 +17,7 @@ export default async function TransactionsPage() {
       <div className="space-y-1">
         <h1 className="text-xl font-semibold md:text-2xl">Transactions</h1>
         <p className="text-muted-foreground">
-          View all transactions of this organization.
+          View all transactions of this organization
         </p>
       </div>
       <div className="flex flex-col gap-4">

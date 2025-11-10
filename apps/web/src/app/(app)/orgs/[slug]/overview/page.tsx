@@ -19,7 +19,7 @@ export default async function OverviewPage() {
       <div className="space-y-1">
         <h1 className="text-xl font-semibold md:text-2xl">Overview</h1>
         <p className="text-muted-foreground">
-          Detailed analysis of your transactions.
+          Detailed analysis of your transactions
         </p>
       </div>
       <div className="flex flex-col gap-4">
