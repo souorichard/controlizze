@@ -24,7 +24,7 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
             slug: z.string(),
           }),
           querystring: z.object({
-            lastMonths: z.coerce.number().optional().default(3),
+            lastMonths: z.coerce.number().optional().default(1),
           }),
           response: {
             200: z.object({
@@ -73,7 +73,7 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
           FROM "transactions"
           WHERE "organization_id" = ${organization.id}
             AND "created_at" BETWEEN ${startDate.startOf('month').toDate()} 
-            AND ${endDate.endOf('month').toDate()}
+            AND ${endDate.startOf('month').toDate()}
           GROUP BY DATE_TRUNC('day', "created_at")
           ORDER BY date ASC;
         `
