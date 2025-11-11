@@ -29,9 +29,15 @@ export async function getCategory(app: FastifyInstance) {
               category: z.object({
                 id: z.uuid(),
                 name: z.string(),
+                slug: z.string(),
                 color: z.string(),
                 type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
                 createdAt: z.date(),
+                owner: z.object({
+                  id: z.uuid(),
+                  name: z.string().nullable(),
+                  avatarUrl: z.string().nullable(),
+                }),
               }),
             }),
           },
@@ -53,6 +59,21 @@ export async function getCategory(app: FastifyInstance) {
         }
 
         const category = await prisma.category.findUnique({
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            color: true,
+            type: true,
+            createdAt: true,
+            owner: {
+              select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+              },
+            },
+          },
           where: {
             id: categoryId,
             organizationId: organization.id,

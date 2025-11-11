@@ -22,6 +22,12 @@ export async function getCategories(app: FastifyInstance) {
           params: z.object({
             slug: z.string(),
           }),
+          querystring: z.object({
+            page: z.coerce.number().default(1),
+            perPage: z.coerce.number().default(10),
+            name: z.string().optional(),
+            type: z.string().optional(),
+          }),
           response: {
             200: z.object({
               categories: z.array(
@@ -32,14 +38,21 @@ export async function getCategories(app: FastifyInstance) {
                   color: z.string(),
                   type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
                   createdAt: z.date(),
+                  owner: z.object({
+                    id: z.uuid(),
+                    name: z.string().nullable(),
+                    avatarUrl: z.string().nullable(),
+                  }),
                 }),
               ),
+              totalCount: z.number(),
             }),
           },
         },
       },
       async (request) => {
         const { slug } = request.params
+        const { page, perPage, name, type } = request.query
 
         const userId = await request.getCurrentUserId()
         const { organization, membership } =
@@ -53,14 +66,57 @@ export async function getCategories(app: FastifyInstance) {
           )
         }
 
-        const categories = await prisma.category.findMany({
-          where: {
-            organizationId: organization.id,
-          },
-        })
+        const [categories, totalCategories] = await Promise.all([
+          prisma.category.findMany({
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              color: true,
+              type: true,
+              createdAt: true,
+              owner: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatarUrl: true,
+                },
+              },
+            },
+            where: {
+              organizationId: organization.id,
+              name: {
+                contains: name,
+                mode: 'insensitive',
+              },
+              type: {
+                equals: type as 'EXPENSE' | 'REVENUE',
+              },
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+            skip: (page - 1) * perPage,
+            take: perPage,
+          }),
+
+          prisma.category.count({
+            where: {
+              organizationId: organization.id,
+              name: {
+                contains: name,
+                mode: 'insensitive',
+              },
+              type: {
+                equals: type as 'EXPENSE' | 'REVENUE',
+              },
+            },
+          }),
+        ])
 
         return {
           categories,
+          totalCount: totalCategories,
         }
       },
     )
