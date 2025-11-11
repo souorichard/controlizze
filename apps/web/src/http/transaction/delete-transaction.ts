@@ -1,23 +1,23 @@
 import { api } from '../api-client'
 
-interface DeleteTransactionsRequest {
+interface DeleteTransactionRequest {
   organization: string
   transactionId: string
 }
 
-type DeleteTransactionsResponse = void
+type DeleteTransactionResponse = void
 
 export async function deleteTransaction({
   organization,
   transactionId,
-}: DeleteTransactionsRequest): Promise<DeleteTransactionsResponse> {
+}: DeleteTransactionRequest): Promise<DeleteTransactionResponse> {
   const response = await api
     .delete(`organizations/${organization}/transactions/${transactionId}`, {
       next: {
         tags: [`${organization}/transactions`],
       },
     })
-    .json<DeleteTransactionsResponse>()
+    .json<DeleteTransactionResponse>()
 
   return response
 }

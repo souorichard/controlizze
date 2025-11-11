@@ -3,10 +3,11 @@
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { AlertCircle, EllipsisVertical, Trash2 } from 'lucide-react'
+import { AlertCircle, Trash2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { Pagination } from '@/components/pagination'
+import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -19,6 +20,8 @@ import {
 import { useOrganization } from '@/hooks/use-organization'
 
 import { getCategoriesAction } from '../actions'
+import { CategoryOptions } from './category-options'
+import { DeleteCategoryDialog } from './dialogs/delete-category-dialog'
 import { getCategoriesFilter } from './filters/get-categories-filter'
 import { typeHandler } from './functions/type-handler'
 import { CategoriesTableSkeleton } from './skeletons/categories-table-skeleton'
@@ -86,12 +89,21 @@ export function CategoriesTable() {
                 </TableCell>
                 <TableCell>{typeHandler({ type: category.type })}</TableCell>
                 <TableCell className="flex items-center justify-center gap-2">
-                  <Button size="icon" variant="outline">
-                    <EllipsisVertical className="size-4" />
-                  </Button>
-                  <Button size="icon" variant="outline">
-                    <Trash2 className="text-destructive size-4" />
-                  </Button>
+                  <CategoryOptions category={category} />
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="size-4" />
+                        <span className="sr-only">Delete category</span>
+                      </Button>
+                    </AlertDialogTrigger>
+
+                    <DeleteCategoryDialog categoryId={category.id} />
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}

@@ -5,6 +5,7 @@ import { HTTPError } from 'ky'
 import { getCurrentOrganization } from '@/auth/auth'
 import { UpsertCategoryFormData } from '@/components/category-form'
 import { createCategory } from '@/http/category/create-category'
+import { deleteCategory } from '@/http/category/delete-category'
 import { getCategories } from '@/http/category/get-categories'
 import { updateCategory } from '@/http/category/update-category'
 import { ActionResponse } from '@/interfaces/action-response'
@@ -110,4 +111,19 @@ export async function updateCategoryAction({
     success: true,
     message: 'Category updated successfully.',
   }
+}
+
+interface DeleteCategoryActionProps {
+  categoryId: string
+}
+
+export async function deleteCategoryAction({
+  categoryId,
+}: DeleteCategoryActionProps) {
+  const currentOrganization = await getCurrentOrganization()
+
+  await deleteCategory({
+    organization: currentOrganization!,
+    categoryId,
+  })
 }
