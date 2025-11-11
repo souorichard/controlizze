@@ -17,6 +17,7 @@ interface GetTransactionsResponse {
     category: {
       name: string
       slug: string
+      color: string
     }
     type: 'EXPENSE' | 'REVENUE'
     status: 'PENDING' | 'COMPLETED' | 'CANCELLED'

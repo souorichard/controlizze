@@ -89,8 +89,14 @@ export function TransactionsTable({ organization }: { organization: string }) {
                   {/* <TableCell>
                     {typeHandler({ type: transaction.type })}
                   </TableCell> */}
-                  <TableCell className="max-w-[160px] truncate">
-                    {transaction.category.name}
+                  <TableCell>
+                    <div className="flex max-w-[160px] items-center gap-2">
+                      <div
+                        className="size-2 rounded-full"
+                        style={{ backgroundColor: transaction.category.color }}
+                      />
+                      <p className="truncate">{transaction.category.name}</p>
+                    </div>
                   </TableCell>
                   <TableCell>
                     {statusHandler({ status: transaction.status })}
