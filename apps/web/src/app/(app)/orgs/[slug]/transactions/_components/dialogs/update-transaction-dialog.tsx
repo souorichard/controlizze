@@ -10,13 +10,11 @@ import {
 import { Transaction } from '@/interfaces/transaction'
 
 interface UpdateTransactionDialogProps {
-  organization: string
   transactionId: string
   initialData: Transaction
 }
 
 export function UpdateTransactionDialog({
-  organization,
   transactionId,
   initialData,
 }: UpdateTransactionDialogProps) {
@@ -30,7 +28,6 @@ export function UpdateTransactionDialog({
       </DialogHeader>
 
       <TransactionForm
-        organization={organization}
         transactionId={transactionId}
         initialData={initialData}
         isUpdating

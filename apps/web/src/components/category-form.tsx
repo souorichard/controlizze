@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useOrganization } from '@/hooks/use-organization'
 import { Category } from '@/interfaces/category'
 
 import {
@@ -37,7 +38,6 @@ const upsertCategorySchema = z.object({
 export type UpsertCategoryFormData = z.infer<typeof upsertCategorySchema>
 
 interface CategoryFormProps {
-  organization: string
   categoryId?: string
   initialData?: Category
   isUpdating?: boolean
@@ -45,7 +45,6 @@ interface CategoryFormProps {
 }
 
 export function CategoryForm({
-  organization,
   categoryId,
   initialData,
   isUpdating,
@@ -54,6 +53,7 @@ export function CategoryForm({
   const queryClient = useQueryClient()
 
   const router = useRouter()
+  const organization = useOrganization()
 
   const {
     control,

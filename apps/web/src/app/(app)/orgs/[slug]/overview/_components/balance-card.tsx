@@ -4,12 +4,15 @@ import { useQuery } from '@tanstack/react-query'
 import { Loader2, Wallet2 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { useOrganization } from '@/hooks/use-organization'
 import { cn } from '@/lib/utils'
 
 import { getTotalBalanceAmountAction } from '../actions'
 import { AmountsCardSkeleton } from './skeletons/amounts-card-skeleton'
 
-export function BalanceCard({ organization }: { organization: string }) {
+export function BalanceCard() {
+  const organization = useOrganization()
+
   const { data, isLoading } = useQuery({
     queryKey: ['analysis', organization, 'balance'],
     queryFn: getTotalBalanceAmountAction,

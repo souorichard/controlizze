@@ -11,11 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-export function CreateTransactionDialog({
-  organization,
-}: {
-  organization: string
-}) {
+export function CreateTransactionDialog() {
   const [isOpen, setIsOpen] = useState(true)
 
   return (
@@ -27,7 +23,7 @@ export function CreateTransactionDialog({
             Create a new transaction for this organization.
           </DialogDescription>
         </DialogHeader>
-        <TransactionForm organization={organization} dialogState={setIsOpen} />
+        <TransactionForm dialogState={setIsOpen} />
       </InterceptedDialogContent>
     </Dialog>
   )

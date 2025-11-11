@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useOrganization } from '@/hooks/use-organization'
 import { Transaction } from '@/interfaces/transaction'
 
 import { CategorySelect } from './category-select'
@@ -41,7 +42,6 @@ const upsertTransactionSchema = z.object({
 export type UpsertTransactionFormData = z.infer<typeof upsertTransactionSchema>
 
 interface TransactionFormProps {
-  organization: string
   transactionId?: string
   initialData?: Transaction
   isUpdating?: boolean
@@ -49,7 +49,6 @@ interface TransactionFormProps {
 }
 
 export function TransactionForm({
-  organization,
   transactionId,
   initialData,
   isUpdating,
@@ -58,6 +57,7 @@ export function TransactionForm({
   const queryClient = useQueryClient()
 
   const router = useRouter()
+  const organization = useOrganization()
 
   const {
     watch,

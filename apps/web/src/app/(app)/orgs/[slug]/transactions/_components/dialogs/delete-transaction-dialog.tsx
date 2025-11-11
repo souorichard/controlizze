@@ -11,19 +11,20 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { deleteTransactionAction } from '../../actions'
 
 interface DeleteTransactionDialogProps {
-  organization: string
   transactionId: string
 }
 
 export function DeleteTransactionDialog({
-  organization,
   transactionId,
 }: DeleteTransactionDialogProps) {
   const queryClient = useQueryClient()
+
+  const organization = useOrganization()
 
   async function handleDeleteTransaction() {
     await deleteTransactionAction({ transactionId })

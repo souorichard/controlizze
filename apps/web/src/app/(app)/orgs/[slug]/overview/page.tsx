@@ -1,7 +1,5 @@
 import { Metadata } from 'next'
 
-import { getCurrentOrganization } from '@/auth/auth'
-
 import { BalanceCard } from './_components/balance-card'
 import { ExpensesCard } from './_components/expenses-card'
 import { RevenuesCard } from './_components/revenues-card'
@@ -12,8 +10,6 @@ export const metadata: Metadata = {
 }
 
 export default async function OverviewPage() {
-  const currentOrganization = await getCurrentOrganization()
-
   return (
     <>
       <div className="space-y-1">
@@ -24,11 +20,11 @@ export default async function OverviewPage() {
       </div>
       <div className="flex flex-col gap-4">
         <div className="grid items-center gap-4 lg:grid-cols-3">
-          <ExpensesCard organization={currentOrganization!} />
-          <RevenuesCard organization={currentOrganization!} />
-          <BalanceCard organization={currentOrganization!} />
+          <ExpensesCard />
+          <RevenuesCard />
+          <BalanceCard />
         </div>
-        <TransactionPerPeriodCard organization={currentOrganization!} />
+        <TransactionPerPeriodCard />
         <div className="grid items-center gap-4 lg:grid-cols-2">
           {/* <ExpenseCategoriesCard organization={currentOrganization!} />
           <RevenueCategoriesCard organization={currentOrganization!} /> */}

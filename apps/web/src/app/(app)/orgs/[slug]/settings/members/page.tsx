@@ -37,9 +37,9 @@ export default async function MembersPage() {
     <main className="w-full space-y-8">
       {canInviteMembers && (
         <>
-          <InviteMemberForm organization={currentOrganization!} />
+          <InviteMemberForm />
           <Separator />
-          <InvitesTable organization={currentOrganization!} />
+          <InvitesTable />
           <Separator />
         </>
       )}

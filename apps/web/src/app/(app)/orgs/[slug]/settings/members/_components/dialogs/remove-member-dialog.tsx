@@ -11,19 +11,18 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { removeMemberAction } from '../../actions'
 
 interface RemoveMemberDialogProps {
-  organization: string
   memberId: string
 }
 
-export function RemoveMemberDialog({
-  organization,
-  memberId,
-}: RemoveMemberDialogProps) {
+export function RemoveMemberDialog({ memberId }: RemoveMemberDialogProps) {
   const queryClient = useQueryClient()
+
+  const organization = useOrganization()
 
   async function handleRemoveMember() {
     await removeMemberAction({ memberId })

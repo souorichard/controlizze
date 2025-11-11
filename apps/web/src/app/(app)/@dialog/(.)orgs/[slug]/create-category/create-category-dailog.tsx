@@ -11,11 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-export function CreateCategoryDialog({
-  organization,
-}: {
-  organization: string
-}) {
+export function CreateCategoryDialog() {
   const [isOpen, setIsOpen] = useState(true)
 
   return (
@@ -27,7 +23,7 @@ export function CreateCategoryDialog({
             Create a new category for this organization.
           </DialogDescription>
         </DialogHeader>
-        <CategoryForm organization={organization} dialogState={setIsOpen} />
+        <CategoryForm dialogState={setIsOpen} />
       </InterceptedDialogContent>
     </Dialog>
   )

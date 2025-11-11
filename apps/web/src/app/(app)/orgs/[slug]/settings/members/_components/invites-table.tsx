@@ -13,12 +13,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { getInvitesAction } from '../actions'
 import { RevokeInviteDialog } from './dialogs/revoke-invite-dialog'
 import { InvitesTableSkeleton } from './skeletons/invites-table-skeleton'
 
-export function InvitesTable({ organization }: { organization: string }) {
+export function InvitesTable() {
+  const organization = useOrganization()
+
   const { data, isPending } = useQuery({
     queryKey: ['invites', organization],
     queryFn: getInvitesAction,
@@ -73,10 +76,7 @@ export function InvitesTable({ organization }: { organization: string }) {
                         </Button>
                       </AlertDialogTrigger>
 
-                      <RevokeInviteDialog
-                        organization={organization}
-                        inviteId={invite.id}
-                      />
+                      <RevokeInviteDialog inviteId={invite.id} />
                     </AlertDialog>
                   </div>
                 </TableCell>

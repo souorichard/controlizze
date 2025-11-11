@@ -11,19 +11,18 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { revokeInviteAction } from '../../actions'
 
 interface RevokeInviteDialogProps {
-  organization: string
   inviteId: string
 }
 
-export function RevokeInviteDialog({
-  organization,
-  inviteId,
-}: RevokeInviteDialogProps) {
+export function RevokeInviteDialog({ inviteId }: RevokeInviteDialogProps) {
   const queryClient = useQueryClient()
+
+  const organization = useOrganization()
 
   async function handleRevokeInvite() {
     await revokeInviteAction(inviteId)

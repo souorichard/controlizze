@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useOrganization } from '@/hooks/use-organization'
 import { cn } from '@/lib/utils'
 
 import { getTransactionsAction } from '../actions'
@@ -30,10 +31,12 @@ import { TransactionOptions } from './transaction-options'
 
 dayjs.extend(relativeTime)
 
-export function TransactionsTable({ organization }: { organization: string }) {
+export function TransactionsTable() {
   const pathname = usePathname()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
+
+  const organization = useOrganization()
 
   const filters = getTransactionsFilter(searchParams)
 
@@ -115,10 +118,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
                     })}
                   </TableCell>
                   <TableCell className="flex items-center justify-end gap-2">
-                    <TransactionOptions
-                      organization={organization}
-                      transaction={transaction}
-                    />
+                    <TransactionOptions transaction={transaction} />
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
@@ -131,10 +131,7 @@ export function TransactionsTable({ organization }: { organization: string }) {
                         </Button>
                       </AlertDialogTrigger>
 
-                      <DeleteTransactionDialog
-                        organization={organization}
-                        transactionId={transaction.id}
-                      />
+                      <DeleteTransactionDialog transactionId={transaction.id} />
                     </AlertDialog>
                   </TableCell>
                 </TableRow>

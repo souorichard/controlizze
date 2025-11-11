@@ -141,7 +141,6 @@ export function MembersTable({
                           </AlertDialogTrigger>
 
                           <TransferOrganizationDialog
-                            organization={organization.slug}
                             memberId={member.userId}
                           />
                         </AlertDialog>
@@ -163,10 +162,7 @@ export function MembersTable({
                             </Button>
                           </AlertDialogTrigger>
 
-                          <RemoveMemberDialog
-                            organization={organization.slug}
-                            memberId={member.id}
-                          />
+                          <RemoveMemberDialog memberId={member.id} />
                         </AlertDialog>
                       )}
                     </div>

@@ -20,14 +20,10 @@ import { getInitials } from '@/utils/get-initials'
 import { UpdateTransactionDialog } from './dialogs/update-transaction-dialog'
 
 interface TransactionOptionsProps {
-  organization: string
   transaction: Transaction
 }
 
-export function TransactionOptions({
-  organization,
-  transaction,
-}: TransactionOptionsProps) {
+export function TransactionOptions({ transaction }: TransactionOptionsProps) {
   function handleCopyTransactionId() {
     navigator.clipboard.writeText(transaction.id)
 
@@ -76,7 +72,6 @@ export function TransactionOptions({
       </DropdownMenu>
 
       <UpdateTransactionDialog
-        organization={organization}
         transactionId={transaction.id}
         initialData={transaction}
       />

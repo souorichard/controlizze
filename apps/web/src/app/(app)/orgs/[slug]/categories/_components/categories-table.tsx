@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { getCategoriesAction } from '../actions'
 import { getCategoriesFilter } from './filters/get-categories-filter'
@@ -29,10 +30,12 @@ export function CategoriesTable() {
   const { replace } = useRouter()
   const searchParams = useSearchParams()
 
+  const organization = useOrganization()
+
   const filters = getCategoriesFilter(searchParams)
 
   const { data, isPending } = useQuery({
-    queryKey: ['categories', filters],
+    queryKey: ['categories', organization, filters],
     queryFn: getCategoriesAction.bind(null, filters),
   })
 

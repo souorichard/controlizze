@@ -4,12 +4,15 @@ import { useQuery } from '@tanstack/react-query'
 import { Loader2, TrendingUp } from 'lucide-react'
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { useOrganization } from '@/hooks/use-organization'
 import { cn } from '@/lib/utils'
 
 import { getRevenuesAmountAction } from '../actions'
 import { AmountsCardSkeleton } from './skeletons/amounts-card-skeleton'
 
-export function RevenuesCard({ organization }: { organization: string }) {
+export function RevenuesCard() {
+  const organization = useOrganization()
+
   const { data, isLoading } = useQuery({
     queryKey: ['analysis', organization, 'revenues'],
     queryFn: getRevenuesAmountAction,

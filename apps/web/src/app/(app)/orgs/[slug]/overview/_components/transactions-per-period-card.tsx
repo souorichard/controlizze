@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { getTransactionsPerPeriodAction } from '../actions'
 
@@ -51,12 +52,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function TransactionPerPeriodCard({
-  organization,
-}: {
-  organization: string
-}) {
+export function TransactionPerPeriodCard() {
   const [lastMonths, setLastMonths] = useState<string>('1')
+
+  const organization = useOrganization()
 
   const { data: dailyTransactionsPerPeriod, error } = useQuery({
     queryKey: ['analysis', organization, lastMonths],

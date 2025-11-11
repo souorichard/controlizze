@@ -9,6 +9,7 @@ import { z } from 'zod/v4'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { inviteMemberAction } from '../actions'
 import { RoleSelect } from './role-select'
@@ -20,8 +21,10 @@ const inviteMemberSchema = z.object({
 
 export type InviteMemberFormData = z.infer<typeof inviteMemberSchema>
 
-export function InviteMemberForm({ organization }: { organization: string }) {
+export function InviteMemberForm() {
   const queryClient = useQueryClient()
+
+  const organization = useOrganization()
 
   const {
     control,

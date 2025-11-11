@@ -39,7 +39,7 @@ export default async function TransactionsPage() {
             </Link>
           </Button>
         </div>
-        <TransactionsTable organization={currentOrganization!} />
+        <TransactionsTable />
       </div>
     </>
   )

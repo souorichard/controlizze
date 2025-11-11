@@ -1,7 +1,6 @@
-import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
 
-import { isAuthenticated } from '@/auth/auth'
+import { getCurrentOrganization } from '@/auth/auth'
 import {
   Container,
   HeaderContainer,
@@ -9,6 +8,7 @@ import {
 } from '@/components/container'
 import { Header } from '@/components/header'
 import { Tabs } from '@/components/tabs'
+import { OrganizationProvider } from '@/contexts/organization-context'
 
 interface OrganizationLayoutProps {
   children: ReactNode
@@ -17,17 +17,17 @@ interface OrganizationLayoutProps {
 export default async function OrganizationLayout({
   children,
 }: OrganizationLayoutProps) {
-  if (!(await isAuthenticated())) {
-    redirect('/auth/sign-in')
-  }
+  const currentOrganization = await getCurrentOrganization()
 
   return (
-    <Container>
-      <HeaderContainer className="space-y-4">
-        <Header />
-        <Tabs />
-      </HeaderContainer>
-      <MainContainer>{children}</MainContainer>
-    </Container>
+    <OrganizationProvider organization={currentOrganization}>
+      <Container>
+        <HeaderContainer className="space-y-4">
+          <Header />
+          <Tabs />
+        </HeaderContainer>
+        <MainContainer>{children}</MainContainer>
+      </Container>
+    </OrganizationProvider>
   )
 }

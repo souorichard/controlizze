@@ -11,19 +11,20 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { transferOrganizationAction } from '../../actions'
 
 interface TransferOrganizationDialogProps {
-  organization: string
   memberId: string
 }
 
 export function TransferOrganizationDialog({
-  organization,
   memberId,
 }: TransferOrganizationDialogProps) {
   const queryClient = useQueryClient()
+
+  const organization = useOrganization()
 
   async function handleTransferOrganization() {
     await transferOrganizationAction({ transferToUserId: memberId })
