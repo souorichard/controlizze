@@ -10,5 +10,7 @@ export async function getCategoriesAction() {
     organization: currentOrganization!,
   })
 
-  return categories
+  return {
+    categories,
+  }
 }

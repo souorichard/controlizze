@@ -25,16 +25,16 @@ export function CategorySelect({
   type = 'EXPENSE',
   ...props
 }: CategorySelectProps) {
-  const { data: categories } = useQuery({
+  const { data } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategoriesAction,
   })
 
-  const expenses = categories?.filter((category) => {
+  const expenses = data?.categories.filter((category) => {
     return category.type === 'EXPENSE'
   })
 
-  const revenues = categories?.filter((category) => {
+  const revenues = data?.categories.filter((category) => {
     return category.type === 'REVENUE'
   })
 
@@ -44,7 +44,7 @@ export function CategorySelect({
         <SelectValue placeholder="Select category" />
       </SelectTrigger>
       <SelectContent>
-        {categories?.length === 0 && (
+        {data?.categories.length === 0 && (
           <div className="flex items-center justify-center gap-2 p-2">
             <CircleAlert className="text-primary size-4" />
             <span className="text-sm">No categories.</span>

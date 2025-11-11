@@ -9,6 +9,8 @@ import { z } from 'zod/v4'
 
 import { Input } from '@/components/ui/input'
 
+import { getCategoriesFilter } from './get-categories-filter'
+
 const liveCategoryNameFilterSchema = z.object({
   name: z
     .string()
@@ -26,7 +28,7 @@ export function LiveCategoryNameFilter() {
   const { replace } = useRouter()
   const searchParams = useSearchParams()
 
-  // const { name } = getTransactionsFilter(searchParams)
+  const { name } = getCategoriesFilter(searchParams)
 
   const {
     watch,
@@ -74,7 +76,7 @@ export function LiveCategoryNameFilter() {
 
   return (
     <div className="w-full space-y-1.5">
-      <Input placeholder="Search category name..." {...register('name')} />
+      <Input placeholder="Search name..." {...register('name')} />
       {errors.name && (
         <span className="text-destructive block text-xs">
           {errors.name.message}
