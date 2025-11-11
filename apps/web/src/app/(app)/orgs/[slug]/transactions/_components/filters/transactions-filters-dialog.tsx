@@ -36,7 +36,7 @@ const transactionsFilterSchema = z.object({
 
 export type TransactionsFilterData = z.infer<typeof transactionsFilterSchema>
 
-export function SelectFiltersDialog() {
+export function TransactionsFiltersDialog() {
   const pathname = usePathname()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
