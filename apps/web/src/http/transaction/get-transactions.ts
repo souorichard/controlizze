@@ -1,3 +1,5 @@
+import { Transaction } from '@/interfaces/transaction'
+
 import { api } from '../api-client'
 
 interface GetTransactionsRequest {
@@ -11,24 +13,7 @@ interface GetTransactionsRequest {
 }
 
 interface GetTransactionsResponse {
-  transactions: {
-    id: string
-    description: string
-    category: {
-      name: string
-      slug: string
-      color: string
-    }
-    type: 'EXPENSE' | 'REVENUE'
-    status: 'PENDING' | 'COMPLETED' | 'CANCELLED'
-    amount: number
-    owner: {
-      id: string
-      name: string | null
-      avatarUrl: string | null
-    }
-    createdAt: string
-  }[]
+  transactions: Transaction[]
   pageSubtotal: number
   totalAmount: number
   totalCount: number

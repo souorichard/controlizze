@@ -1,3 +1,5 @@
+import { Category } from '@/interfaces/category'
+
 import { api } from '../api-client'
 
 interface GetCategoriesRequest {
@@ -9,19 +11,8 @@ interface GetCategoriesRequest {
 }
 
 interface GetCategoriesResponse {
-  categories: {
-    id: string
-    name: string
-    slug: string
-    color: string
-    type: 'EXPENSE' | 'REVENUE'
-    createdAt: string
-    owner: {
-      id: string
-      name: string | null
-      avatarUrl: string | null
-    }
-  }[]
+  rawCategories: Category[]
+  categories: Category[]
   totalCount: number
 }
 

@@ -5,6 +5,7 @@ export interface Transaction {
   category: {
     name: string
     slug: string
+    color: string
   }
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED'
   amount: number

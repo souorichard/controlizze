@@ -18,7 +18,7 @@ export async function updateCategory({
   type,
 }: UpdateCategoryRequest): Promise<UpdateCategoryResponse> {
   const response = await api
-    .post(`organizations/${organization}/categories/${categoryId}`, {
+    .put(`organizations/${organization}/categories/${categoryId}`, {
       json: {
         name,
         color,
