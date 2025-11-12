@@ -8,122 +8,121 @@ const categories = [
   {
     name: 'Housing',
     slug: 'housing',
-    color: 'oklch(70.4% 0.14 182.53)',
+    color: '#06b6d4', // cyan
     type: Type.EXPENSE,
   },
   {
     name: 'Utilities (water, electricity, internet)',
     slug: 'utilities-water-electricity-internet',
-    color: 'oklch(68.5% 0.19 237.32)',
+    color: '#0ea5e9', // sky
     type: Type.EXPENSE,
   },
   {
     name: 'Transportation',
     slug: 'transportation',
-    color: 'oklch(76.9% 0.21 37.60)',
+    color: '#f59e0b', // amber
     type: Type.EXPENSE,
   },
   {
     name: 'Food',
     slug: 'food',
-    color: 'oklch(72.3% 0.19 149.57)',
+    color: '#22c55e', // green
     type: Type.EXPENSE,
   },
   {
     name: 'Health',
     slug: 'health',
-    color: 'oklch(64.5% 0.25 16.43)',
+    color: '#f43f5e', // rose
     type: Type.EXPENSE,
   },
   {
     name: 'Education',
     slug: 'education',
-    color: 'oklch(55.4% 0.25 267.41)',
+    color: '#6366f1', // indigo
     type: Type.EXPENSE,
   },
   {
     name: 'Leisure and Entertainment',
     slug: 'leisure-and-entertainment',
-    color: 'oklch(58.5% 0.23 272.17)',
+    color: '#8b5cf6', // violet
     type: Type.EXPENSE,
   },
   {
     name: 'Subscriptions and Services',
     slug: 'subscriptions-and-services',
-    color: 'oklch(71.5% 0.18 250.39)',
+    color: '#3b82f6', // blue
     type: Type.EXPENSE,
   },
   {
     name: 'General Shopping',
     slug: 'general-shopping',
-    color: 'oklch(79.5% 0.18 86.04)',
+    color: '#eab308', // yellow
     type: Type.EXPENSE,
   },
   {
     name: 'Debts and Loans',
     slug: 'debts-and-loans',
-    color: 'oklch(76.8% 0.23 130.85)',
+    color: '#10b981', // emerald
     type: Type.EXPENSE,
   },
   {
     name: 'Investments',
     slug: 'investments',
-    color: 'oklch(60.6% 0.25 292.17)',
+    color: '#a855f7', // purple
     type: Type.EXPENSE,
   },
   {
     name: 'Others',
     slug: 'others',
-    color: 'oklch(55.2% 0.01 285.94)',
+    color: '#737373', // neutral
     type: Type.EXPENSE,
   },
-
   {
     name: 'Salary',
     slug: 'salary',
-    color: 'oklch(55.5% 0.01 58.07)',
+    color: '#84cc16', // lime
     type: Type.REVENUE,
   },
   {
     name: 'Freelance / Services',
     slug: 'freelance-services',
-    color: 'oklch(65.6% 0.24 354.30)',
+    color: '#f97316', // orange
     type: Type.REVENUE,
   },
   {
     name: 'Own Business',
     slug: 'own-business',
-    color: 'oklch(62.7% 0.26 302.93)',
+    color: '#d946ef', // fuchsia
     type: Type.REVENUE,
   },
   {
     name: 'Investments',
     slug: 'investments',
-    color: 'oklch(72.3% 0.19 149.57)',
+    color: '#22c55e', // green
     type: Type.REVENUE,
   },
   {
     name: 'Rentals',
     slug: 'rentals',
-    color: 'oklch(64.5% 0.25 16.43)',
+    color: '#ef4444', // red
     type: Type.REVENUE,
   },
   {
     name: 'Refunds',
     slug: 'refunds',
-    color: 'oklch(68.5% 0.19 237.32)',
+    color: '#3b82f6', // blue
     type: Type.REVENUE,
   },
   {
     name: 'Gifts / Donations received',
     slug: 'gifts-donations-received',
-    color: 'oklch(76.8% 0.23 130.85)',
+    color: '#10b981', // emerald
     type: Type.REVENUE,
   },
   {
     name: 'Others',
     slug: 'others',
-    color: 'oklch(55.1% 0.02 264.36)',
+    color: '#71717a', // zinc
     type: Type.REVENUE,
   },
 ]
