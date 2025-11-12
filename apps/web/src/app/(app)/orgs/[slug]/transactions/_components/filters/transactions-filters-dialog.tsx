@@ -50,7 +50,7 @@ export function TransactionsFiltersDialog() {
     defaultValues: {
       type: type ?? 'EXPENSE',
       category: category ?? '',
-      status: status ?? 'PENDING',
+      status: status ?? '',
     },
   })
 

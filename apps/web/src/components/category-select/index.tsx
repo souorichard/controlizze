@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { CircleAlert } from 'lucide-react'
 import { ComponentProps } from 'react'
 
+import { useOrganization } from '@/hooks/use-organization'
+
 import {
   Select,
   SelectContent,
@@ -22,20 +24,18 @@ interface CategorySelectProps extends ComponentProps<typeof Select> {
 
 export function CategorySelect({
   className,
-  type = 'EXPENSE',
+  type,
   ...props
 }: CategorySelectProps) {
+  const organization = useOrganization()
+
   const { data } = useQuery({
-    queryKey: ['categories'],
+    queryKey: ['categories', organization, type],
     queryFn: getCategoriesAction,
   })
 
-  const expenses = data?.categories.filter((category) => {
-    return category.type === 'EXPENSE'
-  })
-
-  const revenues = data?.categories.filter((category) => {
-    return category.type === 'REVENUE'
+  const categories = data?.rawCategories.filter((category) => {
+    return category.type === type
   })
 
   return (
@@ -44,7 +44,7 @@ export function CategorySelect({
         <SelectValue placeholder="Select category" />
       </SelectTrigger>
       <SelectContent>
-        {data?.categories.length === 0 && (
+        {data?.rawCategories.length === 0 && (
           <div className="flex items-center justify-center gap-2 p-2">
             <CircleAlert className="text-primary size-4" />
             <span className="text-sm">No categories.</span>
@@ -58,21 +58,12 @@ export function CategorySelect({
           </div>
         )}
 
-        {type === 'EXPENSE' && (
+        {categories && (
           <SelectGroup>
-            <SelectLabel>Expenses</SelectLabel>
-            {expenses?.map((category) => (
-              <SelectItem key={category.id} value={category.slug}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        )}
-
-        {type === 'REVENUE' && (
-          <SelectGroup>
-            <SelectLabel>Revenues</SelectLabel>
-            {revenues?.map((category) => (
+            <SelectLabel>
+              {type === 'EXPENSE' ? 'Expenses' : 'Revenues'}
+            </SelectLabel>
+            {categories?.map((category) => (
               <SelectItem key={category.id} value={category.slug}>
                 {category.name}
               </SelectItem>

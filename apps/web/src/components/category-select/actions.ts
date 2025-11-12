@@ -6,11 +6,12 @@ import { getCategories } from '@/http/category/get-categories'
 export async function getCategoriesAction() {
   const currentOrganization = await getCurrentOrganization()
 
-  const { categories } = await getCategories({
+  const { rawCategories, categories } = await getCategories({
     organization: currentOrganization!,
   })
 
   return {
+    rawCategories,
     categories,
   }
 }

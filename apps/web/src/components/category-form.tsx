@@ -74,7 +74,7 @@ export function CategoryForm({
     .filter(([, value]) => typeof value === 'object' && value[500])
     .map(([name, value]) => ({
       name,
-      hex: value[500],
+      value: value[500],
     }))
 
   async function handleUpsertCategory({
@@ -140,11 +140,11 @@ export function CategoryForm({
                 </SelectTrigger>
                 <SelectContent>
                   {baseColors.map((color) => (
-                    <SelectItem key={color.name} value={color.hex}>
+                    <SelectItem key={color.name} value={color.value}>
                       <div className="flex items-center gap-2">
                         <div
                           className="size-2 rounded-full"
-                          style={{ backgroundColor: color.hex }}
+                          style={{ backgroundColor: color.value }}
                         />
                         <p className="capitalize">{color.name}</p>
                       </div>

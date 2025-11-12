@@ -37,8 +37,6 @@ export function OrganizationAvatarForm({
 }: OrganizationAvatarFormProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  console.log(initialData.avatarUrl)
-
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(
     initialData?.avatarUrl ?? null,

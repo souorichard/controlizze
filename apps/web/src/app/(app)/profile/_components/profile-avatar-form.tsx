@@ -1,5 +1,6 @@
 'use client'
 
+import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -31,6 +32,7 @@ interface ProfileAvatarFormProps {
 }
 
 export function ProfileAvatarForm({ initialData }: ProfileAvatarFormProps) {
+  const queryClient = useQueryClient()
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [file, setFile] = useState<File | null>(null)
@@ -92,6 +94,8 @@ export function ProfileAvatarForm({ initialData }: ProfileAvatarFormProps) {
 
     setFile(null)
     setPreview(savedUrl!)
+
+    queryClient.invalidateQueries({ queryKey: ['members'] })
   }
 
   function handleRemoveImage() {
