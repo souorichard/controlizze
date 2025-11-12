@@ -6,7 +6,6 @@ import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import colors from 'tailwindcss/colors'
 import { z } from 'zod/v4'
 
 import {
@@ -18,6 +17,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useOrganization } from '@/hooks/use-organization'
 import { Category } from '@/interfaces/category'
+import { baseColors } from '@/utils/tailwind-colors'
 
 import {
   Select,
@@ -69,13 +69,6 @@ export function CategoryForm({
       type: initialData?.type ?? 'EXPENSE',
     },
   })
-
-  const baseColors = Object.entries(colors)
-    .filter(([, value]) => typeof value === 'object' && value[500])
-    .map(([name, value]) => ({
-      name,
-      value: value[500],
-    }))
 
   async function handleUpsertCategory({
     name,
