@@ -30,6 +30,21 @@ export async function getCategories(app: FastifyInstance) {
           }),
           response: {
             200: z.object({
+              rawCategories: z.array(
+                z.object({
+                  id: z.uuid(),
+                  name: z.string(),
+                  slug: z.string(),
+                  color: z.string(),
+                  type: z.union([z.literal('EXPENSE'), z.literal('REVENUE')]),
+                  createdAt: z.date(),
+                  owner: z.object({
+                    id: z.uuid(),
+                    name: z.string().nullable(),
+                    avatarUrl: z.string().nullable(),
+                  }),
+                }),
+              ),
               categories: z.array(
                 z.object({
                   id: z.uuid(),
@@ -66,7 +81,31 @@ export async function getCategories(app: FastifyInstance) {
           )
         }
 
-        const [categories, totalCategories] = await Promise.all([
+        const [rawCategories, categories, totalCategories] = await Promise.all([
+          prisma.category.findMany({
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              color: true,
+              type: true,
+              createdAt: true,
+              owner: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatarUrl: true,
+                },
+              },
+            },
+            where: {
+              organizationId: organization.id,
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          }),
+
           prisma.category.findMany({
             select: {
               id: true,
@@ -115,6 +154,7 @@ export async function getCategories(app: FastifyInstance) {
         ])
 
         return {
+          rawCategories, // Used for category select ion frontend
           categories,
           totalCount: totalCategories,
         }

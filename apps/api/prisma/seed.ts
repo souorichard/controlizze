@@ -199,6 +199,10 @@ async function seed() {
   await prisma.category.createMany({
     data: categories.map((category) => ({
       ...category,
+      createdAt: faker.date.recent({
+        days: 180,
+        refDate: dayjs().toDate(),
+      }),
       organizationId: organization.id,
       ownerId: user.id,
     })),
