@@ -49,8 +49,8 @@ export async function getTopRevenueCategories(app: FastifyInstance) {
           )
         }
 
-        const topRevenuesCategories = await prisma.transaction.groupBy({
-          by: ['category'],
+        const topRevenues = await prisma.transaction.groupBy({
+          by: ['categoryId'],
           _sum: {
             amount: true,
           },
@@ -61,18 +61,36 @@ export async function getTopRevenueCategories(app: FastifyInstance) {
           orderBy: {
             _sum: { amount: 'desc' },
           },
-          take: 6,
+          take: 4,
         })
 
-        const formattedTopRevenuesCategories = topRevenuesCategories.map(
-          (category) => ({
-            category: category.category,
-            amount: Number(category._sum.amount ?? 0),
-          }),
-        )
+        const categoryIds = topRevenues.map((revenue) => revenue.categoryId)
+
+        const categories = await prisma.category.findMany({
+          select: {
+            id: true,
+            name: true,
+          },
+          where: {
+            id: {
+              in: categoryIds,
+            },
+          },
+        })
+
+        const formattedCategories = topRevenues.map((revenue) => {
+          const category = categories.find(
+            (category) => category.id === revenue.categoryId,
+          )
+
+          return {
+            category: category?.name ?? 'Uncategorized',
+            amount: Number(revenue._sum.amount),
+          }
+        })
 
         return {
-          categories: formattedTopRevenuesCategories,
+          categories: formattedCategories,
         }
       },
     )
