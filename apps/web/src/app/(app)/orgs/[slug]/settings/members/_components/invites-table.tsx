@@ -35,7 +35,7 @@ export function InvitesTable() {
           Manage all invites that you have sent.
         </p>
       </div>
-      <div className="border-muted/50 bg-muted/20 overflow-hidden rounded-md border-4">
+      <div className="border-muted/50 bg-card overflow-hidden rounded-md border-4">
         <Table>
           <TableHeader>
             <TableRow>

@@ -70,7 +70,7 @@ export function TransactionPerPeriodCard() {
         <div className="space-y-1">
           <CardTitle>Transactions per period</CardTitle>
           <CardDescription>
-            See your transactions per period for each type.
+            See your transactions per period for each type
           </CardDescription>
         </div>
         <div className="hidden items-center gap-3 lg:flex">

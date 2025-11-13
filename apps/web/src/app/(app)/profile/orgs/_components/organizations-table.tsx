@@ -30,7 +30,7 @@ export default function OrganizationsTable() {
           Manage all organization that you are a member of.
         </p>
       </div>
-      <div className="border-muted/50 bg-muted/20 overflow-hidden rounded-md border-4">
+      <div className="border-muted/50 bg-card overflow-hidden rounded-md border-4">
         <Table>
           <TableHeader>
             <TableRow>

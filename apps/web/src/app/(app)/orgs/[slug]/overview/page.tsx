@@ -1,7 +1,9 @@
 import { Metadata } from 'next'
 
 import { BalanceCard } from './_components/balance-card'
+import { ExpenseCategoriesCard } from './_components/expense-categories-card'
 import { ExpensesCard } from './_components/expenses-card'
+import { RevenueCategoriesCard } from './_components/revenue-categories-card'
 import { RevenuesCard } from './_components/revenues-card'
 import { TransactionPerPeriodCard } from './_components/transactions-per-period-card'
 
@@ -26,8 +28,8 @@ export default async function OverviewPage() {
         </div>
         <TransactionPerPeriodCard />
         <div className="grid items-center gap-4 lg:grid-cols-2">
-          {/* <ExpenseCategoriesCard organization={currentOrganization!} />
-          <RevenueCategoriesCard organization={currentOrganization!} /> */}
+          <ExpenseCategoriesCard />
+          <RevenueCategoriesCard />
         </div>
       </div>
     </>

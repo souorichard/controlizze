@@ -17,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useOrganization } from '@/hooks/use-organization'
 
 import { getTopRevenueCategoriesAction } from '../actions'
 
@@ -30,11 +31,9 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function RevenueCategoriesCard({
-  organization,
-}: {
-  organization: string
-}) {
+export function RevenueCategoriesCard() {
+  const organization = useOrganization()
+
   const { data: topRevenueCategories, isPending } = useQuery({
     queryKey: ['analysis', organization, 'top-revenue-categories'],
     queryFn: getTopRevenueCategoriesAction,
@@ -45,12 +44,12 @@ export function RevenueCategoriesCard({
       <CardHeader className="flex flex-col gap-1">
         <CardTitle>Revenue categories</CardTitle>
         <CardDescription>
-          See categories of your revenues and their total amount.
+          See top four categories of your revenues and their total amount
         </CardDescription>
       </CardHeader>
       <CardContent>
         {isPending && (
-          <div className="flex h-[300px] w-full flex-col items-center justify-center gap-4">
+          <div className="flex h-[200px] w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <Loader2 className="text-primary size-5 animate-spin" />
               {/* <span className="text-sm">Loading...</span> */}
@@ -59,7 +58,7 @@ export function RevenueCategoriesCard({
         )}
 
         {topRevenueCategories?.length === 0 && (
-          <div className="flex h-[300px] w-full flex-col items-center justify-center gap-4">
+          <div className="flex h-[200px] w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <CircleAlert className="text-primary size-5" />
               <span className="text-sm">No categories.</span>
@@ -68,7 +67,7 @@ export function RevenueCategoriesCard({
         )}
 
         {topRevenueCategories && (
-          <ChartContainer config={chartConfig} className="h-[300px] w-full">
+          <ChartContainer config={chartConfig} className="h-[200px] w-full">
             <BarChart
               accessibilityLayer
               data={topRevenueCategories}
