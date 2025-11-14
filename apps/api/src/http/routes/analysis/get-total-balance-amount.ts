@@ -47,21 +47,20 @@ export async function getTotalBalanceAmount(app: FastifyInstance) {
         }
 
         const { totalExpensesAmount, totalExpensesLastMonthAmount } =
-          await getTotalExpenses(organization.id)
+          await getTotalExpenses(organization.id, { accumulated: true })
 
         const { totalRevenuesAmount, totalRevenuesLastMonthAmount } =
-          await getTotalRevenues(organization.id)
+          await getTotalRevenues(organization.id, { accumulated: true })
 
-        const totalBalanceAmount =
-          (totalExpensesAmount - totalRevenuesAmount) * -1
+        const totalBalanceAmount = totalRevenuesAmount - totalExpensesAmount
 
         const totalBalanceLastMonthAmount =
-          (totalExpensesLastMonthAmount - totalRevenuesLastMonthAmount) * -1
+          totalRevenuesLastMonthAmount - totalExpensesLastMonthAmount
 
         const diffFromLastMonth =
-          totalBalanceAmount && totalBalanceLastMonthAmount
+          totalBalanceLastMonthAmount !== 0
             ? ((totalBalanceAmount - totalBalanceLastMonthAmount) /
-                totalBalanceLastMonthAmount) *
+                Math.abs(totalBalanceLastMonthAmount)) *
               100
             : 0
 
