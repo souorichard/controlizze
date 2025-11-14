@@ -1,6 +1,7 @@
 'use server'
 
 import { getCurrentOrganization } from '@/auth/auth'
+import { getBalanceEvolution } from '@/http/analysis/get-balance-evolution'
 import { getExpensesAmount } from '@/http/analysis/get-expenses-amount'
 import { getRevenuesAmount } from '@/http/analysis/get-revenues-amount'
 import { getTopExpenseCategories } from '@/http/analysis/get-top-expense-categories'
@@ -71,6 +72,28 @@ export async function getTransactionsPerPeriodAction({
   )
 
   return formattedDailyTransactions
+}
+
+interface GetBalanceEvolutionActionProps {
+  year: string
+}
+
+export async function getBalanceEvolutionAction({
+  year,
+}: GetBalanceEvolutionActionProps) {
+  const currentOrganization = await getCurrentOrganization()
+
+  const { evolutions } = await getBalanceEvolution({
+    organization: currentOrganization!,
+    year,
+  })
+
+  const formattedEvolutions = evolutions.map((item) => ({
+    ...item,
+    balance: centsToReal(item.balance),
+  }))
+
+  return formattedEvolutions
 }
 
 export async function getTopExpenseCategoriesAction() {

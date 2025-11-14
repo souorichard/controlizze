@@ -86,7 +86,9 @@ export function TransactionsTable() {
               return (
                 <TableRow key={transaction.id}>
                   <TableCell>
-                    {dayjs(transaction.createdAt).fromNow()}
+                    {dayjs(transaction.createdAt)
+                      .format('MMM DD, YYYY')
+                      .toString()}
                   </TableCell>
                   <TableCell>{transaction.description}</TableCell>
                   {/* <TableCell>

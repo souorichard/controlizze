@@ -3,25 +3,20 @@
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ArrowUpRight, CircleAlert, Loader2, XCircle } from 'lucide-react'
-import Link from 'next/link'
+import { CircleAlert, Loader2, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
@@ -34,71 +29,67 @@ import {
 } from '@/components/ui/select'
 import { useOrganization } from '@/hooks/use-organization'
 
-import { getTransactionsPerPeriodAction } from '../actions'
+import { getBalanceEvolutionAction } from '../actions'
 
 dayjs.extend(relativeTime)
 
 const chartConfig = {
-  transactions: {
-    label: 'Transactions',
+  evolutions: {
+    label: 'Evolutions',
   },
-  expenses: {
-    label: 'Expenses',
-    color: 'var(--chart-1)',
-  },
-  revenues: {
-    label: 'Revenues',
-    color: 'var(--chart-2)',
+  balance: {
+    label: 'Balance',
+    color: 'var(--chart-6)',
   },
 } satisfies ChartConfig
 
-export function TransactionPerPeriodCard() {
-  const [lastMonths, setLastMonths] = useState<string>('1')
+export function BalanceEvolutionCard() {
+  const currentYear = dayjs().year().toString()
+
+  const [year, setYear] = useState<string>(currentYear)
 
   const organization = useOrganization()
 
-  const { data: dailyTransactionsPerPeriod, error } = useQuery({
-    queryKey: ['analysis', organization, 'transactions-per-period', lastMonths],
-    queryFn: getTransactionsPerPeriodAction.bind(null, {
-      lastMonths,
-    }),
+  const { data: evolutions, error } = useQuery({
+    queryKey: ['analysis', organization, 'balance-evolution', year],
+    queryFn: getBalanceEvolutionAction.bind(null, { year }),
   })
 
   return (
     <Card>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
-          <CardTitle>Transactions per period</CardTitle>
+          <CardTitle>Balance evolution</CardTitle>
           <CardDescription>
-            See your transactions per period for each type
+            See your balance evolution for a given year
           </CardDescription>
         </div>
         <div className="hidden items-center gap-3 lg:flex">
-          <span className="text-xs">Period</span>
-          <Select defaultValue="1" onValueChange={setLastMonths}>
+          <span className="text-xs">Year</span>
+          <Select defaultValue="2025" onValueChange={setYear}>
             <SelectTrigger>
-              <SelectValue placeholder="Select period" />
+              <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Last month</SelectItem>
-              <SelectItem value="3">Last 3 months</SelectItem>
-              <SelectItem value="6">Last 6 months</SelectItem>
+              <SelectItem value="2025">2025</SelectItem>
+              <SelectItem value="2024">2024</SelectItem>
+              <SelectItem value="2023">2023</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </CardHeader>
       <CardContent>
-        {dailyTransactionsPerPeriod ? (
+        {evolutions ? (
           <>
-            {dailyTransactionsPerPeriod.length > 0 ? (
+            {evolutions.length > 0 ? (
               <ChartContainer
                 config={chartConfig}
                 className="aspect-auto h-[250px] w-full"
               >
-                <AreaChart data={dailyTransactionsPerPeriod}>
+                <AreaChart data={evolutions}>
                   <defs>
                     <linearGradient
-                      id="fillExpenses"
+                      id="fillBalance"
                       x1="0"
                       y1="0"
                       x2="0"
@@ -106,30 +97,12 @@ export function TransactionPerPeriodCard() {
                     >
                       <stop
                         offset="5%"
-                        stopColor="var(--color-expenses)"
+                        stopColor="var(--color-balance)"
                         stopOpacity={0.8}
                       />
                       <stop
                         offset="95%"
-                        stopColor="var(--color-expenses)"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                    <linearGradient
-                      id="fillRevenues"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor="var(--color-revenues)"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--color-revenues)"
+                        stopColor="var(--color-balance)"
                         stopOpacity={0.1}
                       />
                     </linearGradient>
@@ -142,7 +115,7 @@ export function TransactionPerPeriodCard() {
                     tickMargin={8}
                     minTickGap={32}
                     tickFormatter={(value) => {
-                      const date = dayjs(value).format('MMM DD')
+                      const date = dayjs(value).format('MMM')
 
                       return date
                     }}
@@ -152,7 +125,7 @@ export function TransactionPerPeriodCard() {
                     content={
                       <ChartTooltipContent
                         labelFormatter={(value) => {
-                          const date = dayjs(value).format('MMMM DD')
+                          const date = dayjs(value).format('MMMM')
 
                           return date
                         }}
@@ -162,32 +135,20 @@ export function TransactionPerPeriodCard() {
                     }
                   />
                   <Area
-                    dataKey="expenses"
+                    dataKey="balance"
                     type="natural"
-                    fill="url(#fillExpenses)"
-                    stroke="var(--color-expenses)"
+                    fill="url(#fillBalance)"
+                    stroke="var(--color-balance)"
                     stackId="a"
                   />
-                  <Area
-                    dataKey="revenues"
-                    type="natural"
-                    fill="url(#fillRevenues)"
-                    stroke="var(--color-revenues)"
-                    stackId="a"
-                  />
-                  <ChartLegend content={<ChartLegendContent />} />
                 </AreaChart>
               </ChartContainer>
             ) : (
               <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
                 <div className="flex items-center gap-2">
                   <CircleAlert className="text-primary size-5" />
-                  <span className="text-sm">No transactions.</span>
+                  <span className="text-sm">No evolutions</span>
                 </div>
-                {/* <Separator className="!w-[60px]" />
-                <Button size="xs" variant="link" onClick={handleResetPeriod}>
-                  Show results from the last 7 days
-                </Button> */}
               </div>
             )}
           </>
@@ -195,30 +156,17 @@ export function TransactionPerPeriodCard() {
           <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <XCircle className="text-destructive size-5" />
-              <span className="text-sm">Something went wrong.</span>
+              <span className="text-sm">Something went wrong</span>
             </div>
-            {/* <Separator className="!w-[60px]" />
-            <Button size="xs" variant="link" onClick={handleResetPeriod}>
-              Show results from the last 7 days
-            </Button> */}
           </div>
         ) : (
           <div className="flex h-[250px] w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <Loader2 className="text-primary size-5 animate-spin" />
-              {/* <span className="text-sm">Loading...</span> */}
             </div>
           </div>
         )}
       </CardContent>
-      <CardFooter className="justify-end gap-3 py-2.5">
-        <Button size="xs" variant="link" asChild>
-          <Link href={`/orgs/${organization}/transactions`}>
-            View all transactions
-            <ArrowUpRight className="size-4" />
-          </Link>
-        </Button>
-      </CardFooter>
     </Card>
   )
 }
