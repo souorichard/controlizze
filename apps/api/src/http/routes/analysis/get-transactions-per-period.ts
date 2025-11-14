@@ -58,11 +58,6 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
         const startDate = dayjs().subtract(lastMonths, 'months')
         const endDate = dayjs()
 
-        console.log({
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
-        })
-
         const periodTransactions = await prisma.$queryRaw<
           { date: Date; revenues: number; expenses: number }[]
         >`
