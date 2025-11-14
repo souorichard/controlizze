@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
+import { getBalanceEvolution } from './analysis/get-balance-evolution'
 import { getExpensesAmount } from './analysis/get-expenses-amount'
 import { getRevenuesAmount } from './analysis/get-revenues-amount'
 import { getTopExpenseCategories } from './analysis/get-top-expense-categories'
@@ -115,6 +116,7 @@ export async function registerRoutes(app: FastifyInstance) {
   app.register(getTransactionsPerPeriod)
   app.register(getTopExpenseCategories)
   app.register(getTopRevenueCategories)
+  app.register(getBalanceEvolution)
 
   // Storage
   app.register(uploadProfileAvatar)
