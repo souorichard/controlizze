@@ -44,9 +44,10 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function BalanceEvolutionCard() {
-  const currentYear = dayjs().year().toString()
+  const currentYear = dayjs().year()
+  const years = [currentYear, currentYear - 1, currentYear - 2]
 
-  const [year, setYear] = useState<string>(currentYear)
+  const [year, setYear] = useState<string>(String(currentYear))
 
   const organization = useOrganization()
 
@@ -71,9 +72,11 @@ export function BalanceEvolutionCard() {
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="2025">2025</SelectItem>
-              <SelectItem value="2024">2024</SelectItem>
-              <SelectItem value="2023">2023</SelectItem>
+              {years.map((year) => (
+                <SelectItem key={year} value={String(year)}>
+                  {year}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
