@@ -1,7 +1,7 @@
-import { Building2, LogOut, Menu, User } from 'lucide-react'
+import { Building2, HandCoins, LogOut, Menu, User } from 'lucide-react'
 import Link from 'next/link'
 
-import { auth } from '@/auth/auth'
+import { auth, getCurrentOrganization } from '@/auth/auth'
 import { getInitials } from '@/utils/get-initials'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
@@ -16,6 +16,8 @@ import {
 
 export async function ProfileButton() {
   const { user } = await auth()
+
+  const currentOrganization = await getCurrentOrganization()
 
   return (
     <DropdownMenu>
@@ -67,6 +69,13 @@ export async function ProfileButton() {
             </Link>
           </DropdownMenuItem>
         )} */}
+
+        <DropdownMenuItem asChild>
+          <Link href={`/orgs/${currentOrganization}/settings/billing`}>
+            <HandCoins className="text-muted-foreground size-4" />
+            Billing
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 

@@ -1,4 +1,4 @@
-import { Settings2, Users } from 'lucide-react'
+import { HandCoins, Settings2, Users } from 'lucide-react'
 
 import { ability, getCurrentOrganization } from '@/auth/auth'
 import { Sidebar, SidebarLink } from '@/components/sidebar'
@@ -8,7 +8,7 @@ export async function SettingsNavigation() {
   const permissions = await ability()
 
   const canGetMembers = permissions?.can('get', 'User')
-  // const canGetBilling = permissions?.can('get', 'Billing')
+  const canGetBilling = permissions?.can('get', 'Billing')
 
   return (
     <Sidebar>
@@ -24,14 +24,12 @@ export async function SettingsNavigation() {
         </SidebarLink>
       )}
 
-      {/* {canGetBilling && (
-        <SidebarLink
-          href={`/orgs/${currentOrganization}/settings/billing`}
-        >
+      {canGetBilling && (
+        <SidebarLink href={`/orgs/${currentOrganization}/settings/billing`}>
           <HandCoins className="size-4" />
           Billing
         </SidebarLink>
-      )} */}
+      )}
     </Sidebar>
   )
 }
