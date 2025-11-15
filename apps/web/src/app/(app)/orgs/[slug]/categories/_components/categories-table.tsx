@@ -79,7 +79,9 @@ export function CategoriesTable() {
 
             {data?.categories.map((category) => (
               <TableRow key={category.id}>
-                <TableCell>{dayjs(category.createdAt).fromNow()}</TableCell>
+                <TableCell>
+                  {dayjs(category.createdAt).format('MMM DD, YYYY').toString()}
+                </TableCell>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>
                   <div

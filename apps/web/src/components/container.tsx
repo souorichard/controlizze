@@ -15,7 +15,7 @@ export function HeaderContainer({ className, children }: GenericProps) {
   return (
     <div
       className={cn(
-        'bg-card fixed top-0 z-50 w-full border-b pt-5 shadow-xl shadow-black/50',
+        'bg-card sticky top-0 right-0 left-0 z-50 border-b pt-5 shadow-xl shadow-black/50',
         className,
       )}
     >
@@ -27,10 +27,7 @@ export function HeaderContainer({ className, children }: GenericProps) {
 export function MainContainer({ className, children }: GenericProps) {
   return (
     <div
-      className={cn(
-        'mx-auto mt-[117px] w-full max-w-7xl space-y-8 px-5 py-8',
-        className,
-      )}
+      className={cn('mx-auto w-full max-w-7xl space-y-8 px-5 py-8', className)}
     >
       {children}
     </div>
