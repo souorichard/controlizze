@@ -27,11 +27,15 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: z.string(),
     AWS_SECRET_ACCESS_KEY: z.string(),
     AWS_S3_BUCKET: z.string(),
+
+    STRIPE_SECRET_KEY: z.string(),
   },
   client: {},
   shared: {
     NEXT_PUBLIC_WEB_URL: z.url(),
     NEXT_PUBLIC_API_URL: z.url(),
+
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
   },
   runtimeEnv: {
     APP_ENV: process.env.APP_ENV || 'development',
@@ -61,6 +65,10 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
+
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   },
   emptyStringAsUndefined: true,
 })
