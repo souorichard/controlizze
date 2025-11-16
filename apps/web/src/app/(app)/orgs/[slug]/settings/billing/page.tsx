@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function BillingPage() {
   return (
     <main className="w-full space-y-8">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FreePlan />
         <ProPlan />
       </div>
