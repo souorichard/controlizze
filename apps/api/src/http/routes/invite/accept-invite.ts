@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
+import { checkPlan } from '@/http/middlewares/check-plan'
 import { prisma } from '@/lib/prisma'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -12,6 +13,7 @@ export async function acceptInvite(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
+    .register(checkPlan)
     .post(
       '/invites/:inviteId/accept',
       {

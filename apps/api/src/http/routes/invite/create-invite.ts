@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
+import { checkPlan } from '@/http/middlewares/check-plan'
 import { prisma } from '@/lib/prisma'
 import { sendInviteEmail } from '@/services/email/send-invite-email'
 import { getUserPermissions } from '@/utils/get-user-permissions'
@@ -15,6 +16,7 @@ export async function createInvite(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
+    .register(checkPlan)
     .post(
       '/organizations/:slug/invites',
       {
