@@ -7,12 +7,14 @@ import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
+import { checkPlan } from '../../middlewares/check-plan'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function getTransactionsPerPeriod(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
+    .register(checkPlan)
     .get(
       '/organizations/:slug/analysis/transactions-per-period',
       {
