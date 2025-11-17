@@ -115,6 +115,11 @@ model Organization {
   createdAt                 DateTime @default(now()) @map("created_at")
   updatedAt                 DateTime @updatedAt @map("updated_at")
 
+  stripeCustomerId         String? @unique @map("stripe_customer_id")
+  stripeSubscriptionId     String? @unique @map("stripe_subscription_id")
+  stripeSubscriptionStatus String? @map("stripe_subscription_status")
+  stripePriceId            String? @map("stripe_price_id")
+
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
