@@ -70,7 +70,7 @@ export async function createTransation(app: FastifyInstance) {
 
         const plan = await getOrganizationPlan(organization.slug)
 
-        if (plan === 'free') {
+        if (plan === 'FREE') {
           const startOfMonth = dayjs().startOf('month').toDate()
           const endOfMonth = dayjs().endOf('month').toDate()
 

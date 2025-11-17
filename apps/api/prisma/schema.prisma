@@ -104,12 +104,18 @@ model Invite {
   @@map("invites")
 }
 
+enum Plan {
+  FREE
+  PRO
+}
+
 model Organization {
   id                        String   @id @default(uuid())
   name                      String
   slug                      String   @unique
   domain                    String?  @unique
   shouldAttachUsersByDomain Boolean  @default(false) @map("should_attach_users_by_domain")
+  plan                      Plan     @default(FREE)
   avatarUrl                 String?  @map("avatar_url")
   avatarKey                 String?  @map("avatar_key")
   createdAt                 DateTime @default(now()) @map("created_at")

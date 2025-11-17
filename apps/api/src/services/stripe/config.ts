@@ -8,7 +8,6 @@ export const stripeConfig = {
 
   plans: {
     free: {
-      priceId: env.STRIPE_PRICE_FREE_MONTHLY,
       quota: {
         organizations: 1,
         transactions: 50,

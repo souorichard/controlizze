@@ -58,7 +58,7 @@ export async function createCategory(app: FastifyInstance) {
 
         const plan = await getOrganizationPlan(organization.slug)
 
-        if (plan === 'free') {
+        if (plan === 'FREE') {
           const categoriesCount = await prisma.category.count({
             where: {
               organizationId: organization.id,

@@ -5,7 +5,6 @@ import { z } from 'zod/v4'
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
 import { stripe } from '@/services/stripe'
-import { stripeConfig } from '@/services/stripe/config'
 import { createSlug } from '@/utils/create-slug'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -56,7 +55,7 @@ export async function createOrganization(app: FastifyInstance) {
 
         const existingFreeOrganization = await prisma.organization.findFirst({
           where: {
-            stripePriceId: stripeConfig.plans.free.priceId,
+            plan: 'FREE',
             ownerId: userId,
           },
         })
@@ -88,20 +87,12 @@ export async function createOrganization(app: FastifyInstance) {
           },
         })
 
-        const subscription = await stripe.subscriptions.create({
-          customer: customer.id,
-          items: [{ price: stripeConfig.plans.free.priceId }],
-        })
-
         await prisma.organization.update({
           where: {
             id: organization.id,
           },
           data: {
             stripeCustomerId: customer.id,
-            stripeSubscriptionId: subscription.id,
-            stripeSubscriptionStatus: subscription.status,
-            stripePriceId: subscription.items.data[0].price.id,
           },
         })
 
