@@ -1,11 +1,15 @@
+import dayjs from 'dayjs'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
+import { stripeConfig } from '@/services/stripe/config'
+import { getOrganizationPlan } from '@/utils/get-organization-plan'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
+import { BadRequestError } from '../_errors/bad-request-error'
 import { NotFoundError } from '../_errors/not-found-error'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 
@@ -63,6 +67,33 @@ export async function createTransation(app: FastifyInstance) {
           status,
           amount,
         } = request.body
+
+        const plan = await getOrganizationPlan(organization.slug)
+
+        if (plan === 'free') {
+          const startOfMonth = dayjs().startOf('month').toDate()
+          const endOfMonth = dayjs().endOf('month').toDate()
+
+          const transactionsCount = await prisma.transaction.count({
+            where: {
+              organizationId: organization.id,
+              ownerId: userId,
+              createdAt: {
+                gte: startOfMonth,
+                lte: endOfMonth,
+              },
+            },
+          })
+
+          const freePlanTransactionsLimit =
+            stripeConfig.plans.free.quota.transactions
+
+          if (transactionsCount >= freePlanTransactionsLimit) {
+            throw new BadRequestError(
+              `Free plan transaction limit per month reached (${transactionsCount}/${freePlanTransactionsLimit}).`,
+            )
+          }
+        }
 
         const category = await prisma.category.findUnique({
           where: {

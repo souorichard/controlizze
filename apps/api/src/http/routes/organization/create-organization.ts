@@ -4,8 +4,11 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
+import { stripe } from '@/services/stripe'
+import { stripeConfig } from '@/services/stripe/config'
 import { createSlug } from '@/utils/create-slug'
 
+import { BadRequestError } from '../_errors/bad-request-error'
 import { ConflictError } from '../_errors/conflict-error'
 
 export async function createOrganization(app: FastifyInstance) {
@@ -51,6 +54,17 @@ export async function createOrganization(app: FastifyInstance) {
           }
         }
 
+        const existingFreeOrganization = await prisma.organization.findFirst({
+          where: {
+            stripePriceId: stripeConfig.plans.free.priceId,
+            ownerId: userId,
+          },
+        })
+
+        if (existingFreeOrganization) {
+          throw new BadRequestError('You already have a free organization.')
+        }
+
         const organization = await prisma.organization.create({
           data: {
             name,
@@ -64,6 +78,30 @@ export async function createOrganization(app: FastifyInstance) {
                 role: 'ADMIN',
               },
             },
+          },
+        })
+
+        const customer = await stripe.customers.create({
+          name,
+          metadata: {
+            org_id: organization.id,
+          },
+        })
+
+        const subscription = await stripe.subscriptions.create({
+          customer: customer.id,
+          items: [{ price: stripeConfig.plans.free.priceId }],
+        })
+
+        await prisma.organization.update({
+          where: {
+            id: organization.id,
+          },
+          data: {
+            stripeCustomerId: customer.id,
+            stripeSubscriptionId: subscription.id,
+            stripeSubscriptionStatus: subscription.status,
+            stripePriceId: subscription.items.data[0].price.id,
           },
         })
 

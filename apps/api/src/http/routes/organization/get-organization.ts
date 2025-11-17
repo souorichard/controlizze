@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
+import { getOrganizationPlan } from '@/utils/get-organization-plan'
 
 export async function getOrganization(app: FastifyInstance) {
   app
@@ -30,6 +31,7 @@ export async function getOrganization(app: FastifyInstance) {
                 createdAt: z.date(),
                 updatedAt: z.date(),
                 ownerId: z.uuid(),
+                plan: z.string(),
               }),
             }),
           },
@@ -40,8 +42,13 @@ export async function getOrganization(app: FastifyInstance) {
 
         const { organization } = await request.getUserMembership(slug)
 
+        const plan = await getOrganizationPlan(organization.slug)
+
         return {
-          organization,
+          organization: {
+            ...organization,
+            plan,
+          },
         }
       },
     )
