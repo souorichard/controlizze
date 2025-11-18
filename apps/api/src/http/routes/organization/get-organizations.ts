@@ -23,6 +23,7 @@ export async function getOrganizations(app: FastifyInstance) {
                   id: z.uuid(),
                   name: z.string(),
                   slug: z.string(),
+                  plan: z.union([z.literal('FREE'), z.literal('PRO')]),
                   avatarUrl: z.url().nullable(),
                   role: z.union([
                     z.literal('ADMIN'),
@@ -44,6 +45,7 @@ export async function getOrganizations(app: FastifyInstance) {
             name: true,
             slug: true,
             domain: true,
+            plan: true,
             avatarUrl: true,
             members: {
               select: {

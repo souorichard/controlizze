@@ -15,7 +15,7 @@ export const checkPlan = fastifyPlugin(async (app: FastifyInstance) => {
 
     const plan = await getOrganizationPlan(organization)
 
-    if (plan === 'free') {
+    if (plan === 'FREE') {
       throw new UnauthorizedError(
         'This action is not allowed on the free plan.',
       )

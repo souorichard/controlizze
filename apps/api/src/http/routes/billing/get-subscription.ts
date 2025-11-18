@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
+import { checkPlan } from '@/http/middlewares/check-plan'
 import { stripe } from '@/services/stripe'
 import { getOrganizationPlan } from '@/utils/get-organization-plan'
 
@@ -12,6 +13,7 @@ export async function getSubscription(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
+    .register(checkPlan)
     .get(
       '/organizations/:slug/subscription',
       {
