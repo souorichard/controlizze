@@ -25,6 +25,8 @@ export default async function MembersPage() {
     getMembership(currentOrganization!),
   ])
 
+  const isFreePlan = organization.plan === 'FREE'
+
   const authOrganization = organizationSchema.parse(organization)
 
   const serializedPermissions = {
@@ -35,7 +37,7 @@ export default async function MembersPage() {
 
   return (
     <main className="w-full space-y-8">
-      {canInviteMembers && (
+      {canInviteMembers && !isFreePlan && (
         <>
           <InviteMemberForm />
           <Separator />

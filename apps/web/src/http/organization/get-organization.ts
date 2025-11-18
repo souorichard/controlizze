@@ -7,6 +7,7 @@ interface GetOrganizationResponse {
     slug: string
     domain: string | null
     shouldAttachUsersByDomain: boolean
+    plan: 'FREE' | 'PRO'
     avatarUrl: string | null
     ownerId: string
   }

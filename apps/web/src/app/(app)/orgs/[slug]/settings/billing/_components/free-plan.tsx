@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge'
 const features = [
   'Up to 1 organization',
   'Basic analytics',
-  'Up to 75 transactions',
-  'Up to 5 categories',
+  'Up to 50 transactions per month',
+  'Up to 10 categories',
 ]
 
 export function FreePlan() {

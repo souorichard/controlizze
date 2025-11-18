@@ -58,6 +58,8 @@ export function MembersTable({
     queryFn: getMembersAction,
   })
 
+  console.log(data?.members)
+
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">

@@ -1,5 +1,8 @@
 import { Metadata } from 'next'
 
+import { getCurrentOrganization } from '@/auth/auth'
+import { getOrganization } from '@/http/organization/get-organization'
+
 import { BalanceCard } from './_components/balance-card'
 import { BalanceEvolutionCard } from './_components/balance-evolution-card'
 import { ExpenseCategoriesCard } from './_components/expense-categories-card'
@@ -13,6 +16,12 @@ export const metadata: Metadata = {
 }
 
 export default async function OverviewPage() {
+  const currentOrganization = await getCurrentOrganization()
+
+  const { organization } = await getOrganization(currentOrganization!)
+
+  const isFreePlan = organization.plan === 'FREE'
+
   return (
     <>
       <div className="space-y-1">
@@ -27,8 +36,13 @@ export default async function OverviewPage() {
           <RevenuesCard />
           <BalanceCard />
         </div>
-        <TransactionPerPeriodCard />
-        <BalanceEvolutionCard />
+        {!isFreePlan && (
+          <>
+            <TransactionPerPeriodCard />
+            <BalanceEvolutionCard />
+          </>
+        )}
+
         <div className="grid items-center gap-4 lg:grid-cols-2">
           <ExpenseCategoriesCard />
           <RevenueCategoriesCard />
