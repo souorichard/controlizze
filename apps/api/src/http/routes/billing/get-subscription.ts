@@ -3,9 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
-import { checkPlan } from '@/http/middlewares/check-plan'
-import { stripe } from '@/services/stripe'
-import { getOrganizationPlan } from '@/utils/get-organization-plan'
+import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
 
 import { NotFoundError } from '../_errors/not-found-error'
 
@@ -13,7 +11,6 @@ export async function getSubscription(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .register(checkPlan)
     .get(
       '/organizations/:slug/subscription',
       {
@@ -27,9 +24,29 @@ export async function getSubscription(app: FastifyInstance) {
           response: {
             200: z.object({
               subscription: z.object({
-                plan: z.string(),
-                status: z.string(),
-                cancelAtPeriodEnd: z.boolean(),
+                name: z.string(),
+                quota: z.object({
+                  organizations: z.object({
+                    available: z.number(),
+                    current: z.number(),
+                    usage: z.number(),
+                  }),
+                  transactions: z.object({
+                    available: z.number(),
+                    current: z.number(),
+                    usage: z.number(),
+                  }),
+                  categories: z.object({
+                    available: z.number(),
+                    current: z.number(),
+                    usage: z.number(),
+                  }),
+                  members: z.object({
+                    available: z.number(),
+                    current: z.number(),
+                    usage: z.number(),
+                  }),
+                }),
               }),
             }),
           },
@@ -44,18 +61,12 @@ export async function getSubscription(app: FastifyInstance) {
           throw new NotFoundError('Organization not found.')
         }
 
-        const subscription = await stripe.subscriptions.retrieve(
-          organization.stripeSubscriptionId!,
+        const { subscription } = await getCurrentOrganizationPlan(
+          organization.slug,
         )
 
-        const plan = await getOrganizationPlan(organization.slug)
-
         return {
-          subscription: {
-            plan,
-            status: subscription.status,
-            cancelAtPeriodEnd: subscription.cancel_at_period_end,
-          },
+          subscription,
         }
       },
     )

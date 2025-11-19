@@ -4,9 +4,8 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
-import { stripeConfig } from '@/services/stripe/config'
 import { createSlug } from '@/utils/create-slug'
-import { getOrganizationPlan } from '@/utils/get-organization-plan'
+import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -56,9 +55,11 @@ export async function createCategory(app: FastifyInstance) {
 
         const { name, color, type } = request.body
 
-        const plan = await getOrganizationPlan(organization.slug)
+        const { subscription } = await getCurrentOrganizationPlan(
+          organization.slug,
+        )
 
-        if (plan === 'FREE') {
+        if (subscription.name === 'free') {
           const categoriesCount = await prisma.category.count({
             where: {
               organizationId: organization.id,
@@ -66,12 +67,11 @@ export async function createCategory(app: FastifyInstance) {
             },
           })
 
-          const freePlanCategoriesLimit =
-            stripeConfig.plans.free.quota.categories
+          const limit = subscription.quota.categories.available
 
-          if (categoriesCount >= freePlanCategoriesLimit) {
+          if (categoriesCount >= limit) {
             throw new BadRequestError(
-              `Free plan category limit reached (${categoriesCount}/${freePlanCategoriesLimit}).`,
+              `Free plan category limit reached (${categoriesCount}/${limit}).`,
             )
           }
         }

@@ -8,6 +8,7 @@ export const stripeConfig = {
 
   plans: {
     free: {
+      priceId: '',
       quota: {
         organizations: 1,
         transactions: 50,

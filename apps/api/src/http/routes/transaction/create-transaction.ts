@@ -5,8 +5,7 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
-import { stripeConfig } from '@/services/stripe/config'
-import { getOrganizationPlan } from '@/utils/get-organization-plan'
+import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -68,9 +67,11 @@ export async function createTransation(app: FastifyInstance) {
           amount,
         } = request.body
 
-        const plan = await getOrganizationPlan(organization.slug)
+        const { subscription } = await getCurrentOrganizationPlan(
+          organization.slug,
+        )
 
-        if (plan === 'FREE') {
+        if (subscription.name === 'free') {
           const startOfMonth = dayjs().startOf('month').toDate()
           const endOfMonth = dayjs().endOf('month').toDate()
 
@@ -85,12 +86,11 @@ export async function createTransation(app: FastifyInstance) {
             },
           })
 
-          const freePlanTransactionsLimit =
-            stripeConfig.plans.free.quota.transactions
+          const limit = subscription.quota.transactions.available
 
-          if (transactionsCount >= freePlanTransactionsLimit) {
+          if (transactionsCount >= limit) {
             throw new BadRequestError(
-              `Free plan transaction limit per month reached (${transactionsCount}/${freePlanTransactionsLimit}).`,
+              `Free plan transaction limit per month reached (${transactionsCount}/${limit}).`,
             )
           }
         }

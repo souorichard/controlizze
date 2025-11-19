@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, RouteGenericInterface } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 
-import { getOrganizationPlan } from '@/utils/get-organization-plan'
+import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
 
 import { UnauthorizedError } from '../routes/_errors/unauthorized-error'
 
@@ -11,11 +11,11 @@ interface Params extends RouteGenericInterface {
 
 export const checkPlan = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('preHandler', async (request: FastifyRequest<Params>) => {
-    const organization = request.params.slug
+    const organizationSlug = request.params.slug
 
-    const plan = await getOrganizationPlan(organization)
+    const { subscription } = await getCurrentOrganizationPlan(organizationSlug)
 
-    if (plan === 'FREE') {
+    if (subscription.name === 'free') {
       throw new UnauthorizedError(
         'This action is not allowed on the free plan.',
       )
