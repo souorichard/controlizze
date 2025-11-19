@@ -5,7 +5,6 @@ interface GetOrganizationsResponse {
     id: string
     name: string
     slug: string
-    plan: 'FREE' | 'PRO'
     avatarUrl: string | null
     role: 'ADMIN' | 'MEMBER' | 'BILLING'
   }[]

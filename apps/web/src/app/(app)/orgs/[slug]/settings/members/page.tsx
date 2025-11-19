@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 
 import { ability, getCurrentOrganization } from '@/auth/auth'
 import { Separator } from '@/components/ui/separator'
+import { getSubscription } from '@/http/billing/get-subscription'
 import { getMembership } from '@/http/organization/get-membership'
 import { getOrganization } from '@/http/organization/get-organization'
 
@@ -25,7 +26,7 @@ export default async function MembersPage() {
     getMembership(currentOrganization!),
   ])
 
-  const isFreePlan = organization.plan === 'FREE'
+  const { subscription } = await getSubscription(organization.slug)
 
   const authOrganization = organizationSchema.parse(organization)
 
@@ -37,7 +38,7 @@ export default async function MembersPage() {
 
   return (
     <main className="w-full space-y-8">
-      {canInviteMembers && !isFreePlan && (
+      {canInviteMembers && subscription.name !== 'free' && (
         <>
           <InviteMemberForm />
           <Separator />

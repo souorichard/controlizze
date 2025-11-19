@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 import { getCurrentOrganization } from '@/auth/auth'
-import { getOrganization } from '@/http/organization/get-organization'
+import { getSubscription } from '@/http/billing/get-subscription'
 
 import { BalanceCard } from './_components/balance-card'
 import { BalanceEvolutionCard } from './_components/balance-evolution-card'
@@ -18,9 +18,7 @@ export const metadata: Metadata = {
 export default async function OverviewPage() {
   const currentOrganization = await getCurrentOrganization()
 
-  const { organization } = await getOrganization(currentOrganization!)
-
-  const isFreePlan = organization.plan === 'FREE'
+  const { subscription } = await getSubscription(currentOrganization!)
 
   return (
     <>
@@ -36,7 +34,7 @@ export default async function OverviewPage() {
           <RevenuesCard />
           <BalanceCard />
         </div>
-        {!isFreePlan && (
+        {subscription.name !== 'free' && (
           <>
             <TransactionPerPeriodCard />
             <BalanceEvolutionCard />
