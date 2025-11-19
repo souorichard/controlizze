@@ -15,7 +15,7 @@ export function PaymentMethod() {
 
       <div className="flex items-center justify-between gap-3 rounded-xl border p-4">
         <div className="flex items-center gap-2">
-          <div className="bg-muted/40 flex items-center justify-between rounded-md p-3">
+          <div className="bg-muted/50 flex items-center justify-between rounded-md p-3">
             <CreditCard className="text-muted-foreground size-5" />
           </div>
           <div>
