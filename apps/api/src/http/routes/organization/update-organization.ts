@@ -19,7 +19,7 @@ export async function updateOrganization(app: FastifyInstance) {
       {
         schema: {
           tags: ['Organization'],
-          summary: 'Update an organization.',
+          summary: 'Update an organization',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -49,7 +49,7 @@ export async function updateOrganization(app: FastifyInstance) {
 
         if (cannot('update', authOrganization)) {
           throw new UnauthorizedError(
-            `You're not allowed to update this organization.`,
+            `You're not allowed to update this organization`,
           )
         }
 
@@ -66,7 +66,7 @@ export async function updateOrganization(app: FastifyInstance) {
 
           if (organizationWithSameDomain) {
             throw new ConflictError(
-              'Organization with same domain already exists.',
+              'Organization with same domain already exists',
             )
           }
         }

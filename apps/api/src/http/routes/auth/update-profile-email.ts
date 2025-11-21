@@ -18,7 +18,7 @@ export async function updateProfileEmail(app: FastifyInstance) {
       {
         schema: {
           tags: ['Auth'],
-          summary: 'Update profile email.',
+          summary: 'Update profile email',
           security: [{ bearerAuth: [] }],
           body: z.object({
             email: z.string(),
@@ -48,17 +48,17 @@ export async function updateProfileEmail(app: FastifyInstance) {
         ])
 
         if (!user) {
-          throw new NotFoundError('User not found.')
+          throw new NotFoundError('User not found')
         }
 
         if (!user.hashPassword) {
           throw new ForbiddenError(
-            'Only users with password authentication can change e-mail.',
+            'Only users with password authentication can change e-mail',
           )
         }
 
         if (userFromEmail) {
-          throw new ConflictError('User with same e-mail already exists.')
+          throw new ConflictError('User with same e-mail already exists')
         }
 
         await prisma.user.update({

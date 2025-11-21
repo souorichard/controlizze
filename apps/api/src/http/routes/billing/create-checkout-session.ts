@@ -18,7 +18,7 @@ export async function getSubscription(app: FastifyInstance) {
       {
         schema: {
           tags: ['Billing'],
-          summary: 'Create checkout session.',
+          summary: 'Create checkout session',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -39,7 +39,7 @@ export async function getSubscription(app: FastifyInstance) {
         const { organization } = await request.getUserMembership(slug)
 
         if (!organization) {
-          throw new NotFoundError('Organization not found.')
+          throw new NotFoundError('Organization not found')
         }
 
         try {
@@ -65,7 +65,7 @@ export async function getSubscription(app: FastifyInstance) {
             },
           }
         } catch (error) {
-          throw new NotFoundError('Could not create checkout session.')
+          throw new NotFoundError('Could not create checkout session')
         }
       },
     )

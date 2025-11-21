@@ -20,7 +20,7 @@ export async function getTransactionsPerPeriod(app: FastifyInstance) {
       {
         schema: {
           tags: ['Analysis'],
-          summary: 'Get transactions per period.',
+          summary: 'Get transactions per period',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),

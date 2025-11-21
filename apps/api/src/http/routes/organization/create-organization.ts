@@ -22,7 +22,7 @@ export async function createOrganization(app: FastifyInstance) {
       {
         schema: {
           tags: ['Organization'],
-          summary: 'Create a new organization.',
+          summary: 'Create a new organization',
           security: [{ bearerAuth: [] }],
           body: z
             .object({
@@ -42,7 +42,7 @@ export async function createOrganization(app: FastifyInstance) {
                 return true
               },
               {
-                message: 'Domain is required when auto-join is enabled.',
+                message: 'Domain is required when auto-join is enabled',
                 path: ['domain'],
               },
             ),
@@ -71,7 +71,7 @@ export async function createOrganization(app: FastifyInstance) {
 
           if (subscription.name === 'free') {
             throw new BadRequestError(
-              'You cannot create a new organization on the free plan.',
+              'You cannot create a new organization on the free plan',
             )
           }
         }
@@ -86,7 +86,7 @@ export async function createOrganization(app: FastifyInstance) {
 
           if (organizationWithSameDomain) {
             throw new ConflictError(
-              'Organization with same domain already exists.',
+              'Organization with same domain already exists',
             )
           }
         }

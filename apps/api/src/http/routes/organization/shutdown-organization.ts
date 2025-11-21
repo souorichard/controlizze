@@ -18,7 +18,7 @@ export async function shutdownOrganization(app: FastifyInstance) {
       {
         schema: {
           tags: ['Organization'],
-          summary: 'Shutdown organization.',
+          summary: 'Shutdown organization',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -41,7 +41,7 @@ export async function shutdownOrganization(app: FastifyInstance) {
 
         if (cannot('delete', authOrganization)) {
           throw new UnauthorizedError(
-            `You're not allowed to shutdown this organization.`,
+            `You're not allowed to shutdown this organization`,
           )
         }
 

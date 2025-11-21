@@ -15,7 +15,7 @@ export async function updateProfileName(app: FastifyInstance) {
       {
         schema: {
           tags: ['Auth'],
-          summary: 'Update profile name.',
+          summary: 'Update profile name',
           security: [{ bearerAuth: [] }],
           body: z.object({
             name: z.string(),
@@ -37,7 +37,7 @@ export async function updateProfileName(app: FastifyInstance) {
         })
 
         if (!user) {
-          throw new NotFoundError('User not found.')
+          throw new NotFoundError('User not found')
         }
 
         await prisma.user.update({

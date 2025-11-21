@@ -19,7 +19,7 @@ export async function deleteTransation(app: FastifyInstance) {
       {
         schema: {
           tags: ['Transaction'],
-          summary: 'Delete a transaction.',
+          summary: 'Delete a transaction',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -45,7 +45,7 @@ export async function deleteTransation(app: FastifyInstance) {
         })
 
         if (!transaction) {
-          throw new NotFoundError(`Transaction not found.`)
+          throw new NotFoundError(`Transaction not found`)
         }
 
         const authTransaction = transactionSchema.parse(transaction)
@@ -54,7 +54,7 @@ export async function deleteTransation(app: FastifyInstance) {
 
         if (cannot('delete', authTransaction)) {
           throw new UnauthorizedError(
-            `You're not allowed to delete this transaction.`,
+            `You're not allowed to delete this transaction`,
           )
         }
 

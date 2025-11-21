@@ -21,7 +21,7 @@ export async function uploadOrganizationAvatar(app: FastifyInstance) {
       {
         schema: {
           tags: ['Storage'],
-          summary: 'Upload organization avatar.',
+          summary: 'Upload organization avatar',
           consumes: ['multipart/form-data'],
           security: [{ bearerAuth: [] }],
           params: z.object({
@@ -40,7 +40,7 @@ export async function uploadOrganizationAvatar(app: FastifyInstance) {
         const file = await request.file()
 
         if (!file) {
-          throw new BadRequestError('No file uploaded.')
+          throw new BadRequestError('No file uploaded')
         }
 
         const organization = await prisma.organization.findUnique({
@@ -50,19 +50,19 @@ export async function uploadOrganizationAvatar(app: FastifyInstance) {
         })
 
         if (!organization) {
-          throw new NotFoundError('Organization not found.')
+          throw new NotFoundError('Organization not found')
         }
 
         const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg']
 
         if (!allowedTypes.includes(file.mimetype)) {
           throw new BadRequestError(
-            'Invalid file type. Only PNG, JPG, JPEG are allowed.',
+            'Invalid file type. Only PNG, JPG, JPEG are allowed',
           )
         }
 
         if (file.file.truncated) {
-          throw new BadRequestError(`File size should not be larger than 5MB.`)
+          throw new BadRequestError(`File size should not be larger than 5MB`)
         }
 
         const buffer = await file.toBuffer()

@@ -18,7 +18,7 @@ export async function getTotalBalanceAmount(app: FastifyInstance) {
       {
         schema: {
           tags: ['Analysis'],
-          summary: 'Get total balance amount.',
+          summary: 'Get total balance amount',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -42,7 +42,7 @@ export async function getTotalBalanceAmount(app: FastifyInstance) {
 
         if (cannot('get', 'Analysis')) {
           throw new UnauthorizedError(
-            `You're not allowed to see this information.`,
+            `You're not allowed to see this information`,
           )
         }
 

@@ -22,7 +22,7 @@ export async function createInvite(app: FastifyInstance) {
       {
         schema: {
           tags: ['Invite'],
-          summary: 'Create a new invite.',
+          summary: 'Create a new invite',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -53,7 +53,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (cannot('create', 'Invite')) {
           throw new UnauthorizedError(
-            `You're not allowed to create new invites.`,
+            `You're not allowed to create new invites`,
           )
         }
 
@@ -66,7 +66,7 @@ export async function createInvite(app: FastifyInstance) {
           organization.domain === domain
         ) {
           throw new BadRequestError(
-            `Users with ${domain} domain will join your organization automatically on login.`,
+            `Users with ${domain} domain will join your organization automatically on login`,
           )
         }
 
@@ -81,7 +81,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (inviteWithSameEmail) {
           throw new ConflictError(
-            'Another invite with same e-mail already exists.',
+            'Another invite with same e-mail already exists',
           )
         }
 
@@ -96,7 +96,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (memberWithSameEmail) {
           throw new ConflictError(
-            'Another member with same e-mail already exists.',
+            'Another member with same e-mail already exists',
           )
         }
 

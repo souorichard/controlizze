@@ -12,7 +12,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Authenticate with Github.',
+        summary: 'Authenticate with Github',
         body: z.object({
           code: z.string(),
         }),
@@ -82,7 +82,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
 
       if (email === null) {
         throw new BadRequestError(
-          'Your Github account must have an e-mail address for authentication or you need to make it public.',
+          'Your Github account must have an e-mail address for authentication or you need to make it public',
         )
       }
 

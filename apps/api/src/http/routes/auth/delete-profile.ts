@@ -16,7 +16,7 @@ export async function deleteProfile(app: FastifyInstance) {
       {
         schema: {
           tags: ['Auth'],
-          summary: 'Delete profile.',
+          summary: 'Delete profile',
           security: [{ bearerAuth: [] }],
           response: {
             204: z.null(),
@@ -33,7 +33,7 @@ export async function deleteProfile(app: FastifyInstance) {
         })
 
         if (!user) {
-          throw new NotFoundError('User not found.')
+          throw new NotFoundError('User not found')
         }
 
         await prisma.user.delete({

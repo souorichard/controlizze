@@ -16,7 +16,7 @@ export async function getSubscription(app: FastifyInstance) {
       {
         schema: {
           tags: ['Billing'],
-          summary: 'Get organization billing.',
+          summary: 'Get organization billing',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),

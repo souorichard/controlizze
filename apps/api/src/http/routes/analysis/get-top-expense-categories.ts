@@ -17,7 +17,7 @@ export async function getTopExpenseCategories(app: FastifyInstance) {
       {
         schema: {
           tags: ['Analysis'],
-          summary: 'Get top expense categories.',
+          summary: 'Get top expense categories',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -45,7 +45,7 @@ export async function getTopExpenseCategories(app: FastifyInstance) {
 
         if (cannot('get', 'Analysis')) {
           throw new UnauthorizedError(
-            `You're not allowed to see this information.`,
+            `You're not allowed to see this information`,
           )
         }
 

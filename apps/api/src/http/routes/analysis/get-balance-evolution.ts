@@ -20,7 +20,7 @@ export async function getBalanceEvolution(app: FastifyInstance) {
       {
         schema: {
           tags: ['Analysis'],
-          summary: 'Get monthly balance evolution for a given year.',
+          summary: 'Get monthly balance evolution for a given year',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -54,7 +54,7 @@ export async function getBalanceEvolution(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
         if (cannot('get', 'Analysis')) {
           throw new UnauthorizedError(
-            `You're not allowed to see this information.`,
+            `You're not allowed to see this information`,
           )
         }
 

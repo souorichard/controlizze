@@ -18,7 +18,7 @@ export async function deleteCategory(app: FastifyInstance) {
       {
         schema: {
           tags: ['Category'],
-          summary: 'Delete a category.',
+          summary: 'Delete a category',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -39,9 +39,7 @@ export async function deleteCategory(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('delete', 'Category')) {
-          throw new UnauthorizedError(
-            `You're not allowed to delete a category.`,
-          )
+          throw new UnauthorizedError(`You're not allowed to delete a category`)
         }
 
         const category = await prisma.category.findUnique({
@@ -52,7 +50,7 @@ export async function deleteCategory(app: FastifyInstance) {
         })
 
         if (!category) {
-          throw new NotFoundError('Category not found.')
+          throw new NotFoundError('Category not found')
         }
 
         await prisma.category.delete({

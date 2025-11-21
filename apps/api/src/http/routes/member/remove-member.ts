@@ -20,7 +20,7 @@ export async function removeMember(app: FastifyInstance) {
       {
         schema: {
           tags: ['Member'],
-          summary: 'Remove a member from the organization.',
+          summary: 'Remove a member from the organization',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -42,7 +42,7 @@ export async function removeMember(app: FastifyInstance) {
 
         if (cannot('delete', 'User')) {
           throw new UnauthorizedError(
-            `You're not allowed to delete this member from the organization.`,
+            `You're not allowed to delete this member from the organization`,
           )
         }
 
@@ -54,7 +54,7 @@ export async function removeMember(app: FastifyInstance) {
         })
 
         if (!member) {
-          throw new NotFoundError(`Member not found.`)
+          throw new NotFoundError(`Member not found`)
         }
 
         await prisma.member.delete({

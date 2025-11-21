@@ -12,7 +12,7 @@ export async function createAccount(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Create a new account.',
+        summary: 'Create a new account',
         body: z.object({
           name: z.string(),
           email: z.email(),
@@ -33,7 +33,7 @@ export async function createAccount(app: FastifyInstance) {
       })
 
       if (userWithSameEmail) {
-        throw new ConflictError('User with same e-mail already exists.')
+        throw new ConflictError('User with same e-mail already exists')
       }
 
       const [, domain] = email.split('@')

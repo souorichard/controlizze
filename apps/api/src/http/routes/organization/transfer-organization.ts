@@ -19,7 +19,7 @@ export async function transferOrganization(app: FastifyInstance) {
       {
         schema: {
           tags: ['Organization'],
-          summary: 'Trasfer organization ownership.',
+          summary: 'Trasfer organization ownership',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -47,7 +47,7 @@ export async function transferOrganization(app: FastifyInstance) {
 
         if (cannot('transfer_ownership', authOrganization)) {
           throw new UnauthorizedError(
-            `You're not allowed to transfer ownership of this organization.`,
+            `You're not allowed to transfer ownership of this organization`,
           )
         }
 
@@ -62,7 +62,7 @@ export async function transferOrganization(app: FastifyInstance) {
 
         if (!tranferToMembership) {
           throw new BadRequestError(
-            'Target user is not a member of this organization.',
+            'Target user is not a member of this organization',
           )
         }
 

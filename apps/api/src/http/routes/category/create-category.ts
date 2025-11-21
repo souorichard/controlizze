@@ -21,7 +21,7 @@ export async function createCategory(app: FastifyInstance) {
       {
         schema: {
           tags: ['Category'],
-          summary: 'Create a new category.',
+          summary: 'Create a new category',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),

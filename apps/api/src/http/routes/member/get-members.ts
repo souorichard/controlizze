@@ -17,7 +17,7 @@ export async function getMembers(app: FastifyInstance) {
       {
         schema: {
           tags: ['Member'],
-          summary: 'Get all organization members.',
+          summary: 'Get all organization members',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -53,7 +53,7 @@ export async function getMembers(app: FastifyInstance) {
 
         if (cannot('get', 'User')) {
           throw new UnauthorizedError(
-            `You're not allowed to see organizations members.`,
+            `You're not allowed to see organizations members`,
           )
         }
 

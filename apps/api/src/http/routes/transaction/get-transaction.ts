@@ -18,7 +18,7 @@ export async function getTransation(app: FastifyInstance) {
       {
         schema: {
           tags: ['Transaction'],
-          summary: 'Get transaction details.',
+          summary: 'Get transaction details',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -62,7 +62,7 @@ export async function getTransation(app: FastifyInstance) {
 
         if (cannot('get', 'Transaction')) {
           throw new UnauthorizedError(
-            `You're not allowed to see this transaction.`,
+            `You're not allowed to see this transaction`,
           )
         }
 
@@ -95,7 +95,7 @@ export async function getTransation(app: FastifyInstance) {
         })
 
         if (!transaction) {
-          throw new NotFoundError('Transaction not found.')
+          throw new NotFoundError('Transaction not found')
         }
 
         return {

@@ -12,7 +12,7 @@ export async function authenticateWithGoogle(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Authenticate with Google.',
+        summary: 'Authenticate with Google',
         body: z.object({
           code: z.string(),
         }),
@@ -92,7 +92,7 @@ export async function authenticateWithGoogle(app: FastifyInstance) {
 
       if (email === null) {
         throw new BadRequestError(
-          'Your Google account must have an e-mail address for authentication or you need to make it public.',
+          'Your Google account must have an e-mail address for authentication or you need to make it public',
         )
       }
 

@@ -19,7 +19,7 @@ export async function getInvites(app: FastifyInstance) {
       {
         schema: {
           tags: ['Invite'],
-          summary: 'Get all organization invites.',
+          summary: 'Get all organization invites',
           params: z.object({
             slug: z.string(),
           }),
@@ -58,7 +58,7 @@ export async function getInvites(app: FastifyInstance) {
 
         if (cannot('get', 'Invite')) {
           throw new UnauthorizedError(
-            `You're not allowed to get organization invites.`,
+            `You're not allowed to get organization invites`,
           )
         }
 

@@ -1,11 +1,10 @@
 import { env } from '@controlizze/env'
-import { Resend } from 'resend'
 
 import { User } from '@/generated'
 
-export async function sendRecoverPasswordEmail(user: User, code: string) {
-  const resend = new Resend(env.RESEND_API_KEY)
+import { resend } from '.'
 
+export async function sendRecoverPasswordEmail(user: User, code: string) {
   const recoveryLink = `${env.NEXT_PUBLIC_WEB_URL}/auth/forgot-password/reset?code=${code}`
 
   const html = `

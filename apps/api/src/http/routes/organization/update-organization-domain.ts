@@ -18,7 +18,7 @@ export async function updateOrganizationDomain(app: FastifyInstance) {
       {
         schema: {
           tags: ['Organization'],
-          summary: 'Update an organization domain.',
+          summary: 'Update an organization domain',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -47,7 +47,7 @@ export async function updateOrganizationDomain(app: FastifyInstance) {
 
         if (cannot('update', authOrganization)) {
           throw new UnauthorizedError(
-            `You're not allowed to update this organization.`,
+            `You're not allowed to update this organization`,
           )
         }
 

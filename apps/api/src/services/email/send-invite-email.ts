@@ -1,9 +1,8 @@
 import { env } from '@controlizze/env'
-import { Resend } from 'resend'
+
+import { resend } from '.'
 
 export async function sendInviteEmail(email: string, inviteId: string) {
-  const resend = new Resend(env.RESEND_API_KEY)
-
   const invitePageLink = `${env.NEXT_PUBLIC_WEB_URL}/invite/${inviteId}`
 
   const html = `

@@ -18,7 +18,7 @@ export async function getCategory(app: FastifyInstance) {
       {
         schema: {
           tags: ['Category'],
-          summary: 'Get category details.',
+          summary: 'Get category details',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -54,7 +54,7 @@ export async function getCategory(app: FastifyInstance) {
 
         if (cannot('get', 'Category')) {
           throw new UnauthorizedError(
-            `You're not allowed to see organization category.`,
+            `You're not allowed to see organization category`,
           )
         }
 
@@ -81,7 +81,7 @@ export async function getCategory(app: FastifyInstance) {
         })
 
         if (!category) {
-          throw new NotFoundError('Category not found.')
+          throw new NotFoundError('Category not found')
         }
 
         return {

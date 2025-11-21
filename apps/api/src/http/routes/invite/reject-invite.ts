@@ -19,7 +19,7 @@ export async function rejectInvite(app: FastifyInstance) {
       {
         schema: {
           tags: ['Invite'],
-          summary: 'Reject an invite.',
+          summary: 'Reject an invite',
           security: [{ bearerAuth: [] }],
           params: z.object({
             inviteId: z.uuid(),
@@ -41,7 +41,7 @@ export async function rejectInvite(app: FastifyInstance) {
         })
 
         if (!invite) {
-          throw new NotFoundError('Invite not found or expired.')
+          throw new NotFoundError('Invite not found or expired')
         }
 
         const user = await prisma.user.findUnique({
@@ -51,11 +51,11 @@ export async function rejectInvite(app: FastifyInstance) {
         })
 
         if (!user) {
-          throw new NotFoundError('User not found.')
+          throw new NotFoundError('User not found')
         }
 
         if (invite.email !== user.email) {
-          throw new BadRequestError('This invite belongs to another user.')
+          throw new BadRequestError('This invite belongs to another user')
         }
 
         await prisma.invite.delete({

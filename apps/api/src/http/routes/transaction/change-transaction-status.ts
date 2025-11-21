@@ -19,7 +19,7 @@ export async function changeTransationStatus(app: FastifyInstance) {
       {
         schema: {
           tags: ['Transaction'],
-          summary: 'Update a transaction.',
+          summary: 'Update a transaction',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -52,7 +52,7 @@ export async function changeTransationStatus(app: FastifyInstance) {
         })
 
         if (!transaction) {
-          throw new NotFoundError(`Transaction not found.`)
+          throw new NotFoundError(`Transaction not found`)
         }
 
         const authTransaction = transactionSchema.parse(transaction)
@@ -61,7 +61,7 @@ export async function changeTransationStatus(app: FastifyInstance) {
 
         if (cannot('update', authTransaction)) {
           throw new UnauthorizedError(
-            `You're not allowed to update this transaction.`,
+            `You're not allowed to update this transaction`,
           )
         }
 

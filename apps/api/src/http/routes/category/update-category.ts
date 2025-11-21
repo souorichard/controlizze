@@ -19,7 +19,7 @@ export async function updateCategory(app: FastifyInstance) {
       {
         schema: {
           tags: ['Category'],
-          summary: 'Update a category.',
+          summary: 'Update a category',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -45,9 +45,7 @@ export async function updateCategory(app: FastifyInstance) {
         const { cannot } = getUserPermissions(userId, membership.role)
 
         if (cannot('update', 'Category')) {
-          throw new UnauthorizedError(
-            `You're not allowed to update a category.`,
-          )
+          throw new UnauthorizedError(`You're not allowed to update a category`)
         }
 
         const { name, color, type } = request.body
@@ -60,7 +58,7 @@ export async function updateCategory(app: FastifyInstance) {
         })
 
         if (!category) {
-          throw new NotFoundError('Category not found.')
+          throw new NotFoundError('Category not found')
         }
 
         await prisma.category.update({

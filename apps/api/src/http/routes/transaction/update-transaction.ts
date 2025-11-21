@@ -19,7 +19,7 @@ export async function updateTransation(app: FastifyInstance) {
       {
         schema: {
           tags: ['Transaction'],
-          summary: 'Update a transaction.',
+          summary: 'Update a transaction',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -56,7 +56,7 @@ export async function updateTransation(app: FastifyInstance) {
         })
 
         if (!transaction) {
-          throw new NotFoundError(`Transaction not found.`)
+          throw new NotFoundError(`Transaction not found`)
         }
 
         const authTransaction = transactionSchema.parse(transaction)
@@ -65,7 +65,7 @@ export async function updateTransation(app: FastifyInstance) {
 
         if (cannot('update', authTransaction)) {
           throw new UnauthorizedError(
-            `You're not allowed to update this transaction.`,
+            `You're not allowed to update this transaction`,
           )
         }
 
@@ -87,7 +87,7 @@ export async function updateTransation(app: FastifyInstance) {
         })
 
         if (!category) {
-          throw new NotFoundError('Category not found.')
+          throw new NotFoundError('Category not found')
         }
 
         await prisma.transaction.update({

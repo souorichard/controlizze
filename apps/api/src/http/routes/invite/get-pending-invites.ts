@@ -16,7 +16,7 @@ export async function getPendingInvites(app: FastifyInstance) {
       {
         schema: {
           tags: ['Invite'],
-          summary: 'Get all user pending invites.',
+          summary: 'Get all user pending invites',
           response: {
             200: z.object({
               invites: z.array(
@@ -55,7 +55,7 @@ export async function getPendingInvites(app: FastifyInstance) {
         })
 
         if (!user) {
-          throw new NotFoundError('User not found.')
+          throw new NotFoundError('User not found')
         }
 
         const invites = await prisma.invite.findMany({

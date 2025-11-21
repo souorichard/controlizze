@@ -20,7 +20,7 @@ export async function updateMember(app: FastifyInstance) {
       {
         schema: {
           tags: ['Member'],
-          summary: 'Update a member.',
+          summary: 'Update a member',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -49,7 +49,7 @@ export async function updateMember(app: FastifyInstance) {
 
         if (cannot('update', 'User')) {
           throw new UnauthorizedError(
-            `You're not allowed to update this member.`,
+            `You're not allowed to update this member`,
           )
         }
 
@@ -63,7 +63,7 @@ export async function updateMember(app: FastifyInstance) {
         })
 
         if (!member) {
-          throw new NotFoundError(`Member not found.`)
+          throw new NotFoundError(`Member not found`)
         }
 
         await prisma.member.update({

@@ -17,7 +17,7 @@ export async function leaveOrganization(app: FastifyInstance) {
       {
         schema: {
           tags: ['Organization'],
-          summary: 'Leave organization.',
+          summary: 'Leave organization',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -39,11 +39,11 @@ export async function leaveOrganization(app: FastifyInstance) {
         })
 
         if (!organization) {
-          throw new NotFoundError('Organization not found.')
+          throw new NotFoundError('Organization not found')
         }
 
         if (organization.ownerId === userId) {
-          throw new BadRequestError('You cannot leave your own organization.')
+          throw new BadRequestError('You cannot leave your own organization')
         }
 
         await prisma.member.delete({

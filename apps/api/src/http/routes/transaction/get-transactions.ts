@@ -17,7 +17,7 @@ export async function getTransations(app: FastifyInstance) {
       {
         schema: {
           tags: ['Transaction'],
-          summary: 'Get all organization transactions.',
+          summary: 'Get all organization transactions',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
@@ -77,7 +77,7 @@ export async function getTransations(app: FastifyInstance) {
 
         if (cannot('get', 'Transaction')) {
           throw new UnauthorizedError(
-            `You're not allowed to see organizations transactions.`,
+            `You're not allowed to see organizations transactions`,
           )
         }
 

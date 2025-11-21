@@ -12,7 +12,7 @@ export async function getInvite(app: FastifyInstance) {
     {
       schema: {
         tags: ['Invite'],
-        summary: 'Get invite details.',
+        summary: 'Get invite details',
         params: z.object({
           inviteId: z.uuid(),
         }),
@@ -70,7 +70,7 @@ export async function getInvite(app: FastifyInstance) {
       })
 
       if (!invite) {
-        throw new NotFoundError('Invite not found.')
+        throw new NotFoundError('Invite not found')
       }
 
       return {

@@ -12,7 +12,7 @@ export async function authenticateWithPassword(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Authenticate with e-mail with password.',
+        summary: 'Authenticate with e-mail with password',
         body: z.object({
           email: z.email(),
           password: z.string().min(6),
@@ -34,19 +34,19 @@ export async function authenticateWithPassword(app: FastifyInstance) {
       })
 
       if (!userFromEmail) {
-        throw new BadRequestError('User does not exist.')
+        throw new BadRequestError('User does not exist')
       }
 
       if (userFromEmail.hashPassword === null) {
         throw new BadRequestError(
-          'User does not have a password, use social login.',
+          'User does not have a password, use social login',
         )
       }
 
       const isPassword = await compare(password, userFromEmail.hashPassword)
 
       if (!isPassword) {
-        throw new BadRequestError('Invalid credentials.')
+        throw new BadRequestError('Invalid credentials')
       }
 
       const token = await reply.jwtSign(
