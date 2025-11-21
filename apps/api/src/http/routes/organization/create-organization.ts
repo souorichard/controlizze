@@ -4,9 +4,11 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
-import { stripe } from '@/services/stripe'
+import {
+  createStripeCustomer,
+  getCurrentOrganizationPlan,
+} from '@/services/stripe'
 import { createSlug } from '@/utils/create-slug'
-import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
 
 import { BadRequestError } from '../_errors/bad-request-error'
 import { ConflictError } from '../_errors/conflict-error'
@@ -56,22 +58,20 @@ export async function createOrganization(app: FastifyInstance) {
 
         const { name, domain, shouldAttachUsersByDomain } = request.body
 
-        const existingOrganization = await prisma.organization.findFirst({
+        const organizationExists = await prisma.organization.findFirst({
           where: {
             ownerId: userId,
           },
         })
 
-        console.log({ existingOrganization })
-
-        if (existingOrganization) {
+        if (organizationExists) {
           const { subscription } = await getCurrentOrganizationPlan(
-            existingOrganization.slug,
+            organizationExists.slug,
           )
 
           if (subscription.name === 'free') {
             throw new BadRequestError(
-              'You already have an organization on the FREE plan. Please upgrade your plan to create more organizations.',
+              'You cannot create a new organization on the free plan.',
             )
           }
         }
@@ -107,11 +107,9 @@ export async function createOrganization(app: FastifyInstance) {
           },
         })
 
-        const customer = await stripe.customers.create({
+        const customer = await createStripeCustomer({
           name,
-          metadata: {
-            org_id: organization.id,
-          },
+          organizationId: organization.id,
         })
 
         await prisma.organization.update({

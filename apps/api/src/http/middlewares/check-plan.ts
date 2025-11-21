@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, RouteGenericInterface } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 
-import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
+import { getCurrentOrganizationPlan } from '@/services/stripe'
 
 import { UnauthorizedError } from '../routes/_errors/unauthorized-error'
 
@@ -17,7 +17,7 @@ export const checkPlan = fastifyPlugin(async (app: FastifyInstance) => {
 
     if (subscription.name === 'free') {
       throw new UnauthorizedError(
-        'This action is not allowed on the free plan.',
+        'This information is not allowed on the free plan',
       )
     }
   })

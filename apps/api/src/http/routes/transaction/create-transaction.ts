@@ -1,11 +1,10 @@
-import dayjs from 'dayjs'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
-import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
+import { getCurrentOrganizationPlan } from '@/services/stripe'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -55,7 +54,7 @@ export async function createTransation(app: FastifyInstance) {
 
         if (cannot('create', 'Transaction')) {
           throw new UnauthorizedError(
-            `You're not allowed to create new transactions.`,
+            `You're not allowed to create new transactions`,
           )
         }
 
@@ -72,25 +71,12 @@ export async function createTransation(app: FastifyInstance) {
         )
 
         if (subscription.name === 'free') {
-          const startOfMonth = dayjs().startOf('month').toDate()
-          const endOfMonth = dayjs().endOf('month').toDate()
+          const transactionsCount = subscription.quota.transactions.current
+          const transactionsLimit = subscription.quota.transactions.available
 
-          const transactionsCount = await prisma.transaction.count({
-            where: {
-              organizationId: organization.id,
-              ownerId: userId,
-              createdAt: {
-                gte: startOfMonth,
-                lte: endOfMonth,
-              },
-            },
-          })
-
-          const limit = subscription.quota.transactions.available
-
-          if (transactionsCount >= limit) {
+          if (transactionsCount >= transactionsLimit) {
             throw new BadRequestError(
-              `Free plan transaction limit per month reached (${transactionsCount}/${limit}).`,
+              'Transactions limit reached for the free plan. Please upgrade your plan to create more transactions',
             )
           }
         }
@@ -105,7 +91,7 @@ export async function createTransation(app: FastifyInstance) {
         })
 
         if (!category) {
-          throw new NotFoundError('Category not found.')
+          throw new NotFoundError('Category not found')
         }
 
         const transaction = await prisma.transaction.create({

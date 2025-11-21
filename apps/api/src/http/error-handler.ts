@@ -9,7 +9,7 @@ import { UnauthorizedError } from './routes/_errors/unauthorized-error'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
-export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
+export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   // if (error instanceof ZodError) {
   //   return reply.status(400).send({
   //     message: 'Validation error.',
@@ -48,8 +48,6 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
   if (error instanceof ForbiddenError) {
     return reply.status(403).send({ message: error.message })
   }
-
-  console.error(error)
 
   // TODO: send error to some observalibity plataform
 

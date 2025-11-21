@@ -4,8 +4,8 @@ import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
+import { getCurrentOrganizationPlan } from '@/services/stripe'
 import { createSlug } from '@/utils/create-slug'
-import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
 import { getUserPermissions } from '@/utils/get-user-permissions'
 
 import { BadRequestError } from '../_errors/bad-request-error'
@@ -49,7 +49,7 @@ export async function createCategory(app: FastifyInstance) {
 
         if (cannot('create', 'Category')) {
           throw new UnauthorizedError(
-            `You're not allowed to create new categories.`,
+            `You're not allowed to create new categories`,
           )
         }
 
@@ -60,18 +60,12 @@ export async function createCategory(app: FastifyInstance) {
         )
 
         if (subscription.name === 'free') {
-          const categoriesCount = await prisma.category.count({
-            where: {
-              organizationId: organization.id,
-              ownerId: userId,
-            },
-          })
+          const categoriesCount = subscription.quota.categories.current
+          const categoriesLimit = subscription.quota.categories.available
 
-          const limit = subscription.quota.categories.available
-
-          if (categoriesCount >= limit) {
+          if (categoriesCount >= categoriesLimit) {
             throw new BadRequestError(
-              `Free plan category limit reached (${categoriesCount}/${limit}).`,
+              'Categorieslimit reached for the free plan. Please upgrade your plan to create more categories',
             )
           }
         }
@@ -89,7 +83,7 @@ export async function createCategory(app: FastifyInstance) {
         })
 
         if (categoryWithSameData) {
-          throw new ConflictError('Category with same data already exists.')
+          throw new ConflictError('Category with same data already exists')
         }
 
         const category = await prisma.category.create({

@@ -3,7 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 
 import { auth } from '@/http/middlewares/auth'
-import { getCurrentOrganizationPlan } from '@/utils/get-current-organization-plan'
+import { getCurrentOrganizationPlan } from '@/services/stripe'
 
 import { NotFoundError } from '../_errors/not-found-error'
 
@@ -58,7 +58,7 @@ export async function getSubscription(app: FastifyInstance) {
         const { organization } = await request.getUserMembership(slug)
 
         if (!organization) {
-          throw new NotFoundError('Organization not found.')
+          throw new NotFoundError('Organization not found')
         }
 
         const { subscription } = await getCurrentOrganizationPlan(
