@@ -19,6 +19,7 @@ import { uploadProfileAvatar } from './auth/storage/upload-profile-avatar'
 import { updateProfileAvatar } from './auth/update-profile-avatar'
 import { updateProfileEmail } from './auth/update-profile-email'
 import { updateProfileName } from './auth/update-profile-name'
+import { createCheckoutSession } from './billing/create-checkout-session'
 import { getSubscription } from './billing/get-subscription'
 import { createCategory } from './category/create-category'
 import { deleteCategory } from './category/delete-category'
@@ -125,4 +126,5 @@ export async function registerRoutes(app: FastifyInstance) {
 
   // Billing
   app.register(getSubscription)
+  app.register(createCheckoutSession)
 }

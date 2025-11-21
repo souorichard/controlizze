@@ -9,13 +9,8 @@ import { stripeConfig } from './config'
 
 export const stripe = new Stripe(stripeConfig.secretKey)
 
-export async function getStripeCustomerByEmail(email: string) {
-  const customers = await stripe.customers.list({
-    email,
-    limit: 1,
-  })
-
-  const customer = customers.data[0]
+export async function getStripeCustomerById(customerId: string) {
+  const customer = await stripe.customers.retrieve(customerId)
 
   if (!customer) {
     throw new NotFoundError('Stripe customer not found')
@@ -35,12 +30,6 @@ export async function createStripeCustomer({
   email,
   organizationId,
 }: CreateCustomerProps) {
-  const customerExists = await getStripeCustomerByEmail(email as string)
-
-  if (customerExists) {
-    return customerExists
-  }
-
   const customer = await stripe.customers.create({
     name,
     email,

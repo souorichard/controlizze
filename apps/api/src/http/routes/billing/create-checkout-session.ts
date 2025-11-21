@@ -7,13 +7,14 @@ import { auth } from '@/http/middlewares/auth'
 import { stripe } from '@/services/stripe'
 import { stripeConfig } from '@/services/stripe/config'
 
+import { BadRequestError } from '../_errors/bad-request-error'
 import { NotFoundError } from '../_errors/not-found-error'
 
-export async function getSubscription(app: FastifyInstance) {
+export async function createCheckoutSession(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .get(
+    .post(
       '/organizations/:slug/subscription/checkout-session',
       {
         schema: {
@@ -26,8 +27,7 @@ export async function getSubscription(app: FastifyInstance) {
           response: {
             200: z.object({
               session: z.object({
-                id: z.string(),
-                clientSecret: z.string().nullable(),
+                url: z.url().nullable(),
               }),
             }),
           },
@@ -43,29 +43,28 @@ export async function getSubscription(app: FastifyInstance) {
         }
 
         try {
-          const { id, client_secret: clientSecret } =
-            await stripe.checkout.sessions.create({
-              customer: organization.stripeCustomerId!,
-              ui_mode: 'embedded',
-              mode: 'subscription',
-              payment_method_types: ['card'],
-              line_items: [
-                {
-                  price: stripeConfig.plans.pro.priceId,
-                  quantity: 1,
-                },
-              ],
-              return_url: `${env.NEXT_PUBLIC_WEB_URL}/payment-confirmation?session_id={CHECKOUT_SESSION_ID}`,
-            })
+          const { url } = await stripe.checkout.sessions.create({
+            customer: organization.stripeCustomerId as string,
+            client_reference_id: organization.id,
+            mode: 'subscription',
+            payment_method_types: ['card'],
+            line_items: [
+              {
+                price: stripeConfig.plans.pro.priceId,
+                quantity: 1,
+              },
+            ],
+            success_url: `${env.NEXT_PUBLIC_WEB_URL}/payment-confirmation`,
+            cancel_url: `${env.NEXT_PUBLIC_WEB_URL}/payment-cancelled`,
+          })
 
           return {
             session: {
-              id,
-              clientSecret,
+              url,
             },
           }
         } catch (error) {
-          throw new NotFoundError('Could not create checkout session')
+          throw new BadRequestError('Could not create checkout session')
         }
       },
     )
