@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { Stripe } from 'stripe'
 
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { NotFoundError } from '@/http/routes/_errors/not-found-error'
 import { Plans } from '@/interfaces/plan'
 import { prisma } from '@/lib/prisma'
@@ -41,6 +42,82 @@ export async function createStripeCustomer({
   return customer
 }
 
+export async function handleProcessWebhookCheckout(event: {
+  object: Stripe.Checkout.Session
+}) {
+  const clientReferenceId = event.object.client_reference_id as string
+  const stripeCustomerId = event.object.customer as string
+  const stripeSubscriptionId = event.object.subscription as string
+  const checkoutStatus = event.object.status
+
+  if (checkoutStatus !== 'complete') return
+
+  if (!clientReferenceId || !stripeSubscriptionId || !stripeCustomerId) {
+    throw new BadRequestError('Missing required fields')
+  }
+
+  const organizationExists = await prisma.organization.findUnique({
+    where: {
+      id: clientReferenceId,
+    },
+    select: {
+      id: true,
+    },
+  })
+
+  if (!organizationExists) {
+    throw new NotFoundError('Organization not found')
+  }
+
+  await prisma.organization.update({
+    where: {
+      id: organizationExists.id,
+    },
+    data: {
+      stripeCustomerId,
+      stripeSubscriptionId,
+    },
+  })
+
+  return null
+}
+
+export async function handleProcessWebhookUpdatedSubscription(event: {
+  object: Stripe.Subscription
+}) {
+  const stripeCustomerId = event.object.customer as string
+  const stripeSubscriptionId = event.object.id as string
+  const stripeSubscriptionStatus = event.object.status
+  const stripePriceId = event.object.items.data[0].price.id as string
+
+  const organizationExists = await prisma.organization.findFirst({
+    where: {
+      OR: [{ stripeCustomerId }, { stripeSubscriptionId }],
+    },
+    select: {
+      id: true,
+    },
+  })
+
+  if (!organizationExists) {
+    throw new NotFoundError('Organization not found')
+  }
+
+  await prisma.organization.update({
+    where: {
+      id: organizationExists.id,
+    },
+    data: {
+      stripeCustomerId,
+      stripeSubscriptionId,
+      stripeSubscriptionStatus,
+      stripePriceId,
+    },
+  })
+
+  return null
+}
+
 export function getPlanByPrice(priceId: string) {
   const plans: Plans = stripeConfig.plans
 
@@ -78,11 +155,16 @@ export async function getCurrentOrganizationPlan(slug: string) {
 
   const plan = getPlanByPrice(organization.stripePriceId ?? '')
 
-  const startOfMonth = dayjs().startOf('month').toDate()
-  const endOfMonth = dayjs().endOf('month').toDate()
+  if (plan.name === 'free') {
+    const startOfMonth = dayjs().startOf('month').toDate()
+    const endOfMonth = dayjs().endOf('month').toDate()
 
-  const [organizationsCount, transactionsCount, categoriesCount, membersCount] =
-    await Promise.all([
+    const [
+      organizationsCount,
+      transactionsCount,
+      categoriesCount,
+      membersCount,
+    ] = await Promise.all([
       prisma.organization.count({
         where: {
           ownerId: organization.ownerId,
@@ -112,47 +194,61 @@ export async function getCurrentOrganizationPlan(slug: string) {
       }),
     ])
 
-  const availableOrganizations = plan.quota.organizations
-  const currentOrganizations = organizationsCount
-  const usageOrganizations =
-    (currentOrganizations / availableOrganizations) * 100
+    const availableOrganizations = plan.quota.organizations
+    const currentOrganizations = organizationsCount
+    const usageOrganizations =
+      (currentOrganizations / availableOrganizations) * 100
 
-  const availableTransactions = plan.quota.transactions
-  const currentTransactions = transactionsCount
-  const usageTransactions = (currentTransactions / availableTransactions) * 100
+    const availableTransactions = plan.quota.transactions
+    const currentTransactions = transactionsCount
+    const usageTransactions =
+      (currentTransactions / availableTransactions) * 100
 
-  const availableCategories = plan.quota.categories
-  const currentCategories = categoriesCount
-  const usageCategories = (currentCategories / availableCategories) * 100
+    const availableCategories = plan.quota.categories
+    const currentCategories = categoriesCount
+    const usageCategories = (currentCategories / availableCategories) * 100
 
-  const availableMembers = plan.quota.members
-  const currentMembers = membersCount
-  const usageMembers = (currentMembers / availableMembers) * 100
+    const availableMembers = plan.quota.members
+    const currentMembers = membersCount
+    const usageMembers = (currentMembers / availableMembers) * 100
+
+    return {
+      subscription: {
+        name: plan.name,
+        quota: {
+          organizations: {
+            available: availableOrganizations,
+            current: currentOrganizations,
+            usage: usageOrganizations,
+          },
+          transactions: {
+            available: availableTransactions,
+            current: currentTransactions,
+            usage: usageTransactions,
+          },
+          categories: {
+            available: availableCategories,
+            current: currentCategories,
+            usage: usageCategories,
+          },
+          members: {
+            available: availableMembers,
+            current: currentMembers,
+            usage: usageMembers,
+          },
+        },
+      },
+    }
+  }
 
   return {
     subscription: {
       name: plan.name,
       quota: {
-        organizations: {
-          available: availableOrganizations,
-          current: currentOrganizations,
-          usage: usageOrganizations,
-        },
-        transactions: {
-          available: availableTransactions,
-          current: currentTransactions,
-          usage: usageTransactions,
-        },
-        categories: {
-          available: availableCategories,
-          current: currentCategories,
-          usage: usageCategories,
-        },
-        members: {
-          available: availableMembers,
-          current: currentMembers,
-          usage: usageMembers,
-        },
+        organizations: 'unlimited',
+        transactions: 'unlimited',
+        categories: 'unlimited',
+        members: 'unlimited',
       },
     },
   }

@@ -21,6 +21,7 @@ import { updateProfileEmail } from './auth/update-profile-email'
 import { updateProfileName } from './auth/update-profile-name'
 import { createCheckoutSession } from './billing/create-checkout-session'
 import { getSubscription } from './billing/get-subscription'
+import { stripeWebhook } from './billing/stripe-webhook'
 import { createCategory } from './category/create-category'
 import { deleteCategory } from './category/delete-category'
 import { getCategories } from './category/get-categories'
@@ -127,4 +128,5 @@ export async function registerRoutes(app: FastifyInstance) {
   // Billing
   app.register(getSubscription)
   app.register(createCheckoutSession)
+  app.register(stripeWebhook)
 }

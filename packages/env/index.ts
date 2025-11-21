@@ -29,6 +29,7 @@ export const env = createEnv({
     AWS_S3_BUCKET: z.string(),
 
     STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET_KEY: z.string(),
     STRIPE_PRICE_PRO_MONTHLY: z.string(),
   },
   client: {},
@@ -70,6 +71,7 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET_KEY: process.env.STRIPE_WEBHOOK_SECRET_KEY,
     STRIPE_PRICE_PRO_MONTHLY: process.env.STRIPE_PRICE_PRO_MONTHLY,
   },
   emptyStringAsUndefined: true,
