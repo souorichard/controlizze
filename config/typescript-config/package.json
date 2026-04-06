@@ -1,0 +1,9 @@
+{
+  "name": "@controlizze/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "library.json",
+    "next.json"
+  ]
+}
