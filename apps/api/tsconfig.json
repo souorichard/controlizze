@@ -1,0 +1,4 @@
+{
+  "extends": "@controlizze/tsconfig/node.json",
+  "include": ["src/**/*", "@types/*.d.ts"]
+}

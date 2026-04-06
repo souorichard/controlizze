@@ -1,0 +1,4 @@
+{
+  "extends": "@controlizze/tsconfig/library.json",
+  "include": ["index.ts"]
+}

@@ -4,6 +4,7 @@
   "private": true,
   "files": [
     "library.json",
-    "next.json"
+    "next.json",
+    "node.json"
   ]
 }
