@@ -1,23 +1,7 @@
 import { env } from '@controlizze/env'
-import { fastifyCors } from '@fastify/cors'
-import { fastify } from 'fastify'
-import {
-  serializerCompiler,
-  validatorCompiler,
-} from 'fastify-type-provider-zod'
-import { healthCheck } from './routes/server/health-check.ts'
+import { buildApp } from './app.ts'
 
-const app = fastify()
-
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
-
-app.register(fastifyCors, {
-  origin: '*',
-  methods: ['POST', 'GET', 'PATCH', 'DELETE', 'OPTIONS'],
-})
-
-app.register(healthCheck)
+const app = buildApp()
 
 app.listen({ host: '0.0.0.0', port: env.SERVER_PORT }).then(() => {
   if (env.NODE_ENV !== 'production') {
