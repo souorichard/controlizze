@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: controlizze-db
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: controlizze-db
+    ports:
+      - "5432:5432"
+    
