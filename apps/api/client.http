@@ -2,4 +2,5 @@
 
 ###
 
+# @name healthCheck
 GET {{baseUrl}}/health
