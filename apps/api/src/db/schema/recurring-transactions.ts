@@ -1,12 +1,18 @@
-import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+  integer,
+  numeric,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 import { categories } from './categories.ts'
-import { statusEnum, typeEnum } from './enums.ts'
+import { frequencyEnum, recurringStatusEnum, typeEnum } from './enums.ts'
 import { organizations } from './organizations.ts'
-import { recurringTransactions } from './recurring-transactions.ts'
 import { users } from './users.ts'
 
-export const transactions = pgTable('transactions', {
+export const recurringTransactions = pgTable('recurring_transactions', {
   id: uuid()
     .primaryKey()
     .$defaultFn(() => uuidv7()),
@@ -17,9 +23,12 @@ export const transactions = pgTable('transactions', {
     .notNull()
     .references(() => categories.id),
   amount: numeric().notNull(),
-  status: statusEnum().notNull().default('PENDING'),
-  transactionDate: timestamp().notNull().defaultNow(),
-  recurringTransactionId: uuid().references(() => recurringTransactions.id),
+  status: recurringStatusEnum().notNull().default('ACTIVE'),
+  frequency: frequencyEnum().notNull().default('MONTHLY'),
+  interval: integer().notNull().default(1),
+  startDate: timestamp().notNull(),
+  endDate: timestamp(),
+  lastGeneratedAt: timestamp(),
   ownerId: uuid()
     .notNull()
     .references(() => users.id),

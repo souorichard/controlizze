@@ -13,3 +13,16 @@ export const statusEnum = pgEnum('status_enum', [
   'COMPLETED',
   'CANCELED',
 ])
+
+export const recurringStatusEnum = pgEnum('recurring_status_enum', [
+  'ACTIVE',
+  'PAUSED',
+  'CANCELED',
+])
+
+export const frequencyEnum = pgEnum('frequency_enum', [
+  'DAILY',
+  'WEEKLY',
+  'MONTHLY',
+  'YEARLY',
+])
