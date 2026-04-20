@@ -6,7 +6,7 @@ export const users = pgTable('users', {
     .primaryKey()
     .$defaultFn(() => uuidv7()),
 
-  name: text().notNull(),
+  name: text(),
   email: text().notNull().unique(),
   hashPassword: text(),
 

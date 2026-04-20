@@ -38,10 +38,12 @@ export const recurringTransactions = pgTable('recurring_transactions', {
 
   ownerId: uuid()
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: 'cascade' }),
   orgId: uuid()
     .notNull()
-    .references(() => organizations.id),
+    .references(() => organizations.id, {
+      onDelete: 'cascade',
+    }),
 
   createdAt: timestamp().notNull().defaultNow(),
 })

@@ -15,22 +15,22 @@ export const transactions = pgTable('transactions', {
   description: text(),
   type: typeEnum().notNull().default('EXPENSE'),
 
-  categoryId: uuid()
-    .notNull()
-    .references(() => categories.id),
+  categoryId: uuid().references(() => categories.id, { onDelete: 'set null' }),
 
   amount: numeric().notNull(),
   status: statusEnum().notNull().default('PENDING'),
 
   transactionDate: timestamp().notNull().defaultNow(),
 
-  recurringTransactionId: uuid().references(() => recurringTransactions.id),
+  recurringTransactionId: uuid().references(() => recurringTransactions.id, {
+    onDelete: 'set null',
+  }),
   ownerId: uuid()
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: 'cascade' }),
   orgId: uuid()
     .notNull()
-    .references(() => organizations.id),
+    .references(() => organizations.id, { onDelete: 'cascade' }),
 
   createdAt: timestamp().notNull().defaultNow(),
 })

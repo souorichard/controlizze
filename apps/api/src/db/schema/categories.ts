@@ -17,12 +17,10 @@ export const categories = pgTable(
     color: text().notNull(),
     type: typeEnum().notNull().default('EXPENSE'),
 
-    ownerId: uuid()
-      .notNull()
-      .references(() => users.id),
+    ownerId: uuid().references(() => users.id, { onDelete: 'set null' }),
     orgId: uuid()
       .notNull()
-      .references(() => organizations.id),
+      .references(() => organizations.id, { onDelete: 'cascade' }),
 
     createdAt: timestamp().notNull().defaultNow(),
   },
