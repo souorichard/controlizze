@@ -16,24 +16,32 @@ export const recurringTransactions = pgTable('recurring_transactions', {
   id: uuid()
     .primaryKey()
     .$defaultFn(() => uuidv7()),
+
   title: text().notNull(),
   description: text(),
   type: typeEnum().notNull().default('EXPENSE'),
+
   categoryId: uuid()
     .notNull()
     .references(() => categories.id),
+
   amount: numeric().notNull(),
   status: recurringStatusEnum().notNull().default('ACTIVE'),
+
   frequency: frequencyEnum().notNull().default('MONTHLY'),
   interval: integer().notNull().default(1),
+
   startDate: timestamp().notNull(),
   endDate: timestamp(),
+
   lastGeneratedAt: timestamp(),
+
   ownerId: uuid()
     .notNull()
     .references(() => users.id),
   orgId: uuid()
     .notNull()
     .references(() => organizations.id),
+
   createdAt: timestamp().notNull().defaultNow(),
 })

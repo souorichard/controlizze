@@ -7,9 +7,12 @@ export const tokens = pgTable('tokens', {
   id: uuid()
     .primaryKey()
     .$defaultFn(() => uuidv7()),
+
   type: tokenTypeEnum().notNull(),
+
   userId: uuid()
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
+
   createdAt: timestamp().notNull().defaultNow(),
 })

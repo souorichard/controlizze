@@ -10,8 +10,10 @@ export const authAccounts = pgTable(
       .primaryKey()
       .notNull()
       .$defaultFn(() => uuidv7()),
+
     provider: accountProviderEnum().notNull(),
     providerAccountId: text().notNull().unique(),
+
     userId: uuid()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),

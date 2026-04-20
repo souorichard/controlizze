@@ -10,15 +10,20 @@ export const transactions = pgTable('transactions', {
   id: uuid()
     .primaryKey()
     .$defaultFn(() => uuidv7()),
+
   title: text().notNull(),
   description: text(),
   type: typeEnum().notNull().default('EXPENSE'),
+
   categoryId: uuid()
     .notNull()
     .references(() => categories.id),
+
   amount: numeric().notNull(),
   status: statusEnum().notNull().default('PENDING'),
+
   transactionDate: timestamp().notNull().defaultNow(),
+
   recurringTransactionId: uuid().references(() => recurringTransactions.id),
   ownerId: uuid()
     .notNull()
@@ -26,5 +31,6 @@ export const transactions = pgTable('transactions', {
   orgId: uuid()
     .notNull()
     .references(() => organizations.id),
+
   createdAt: timestamp().notNull().defaultNow(),
 })

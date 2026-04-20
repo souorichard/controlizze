@@ -11,7 +11,9 @@ export const members = pgTable(
       .primaryKey()
       .notNull()
       .$defaultFn(() => uuidv7()),
+
     role: roleEnum().notNull().default('MEMBER'),
+
     userId: uuid()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),

@@ -11,16 +11,19 @@ export const categories = pgTable(
       .primaryKey()
       .notNull()
       .$defaultFn(() => uuidv7()),
+
     name: text().notNull(),
     slug: text().notNull().unique(),
     color: text().notNull(),
     type: typeEnum().notNull().default('EXPENSE'),
+
     ownerId: uuid()
       .notNull()
       .references(() => users.id),
     orgId: uuid()
       .notNull()
       .references(() => organizations.id),
+
     createdAt: timestamp().notNull().defaultNow(),
   },
   (table) => [
