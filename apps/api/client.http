@@ -4,3 +4,74 @@
 
 # @name healthCheck
 GET {{baseUrl}}/health
+
+###
+
+# @name createAccount
+POST {{baseUrl}}/accounts
+content-type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+
+###
+
+# @name authenticateWithPassword
+POST {{baseUrl}}/sessions
+content-type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+
+###
+
+# @name authenticateWithGoogle
+POST {{baseUrl}}/sessions/google
+content-type: application/json
+
+{
+  "code": ""
+}
+
+###
+
+# @name authenticateWithGithub
+POST {{baseUrl}}/sessions/github
+content-type: application/json
+
+{
+  "code": ""
+}
+
+###
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMTlkYWJkYy0yYmZkLTcyOGItODFlZi1jMDIwYTIyY2IwN2QiLCJpYXQiOjE3NzY3MDkxMDgsImV4cCI6MTc3NzMxMzkwOH0.9mMl1SKKp2ckloIm6GJFo-8dEraZodjIawsoS7oqBOo
+
+###
+
+# @name getAccount
+GET {{baseUrl}}/me
+authorization: Bearer {{token}}
+
+###
+
+# @name updateAccount
+PATCH {{baseUrl}}/me
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "name": "John Doe",
+  "avatarUrl": "https://avatars.githubusercontent.com/u/1?v=4"
+}
+
+###
+
+# @name deleteAccount
+DELETE {{baseUrl}}/me
+authorization: Bearer {{token}}

@@ -1,0 +1,133 @@
+import { env } from '../../../env.ts'
+import { and, eq } from 'drizzle-orm'
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import z from 'zod'
+import { db } from '../../../db/index.ts'
+import { authAccounts } from '../../../db/schema/auth-accounts.ts'
+import { users } from '../../../db/schema/users.ts'
+
+export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
+  app.post(
+    '/',
+    {
+      schema: {
+        tags: ['Authentication'],
+        summary: 'Authenticate with Github',
+        body: z.object({
+          code: z.string(),
+        }),
+        response: {
+          200: z.object({
+            token: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { code } = request.body
+
+      const githubOAuthUrl = new URL(
+        'https://github.com/login/oauth/access_token',
+      )
+
+      githubOAuthUrl.searchParams.set('client_id', env.GITHUB_CLIENT_ID)
+      githubOAuthUrl.searchParams.set('client_secret', env.GITHUB_CLIENT_SECRET)
+      githubOAuthUrl.searchParams.set(
+        'redirect_uri',
+        `${env.WEB_URL}/api/auth/callback/github`,
+      )
+      githubOAuthUrl.searchParams.set('code', code)
+
+      const githubAccessTokenResponse = await fetch(githubOAuthUrl, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      const githubAccessTokenData = await githubAccessTokenResponse.json()
+
+      const { access_token: githubAccessToken } = z
+        .object({
+          access_token: z.string(),
+          token_type: z.literal('bearer'),
+          scope: z.string(),
+        })
+        .parse(githubAccessTokenData)
+
+      const githubUserResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `Bearer ${githubAccessToken}`,
+        },
+      })
+
+      const githubUserData = await githubUserResponse.json()
+
+      const {
+        id: githubId,
+        name,
+        email,
+        avatar_url: avatarUrl,
+      } = z
+        .object({
+          id: z.number().transform(String),
+          name: z.string().nullable(),
+          email: z.string().nullable(),
+          avatar_url: z.url(),
+        })
+        .parse(githubUserData)
+
+      if (email === null) {
+        throw new Error(
+          'Your Github account must have an e-mail address for authentication or you need to make it public',
+        )
+      }
+
+      let [user] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1)
+
+      if (!user) {
+        user = await db.insert(users).values({
+          name,
+          email,
+          avatarUrl,
+        })
+      }
+
+      let [authAccount] = await db
+        .select()
+        .from(authAccounts)
+        .where(
+          and(
+            eq(authAccounts.provider, 'GITHUB'),
+            eq(authAccounts.userId, user.id),
+          ),
+        )
+        .limit(1)
+
+      if (!authAccount) {
+        authAccount = await db.insert(authAccounts).values({
+          provider: 'GITHUB',
+          providerAccountId: githubId,
+          userId: user.id,
+        })
+      }
+
+      const token = await reply.jwtSign(
+        {
+          sub: user.id,
+        },
+        {
+          sign: {
+            expiresIn: '7d',
+          },
+        },
+      )
+
+      return reply.status(200).send({ token })
+    },
+  )
+}
