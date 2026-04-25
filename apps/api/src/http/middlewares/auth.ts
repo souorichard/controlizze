@@ -1,5 +1,9 @@
+import { and, eq } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
+import { db } from '../../db/index.ts'
+import { members } from '../../db/schema/members.ts'
+import { organizations } from '../../db/schema/organizations.ts'
 
 export const auth = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('preHandler', async (request) => {
@@ -13,31 +17,27 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
       }
     }
 
-    // request.getUserMembership = async (slug: string) => {
-    //   const userId = await request.getCurrentUserId()
+    request.getUserMembership = async (slug: string) => {
+      const userId = await request.getCurrentUserId()
 
-    //   const member = await prisma.member.findFirst({
-    //     where: {
-    //       userId,
-    //       organization: {
-    //         slug,
-    //       },
-    //     },
-    //     include: {
-    //       organization: true,
-    //     },
-    //   })
+      const [member] = await db
+        .select({
+          organization: organizations,
+          membership: members,
+        })
+        .from(members)
+        .innerJoin(organizations, eq(members.orgId, organizations.id))
+        .where(and(eq(members.userId, userId), eq(organizations.slug, slug)))
+        .limit(1)
 
-    //   if (!member) {
-    //     throw new UnauthorizedError(`You're not a member of this organization`)
-    //   }
+      if (!member) {
+        throw new Error(`You're not a member of this organization`)
+      }
 
-    //   const { organization, ...membership } = member
-
-    //   return {
-    //     organization,
-    //     membership,
-    //   }
-    // }
+      return {
+        org: member.organization,
+        membership: member.membership,
+      }
+    }
   })
 })

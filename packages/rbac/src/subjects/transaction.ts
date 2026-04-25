@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { transactionSchema } from '../models/transaction'
+import { transactionSchema } from '../models/transaction.ts'
 
 export const transactionSubject = z.tuple([
   z.union([

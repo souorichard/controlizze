@@ -19,6 +19,18 @@ content-type: application/json
 
 ###
 
+# @name createAccount
+POST {{baseUrl}}/accounts
+content-type: application/json
+
+{
+  "name": "Jenny Doe",
+  "email": "jenny.doe@example.com",
+  "password": "securepassword"
+}
+
+###
+
 # @name authenticateWithPassword
 POST {{baseUrl}}/sessions
 content-type: application/json
@@ -50,7 +62,7 @@ content-type: application/json
 
 ###
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMTlkYWJkYy0yYmZkLTcyOGItODFlZi1jMDIwYTIyY2IwN2QiLCJpYXQiOjE3NzY3MDkxMDgsImV4cCI6MTc3NzMxMzkwOH0.9mMl1SKKp2ckloIm6GJFo-8dEraZodjIawsoS7oqBOo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMTlkYjA4Yy02MjQ0LTdhOTMtYWQ5OS1lY2FkNDc2OWUzZWUiLCJpYXQiOjE3NzY3ODM0OTAsImV4cCI6MTc3NzM4ODI5MH0.-M-fMzCO3mYDBToPpsEoxiqw_DtlCqBYb2ldGsOdk6U
 
 ###
 
@@ -60,13 +72,23 @@ authorization: Bearer {{token}}
 
 ###
 
-# @name updateAccount
-PATCH {{baseUrl}}/me
+# @name updateAccountName
+PATCH {{baseUrl}}/me/name
 content-type: application/json
 authorization: Bearer {{token}}
 
 {
-  "name": "John Doe",
+  "name": "John Doe"
+}
+
+###
+
+# @name updateAccountAvatar
+PATCH {{baseUrl}}/me/avatar
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
   "avatarUrl": "https://avatars.githubusercontent.com/u/1?v=4"
 }
 
@@ -74,4 +96,82 @@ authorization: Bearer {{token}}
 
 # @name deleteAccount
 DELETE {{baseUrl}}/me
+authorization: Bearer {{token}}
+
+###
+
+# @name createOrg
+POST {{baseUrl}}/orgs
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "name": "Acme Inc"
+}
+
+###
+
+# @name getOrgs
+GET {{baseUrl}}/orgs
+authorization: Bearer {{token}}
+
+###
+
+# @name getOrg
+GET {{baseUrl}}/orgs/acme-inc-9ee7c8
+authorization: Bearer {{token}}
+
+###
+
+# @name updateOrgName
+PATCH {{baseUrl}}/orgs/acme-inc-9ee7c8/name
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "name": "Acme Inc."
+}
+
+###
+
+# @name updateOrgAvatar
+PATCH {{baseUrl}}/orgs/acme-inc-9ee7c8/avatar
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "avatarUrl": "https://avatars.githubusercontent.com/u/1?v=4"
+}
+
+###
+
+# @name shutdownOrg
+DELETE {{baseUrl}}/orgs/acme-inc-9ee7c8
+authorization: Bearer {{token}}
+
+###
+
+@userId = 
+
+###
+
+# @name transferOrg
+PATCH {{baseUrl}}/orgs/acme-inc-9ee7c8
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "transferToUserId": {{userId}}
+}
+
+###
+
+# @name leaveOrg
+DELETE {{baseUrl}}/orgs/acme-inc-9ee7c8/leave
+authorization: Bearer {{token}}
+
+###
+
+# @name getOrgMembership
+GET {{baseUrl}}/orgs/acme-inc-9ee7c8/membership
 authorization: Bearer {{token}}

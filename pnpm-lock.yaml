@@ -72,22 +72,6 @@ importers:
 
   config/typescript-config: {}
 
-  packages/env:
-    dependencies:
-      '@t3-oss/env-nextjs':
-        specifier: ^0.13.11
-        version: 0.13.11(zod@4.3.6)
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
-    devDependencies:
-      '@controlizze/tsconfig':
-        specifier: workspace:*
-        version: link:../../config/typescript-config
-      '@types/node':
-        specifier: ^25.5.2
-        version: 25.5.2
-
   packages/rbac:
     dependencies:
       '@casl/ability':
@@ -658,40 +642,6 @@ packages:
 
   '@pinojs/redact@0.4.0':
     resolution: {integrity: sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==}
-
-  '@t3-oss/env-core@0.13.11':
-    resolution: {integrity: sha512-sM7GYY+KL7H/Hl0BE0inWfk3nRHZOLhmVn7sHGxaZt9FAR6KqREXAE+6TqKfiavfXmpRxO/OZ2QgKRd+oiBYRQ==}
-    peerDependencies:
-      arktype: ^2.1.0
-      typescript: '>=5.0.0'
-      valibot: ^1.0.0-beta.7 || ^1.0.0
-      zod: ^3.24.0 || ^4.0.0
-    peerDependenciesMeta:
-      arktype:
-        optional: true
-      typescript:
-        optional: true
-      valibot:
-        optional: true
-      zod:
-        optional: true
-
-  '@t3-oss/env-nextjs@0.13.11':
-    resolution: {integrity: sha512-NC+3j7YWgpzdFu1t5y/8wqibTK0lm5RS4bjXA1n8uwik3wIR4iZM4Fa+U2BaMa5k3Qk8RZiYhoAIX0WogmGkzg==}
-    peerDependencies:
-      arktype: ^2.1.0
-      typescript: '>=5.0.0'
-      valibot: ^1.0.0-beta.7 || ^1.0.0
-      zod: ^3.24.0 || ^4.0.0
-    peerDependenciesMeta:
-      arktype:
-        optional: true
-      typescript:
-        optional: true
-      valibot:
-        optional: true
-      zod:
-        optional: true
 
   '@turbo/darwin-64@2.9.4':
     resolution: {integrity: sha512-ZSlPqJ5Vqg/wgVw8P3AOVCIosnbBilOxLq7TMz3MN/9U46DUYfdG2jtfevNDufyxyrg98pcPs/GBgDRaaids6g==}
@@ -1505,16 +1455,6 @@ snapshots:
   '@lukeed/ms@2.0.2': {}
 
   '@pinojs/redact@0.4.0': {}
-
-  '@t3-oss/env-core@0.13.11(zod@4.3.6)':
-    optionalDependencies:
-      zod: 4.3.6
-
-  '@t3-oss/env-nextjs@0.13.11(zod@4.3.6)':
-    dependencies:
-      '@t3-oss/env-core': 0.13.11(zod@4.3.6)
-    optionalDependencies:
-      zod: 4.3.6
 
   '@turbo/darwin-64@2.9.4':
     optional: true

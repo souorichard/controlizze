@@ -5,13 +5,18 @@ import {
   type MongoAbility,
 } from '@casl/ability'
 import { z } from 'zod'
-import type { User } from './models/user'
-import { permissions } from './permissions'
-import { categorySubject } from './subjects/category'
-import { inviteSubject } from './subjects/invite'
-import { organizationSubject } from './subjects/organization'
-import { transactionSubject } from './subjects/transaction'
-import { userSubject } from './subjects/user'
+import type { User } from './models/user.ts'
+import { permissions } from './permissions.ts'
+import { categorySubject } from './subjects/category.ts'
+import { inviteSubject } from './subjects/invite.ts'
+import { organizationSubject } from './subjects/organization.ts'
+import { transactionSubject } from './subjects/transaction.ts'
+import { userSubject } from './subjects/user.ts'
+
+export * from './models/organization.ts'
+export * from './models/transaction.ts'
+export * from './models/user.ts'
+export * from './roles.ts'
 
 const appAbilitiesSchema = z.union([
   userSubject,
