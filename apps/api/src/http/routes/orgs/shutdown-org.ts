@@ -5,6 +5,7 @@ import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { organizations } from '../../../db/schema/organizations.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
+import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
 export const shutdownOrg: FastifyPluginAsyncZod = async (app) => {
@@ -34,7 +35,9 @@ export const shutdownOrg: FastifyPluginAsyncZod = async (app) => {
       const { cannot } = getUserPermissions(userId, membership.role)
 
       if (cannot('delete', authOrganization)) {
-        throw new Error(`You're not allowed to shutdown this organization`)
+        throw new UnauthorizedError(
+          `You're not allowed to shutdown this organization`,
+        )
       }
 
       await db.delete(organizations).where(eq(organizations.id, org.id))

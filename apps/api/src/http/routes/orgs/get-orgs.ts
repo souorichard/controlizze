@@ -1,3 +1,4 @@
+import { roleSchema } from '@controlizze/rbac'
 import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
@@ -22,6 +23,7 @@ export const getOrgs: FastifyPluginAsyncZod = async (app) => {
                 name: z.string(),
                 slug: z.string(),
                 avatarUrl: z.string().nullable(),
+                role: roleSchema,
               }),
             ),
           }),
@@ -37,6 +39,7 @@ export const getOrgs: FastifyPluginAsyncZod = async (app) => {
           name: organizations.name,
           slug: organizations.slug,
           avatarUrl: organizations.avatarUrl,
+          role: members.role,
         })
         .from(organizations)
         .innerJoin(members, eq(organizations.id, members.orgId))

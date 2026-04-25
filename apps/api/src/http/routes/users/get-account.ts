@@ -3,6 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { users } from '../../../db/schema/users.ts'
+import { NotFoundError } from '../../errors/not-found-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
 export const getAccount: FastifyPluginAsyncZod = async (app) => {
@@ -40,7 +41,7 @@ export const getAccount: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!user) {
-        throw new Error('User does not exist')
+        throw new NotFoundError('User does not exist')
       }
 
       return {

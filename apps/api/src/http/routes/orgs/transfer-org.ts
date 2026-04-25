@@ -6,6 +6,8 @@ import { db } from '../../../db/index.ts'
 import { members } from '../../../db/schema/members.ts'
 import { organizations } from '../../../db/schema/organizations.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
+import { BadRequestError } from '../../errors/bad-request-error.ts'
+import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
 export const transferOrg: FastifyPluginAsyncZod = async (app) => {
@@ -39,7 +41,7 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
       const { cannot } = getUserPermissions(userId, membership.role)
 
       if (cannot('transfer_ownership', authOrganization)) {
-        throw new Error(
+        throw new UnauthorizedError(
           `You're not allowed to transfer ownership of this organization`,
         )
       }
@@ -53,7 +55,9 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!transferToMembership) {
-        throw new Error('Target user is not a member of this organization')
+        throw new BadRequestError(
+          'Target user is not a member of this organization',
+        )
       }
 
       await db.transaction(async (tx) => {

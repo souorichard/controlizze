@@ -1,10 +1,11 @@
-import { env } from '../../../env.ts'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { authAccounts } from '../../../db/schema/auth-accounts.ts'
 import { users } from '../../../db/schema/users.ts'
+import { env } from '../../../env.ts'
+import { BadRequestError } from '../../errors/bad-request-error.ts'
 
 export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -78,7 +79,7 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
         .parse(githubUserData)
 
       if (email === null) {
-        throw new Error(
+        throw new BadRequestError(
           'Your Github account must have an e-mail address for authentication or you need to make it public',
         )
       }

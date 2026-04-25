@@ -4,6 +4,8 @@ import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { members } from '../../../db/schema/members.ts'
 import { organizations } from '../../../db/schema/organizations.ts'
+import { BadRequestError } from '../../errors/bad-request-error.ts'
+import { NotFoundError } from '../../errors/not-found-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
 export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
@@ -34,11 +36,11 @@ export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!org) {
-        throw new Error('Organization not found')
+        throw new NotFoundError('Organization not found')
       }
 
       if (org.ownerId === userId) {
-        throw new Error('You cannot leave your own organization')
+        throw new BadRequestError('You cannot leave your own organization')
       }
 
       await db

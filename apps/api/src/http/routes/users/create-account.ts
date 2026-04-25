@@ -4,6 +4,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { users } from '../../../db/schema/users.ts'
+import { ConflictError } from '../../errors/conflict-error.ts'
 
 export const createAccount: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -34,7 +35,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (userWithSameEmail) {
-        throw new Error('User with this email already exists')
+        throw new ConflictError('User with this email already exists')
       }
 
       const hashPassword = await hash(password, 8)

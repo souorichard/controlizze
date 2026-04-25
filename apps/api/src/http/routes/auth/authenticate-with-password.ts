@@ -4,6 +4,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { users } from '../../../db/schema/users.ts'
+import { BadRequestError } from '../../errors/bad-request-error.ts'
 
 export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -35,11 +36,11 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!userFromEmail) {
-        throw new Error('User does not exist')
+        throw new BadRequestError('User does not exist')
       }
 
       if (!userFromEmail.hashPassword) {
-        throw new Error(
+        throw new BadRequestError(
           'User does not have a password set, please use another authentication method',
         )
       }
@@ -47,7 +48,7 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
       const isPassword = await compare(password, userFromEmail.hashPassword)
 
       if (!isPassword) {
-        throw new Error('Invalid credentials')
+        throw new BadRequestError('Invalid credentials')
       }
 
       const token = await reply.jwtSign(

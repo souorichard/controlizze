@@ -5,6 +5,7 @@ import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { organizations } from '../../../db/schema/organizations.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
+import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
 export const updateOrgAvatar: FastifyPluginAsyncZod = async (app) => {
@@ -39,7 +40,9 @@ export const updateOrgAvatar: FastifyPluginAsyncZod = async (app) => {
       const { cannot } = getUserPermissions(userId, membership.role)
 
       if (cannot('update', authOrganization)) {
-        throw new Error(`You're not allowed to update this organization`)
+        throw new UnauthorizedError(
+          `You're not allowed to update this organization`,
+        )
       }
 
       await db

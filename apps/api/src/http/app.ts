@@ -6,6 +6,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import { env } from '../env.ts'
+import { errorHandler } from './error-handler.ts'
 import { routes } from './routes/index.ts'
 
 export function buildApp() {
@@ -22,6 +23,8 @@ export function buildApp() {
   app.register(fastifyJwt, {
     secret: env.JWT_SECRET,
   })
+
+  app.setErrorHandler(errorHandler)
 
   for (const route of routes) {
     app.register(route.plugin, { prefix: route.prefix })
