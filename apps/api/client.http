@@ -175,3 +175,30 @@ authorization: Bearer {{token}}
 # @name getOrgMembership
 GET {{baseUrl}}/orgs/acme-inc-9ee7c8/membership
 authorization: Bearer {{token}}
+
+###
+
+# @name getOrgMembers
+GET {{baseUrl}}/orgs/acme-inc-9ee7c8/members
+authorization: Bearer {{token}}
+
+###
+
+@memberId = 
+
+###
+
+# @name updateMemberRole
+PUT {{baseUrl}}/orgs/acme-inc-9ee7c8/members/{{memberId}}
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "role": "ADMIN"
+}
+
+###
+
+# @name removeMember
+DELETE {{baseUrl}}/orgs/acme-inc-9ee7c8/members/{{memberId}}
+authorization: Bearer {{token}}

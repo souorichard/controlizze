@@ -7,7 +7,7 @@ import { auth } from '../../middlewares/auth.ts'
 
 export const updateAccountAvatar: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).patch(
-    '/avatar',
+    '/',
     {
       schema: {
         tags: ['User'],

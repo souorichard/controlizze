@@ -2,6 +2,9 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { authenticateWithGithub } from './auth/authenticate-with-github.ts'
 import { authenticateWithGoogle } from './auth/authenticate-with-google.ts'
 import { authenticateWithPassword } from './auth/authenticate-with-password.ts'
+import { getOrgMembers } from './members/get-org-members.ts'
+import { removeMember } from './members/remove-member.ts'
+import { updateMemberRole } from './members/update-member-role.ts'
 import { createOrg } from './orgs/create-org.ts'
 import { getOrgMembership } from './orgs/get-membership.ts'
 import { getOrg } from './orgs/get-org.ts'
@@ -40,11 +43,11 @@ export const routes: Route[] = [
   },
   {
     plugin: updateAccountName,
-    prefix: '/me',
+    prefix: '/me/name',
   },
   {
     plugin: updateAccountAvatar,
-    prefix: '/me',
+    prefix: '/me/avatar',
   },
   {
     plugin: deleteAccount,
@@ -76,30 +79,44 @@ export const routes: Route[] = [
   },
   {
     plugin: getOrg,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug',
   },
   {
     plugin: updateOrgName,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug/name',
   },
   {
     plugin: updateOrgAvatar,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug/avatar',
   },
   {
     plugin: shutdownOrg,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug',
   },
   {
     plugin: transferOrg,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug/owner',
   },
   {
     plugin: leaveOrg,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug/leave',
   },
   {
     plugin: getOrgMembership,
-    prefix: '/orgs',
+    prefix: '/orgs/:slug/membership',
+  },
+
+  // Members
+  {
+    plugin: getOrgMembers,
+    prefix: '/orgs/:slug/members',
+  },
+  {
+    plugin: updateMemberRole,
+    prefix: '/orgs/:slug/members/:memberId',
+  },
+  {
+    plugin: removeMember,
+    prefix: '/orgs/:slug/members/:memberId',
   },
 ]

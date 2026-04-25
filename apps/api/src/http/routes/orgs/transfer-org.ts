@@ -12,7 +12,7 @@ import { auth } from '../../middlewares/auth.ts'
 
 export const transferOrg: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).patch(
-    '/:slug/owner',
+    '/',
     {
       schema: {
         tags: ['Organization'],

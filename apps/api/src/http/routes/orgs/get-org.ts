@@ -4,7 +4,7 @@ import { auth } from '../../middlewares/auth.ts'
 
 export const getOrg: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
-    '/:slug',
+    '/',
     {
       schema: {
         tags: ['Organization'],

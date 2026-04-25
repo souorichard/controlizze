@@ -10,7 +10,7 @@ import { auth } from '../../middlewares/auth.ts'
 
 export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).delete(
-    '/:slug/leave',
+    '/',
     {
       schema: {
         tags: ['Organization'],
