@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { ConflictError } from '../../errors/conflict-error.ts'
 
 export const createAccount: FastifyPluginAsyncZod = async (app) => {
@@ -29,9 +29,9 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
       const { name, email, password } = request.body
 
       const [userWithSameEmail] = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.email, email))
+        .select({ id: schema.users.id })
+        .from(schema.users)
+        .where(eq(schema.users.email, email))
         .limit(1)
 
       if (userWithSameEmail) {
@@ -40,7 +40,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
 
       const hashPassword = await hash(password, 8)
 
-      await db.insert(users).values({
+      await db.insert(schema.users).values({
         name,
         email,
         hashPassword,

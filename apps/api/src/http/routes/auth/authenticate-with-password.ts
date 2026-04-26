@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 
 export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
@@ -30,9 +30,12 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
       const { email, password } = request.body
 
       const [userFromEmail] = await db
-        .select({ id: users.id, hashPassword: users.hashPassword })
-        .from(users)
-        .where(eq(users.email, email))
+        .select({
+          id: schema.users.id,
+          hashPassword: schema.users.hashPassword,
+        })
+        .from(schema.users)
+        .where(eq(schema.users.email, email))
         .limit(1)
 
       if (!userFromEmail) {

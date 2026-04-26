@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { auth } from '../../middlewares/auth.ts'
 
 export const updateAccountName: FastifyPluginAsyncZod = async (app) => {
@@ -27,11 +27,11 @@ export const updateAccountName: FastifyPluginAsyncZod = async (app) => {
       const { name } = request.body
 
       await db
-        .update(users)
+        .update(schema.users)
         .set({
           name,
         })
-        .where(eq(users.id, userId))
+        .where(eq(schema.users.id, userId))
 
       return reply.status(204).send()
     },

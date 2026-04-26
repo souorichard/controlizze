@@ -2,8 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { categories } from '../../../db/schema/categories.ts'
-import { transactions } from '../../../db/schema/transactions.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -62,23 +61,26 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
 
       const allTransactions = await db
         .select({
-          id: transactions.id,
-          title: transactions.title,
-          description: transactions.description,
-          type: transactions.type,
+          id: schema.transactions.id,
+          title: schema.transactions.title,
+          description: schema.transactions.description,
+          type: schema.transactions.type,
           category: {
-            id: categories.id,
-            name: categories.name,
-            slug: categories.slug,
-            color: categories.color,
+            id: schema.categories.id,
+            name: schema.categories.name,
+            slug: schema.categories.slug,
+            color: schema.categories.color,
           },
-          amount: transactions.amount,
-          status: transactions.status,
-          transactionDate: transactions.transactionDate,
+          amount: schema.transactions.amount,
+          status: schema.transactions.status,
+          transactionDate: schema.transactions.transactionDate,
         })
-        .from(transactions)
-        .leftJoin(categories, eq(transactions.categoryId, categories.id))
-        .where(eq(transactions.orgId, org.id))
+        .from(schema.transactions)
+        .leftJoin(
+          schema.categories,
+          eq(schema.transactions.categoryId, schema.categories.id),
+        )
+        .where(eq(schema.transactions.orgId, org.id))
 
       const allTransactionsWithFormattedAmount = allTransactions.map(
         (transaction) => {

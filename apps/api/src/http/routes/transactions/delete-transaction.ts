@@ -2,7 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { transactions } from '../../../db/schema/transactions.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -39,13 +39,13 @@ export const deleteTransaction: FastifyPluginAsyncZod = async (app) => {
 
       const [transaction] = await db
         .select({
-          id: transactions.id,
+          id: schema.transactions.id,
         })
-        .from(transactions)
+        .from(schema.transactions)
         .where(
           and(
-            eq(transactions.id, transactionId),
-            eq(transactions.orgId, org.id),
+            eq(schema.transactions.id, transactionId),
+            eq(schema.transactions.orgId, org.id),
           ),
         )
         .limit(1)
@@ -55,11 +55,11 @@ export const deleteTransaction: FastifyPluginAsyncZod = async (app) => {
       }
 
       await db
-        .delete(transactions)
+        .delete(schema.transactions)
         .where(
           and(
-            eq(transactions.id, transactionId),
-            eq(transactions.orgId, org.id),
+            eq(schema.transactions.id, transactionId),
+            eq(schema.transactions.orgId, org.id),
           ),
         )
 

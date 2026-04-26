@@ -2,8 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { authAccounts } from '../../../db/schema/auth-accounts.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { env } from '../../../env.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 
@@ -85,13 +84,13 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
       }
 
       let [user] = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.email, email))
+        .select({ id: schema.users.id })
+        .from(schema.users)
+        .where(eq(schema.users.email, email))
         .limit(1)
 
       if (!user) {
-        user = await db.insert(users).values({
+        user = await db.insert(schema.users).values({
           name,
           email,
           avatarUrl,
@@ -100,17 +99,17 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
 
       let [authAccount] = await db
         .select()
-        .from(authAccounts)
+        .from(schema.authAccounts)
         .where(
           and(
-            eq(authAccounts.provider, 'GITHUB'),
-            eq(authAccounts.userId, user.id),
+            eq(schema.authAccounts.provider, 'GITHUB'),
+            eq(schema.authAccounts.userId, user.id),
           ),
         )
         .limit(1)
 
       if (!authAccount) {
-        authAccount = await db.insert(authAccounts).values({
+        authAccount = await db.insert(schema.authAccounts).values({
           provider: 'GITHUB',
           providerAccountId: githubId,
           userId: user.id,

@@ -3,7 +3,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { members } from '../../../db/schema/members.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -45,10 +45,15 @@ export const updateMemberRole: FastifyPluginAsyncZod = async (app) => {
 
       const [member] = await db
         .select({
-          id: members.id,
+          id: schema.members.id,
         })
-        .from(members)
-        .where(and(eq(members.id, memberId), eq(members.orgId, org.id)))
+        .from(schema.members)
+        .where(
+          and(
+            eq(schema.members.id, memberId),
+            eq(schema.members.orgId, org.id),
+          ),
+        )
         .limit(1)
 
       if (!member) {
@@ -56,11 +61,16 @@ export const updateMemberRole: FastifyPluginAsyncZod = async (app) => {
       }
 
       await db
-        .update(members)
+        .update(schema.members)
         .set({
           role,
         })
-        .where(and(eq(members.id, member.id), eq(members.orgId, org.id)))
+        .where(
+          and(
+            eq(schema.members.id, member.id),
+            eq(schema.members.orgId, org.id),
+          ),
+        )
 
       return reply.status(204).send()
     },

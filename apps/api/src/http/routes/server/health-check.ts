@@ -3,7 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { db } from '../../../db/index.ts'
 
 export const healthCheck: FastifyPluginAsyncZod = async (app) => {
-  app.get('/', async (request, reply) => {
+  app.get('', async (request, reply) => {
     try {
       await db.execute(sql`select 1`)
 

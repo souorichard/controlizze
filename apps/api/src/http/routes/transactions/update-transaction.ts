@@ -2,7 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { transactions } from '../../../db/schema/transactions.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -60,7 +60,7 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
       } = request.body
 
       await db
-        .update(transactions)
+        .update(schema.transactions)
         .set({
           title,
           description,
@@ -73,8 +73,8 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
         })
         .where(
           and(
-            eq(transactions.id, transactionId),
-            eq(transactions.orgId, org.id),
+            eq(schema.transactions.id, transactionId),
+            eq(schema.transactions.orgId, org.id),
           ),
         )
 

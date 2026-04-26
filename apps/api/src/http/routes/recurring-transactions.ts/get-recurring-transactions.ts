@@ -2,8 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { categories } from '../../../db/schema/categories.ts'
-import { recurringTransactions } from '../../../db/schema/recurring-transactions.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -69,29 +68,29 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
 
       const allRecurringTransactions = await db
         .select({
-          id: recurringTransactions.id,
-          title: recurringTransactions.title,
-          description: recurringTransactions.description,
-          type: recurringTransactions.type,
+          id: schema.recurringTransactions.id,
+          title: schema.recurringTransactions.title,
+          description: schema.recurringTransactions.description,
+          type: schema.recurringTransactions.type,
           category: {
-            id: categories.id,
-            name: categories.name,
-            slug: categories.slug,
-            color: categories.color,
+            id: schema.categories.id,
+            name: schema.categories.name,
+            slug: schema.categories.slug,
+            color: schema.categories.color,
           },
-          amount: recurringTransactions.amount,
-          status: recurringTransactions.status,
-          frequency: recurringTransactions.frequency,
-          interval: recurringTransactions.interval,
-          startDate: recurringTransactions.startDate,
-          endDate: recurringTransactions.endDate,
+          amount: schema.recurringTransactions.amount,
+          status: schema.recurringTransactions.status,
+          frequency: schema.recurringTransactions.frequency,
+          interval: schema.recurringTransactions.interval,
+          startDate: schema.recurringTransactions.startDate,
+          endDate: schema.recurringTransactions.endDate,
         })
-        .from(recurringTransactions)
+        .from(schema.recurringTransactions)
         .leftJoin(
-          categories,
-          eq(recurringTransactions.categoryId, categories.id),
+          schema.categories,
+          eq(schema.recurringTransactions.categoryId, schema.categories.id),
         )
-        .where(eq(recurringTransactions.orgId, org.id))
+        .where(eq(schema.recurringTransactions.orgId, org.id))
 
       const allRecurringTransactionsWithFormattedAmount =
         allRecurringTransactions.map((transaction) => {

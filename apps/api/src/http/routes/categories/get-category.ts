@@ -2,8 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { categories } from '../../../db/schema/categories.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -56,22 +55,25 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
 
       const [category] = await db
         .select({
-          id: categories.id,
-          name: categories.name,
-          slug: categories.slug,
-          color: categories.color,
-          type: categories.type,
+          id: schema.categories.id,
+          name: schema.categories.name,
+          slug: schema.categories.slug,
+          color: schema.categories.color,
+          type: schema.categories.type,
           owner: {
-            id: users.id,
-            name: users.name,
-            avatarUrl: users.avatarUrl,
+            id: schema.users.id,
+            name: schema.users.name,
+            avatarUrl: schema.users.avatarUrl,
           },
-          createdAt: categories.createdAt,
+          createdAt: schema.categories.createdAt,
         })
-        .from(categories)
-        .innerJoin(users, eq(categories.ownerId, users.id))
+        .from(schema.categories)
+        .innerJoin(schema.users, eq(schema.categories.ownerId, schema.users.id))
         .where(
-          and(eq(categories.slug, categorySlug), eq(categories.orgId, org.id)),
+          and(
+            eq(schema.categories.slug, categorySlug),
+            eq(schema.categories.orgId, org.id),
+          ),
         )
         .limit(1)
 

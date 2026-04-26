@@ -1,8 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { members } from '../../../db/schema/members.ts'
-import { organizations } from '../../../db/schema/organizations.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { generateSlugWithSuffix } from '../../../utils/create-slug.ts'
 import { auth } from '../../middlewares/auth.ts'
 
@@ -33,7 +32,7 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
 
       const org = await db.transaction(async (tx) => {
         const [createdOrg] = await tx
-          .insert(organizations)
+          .insert(schema.organizations)
           .values({
             name,
             slug: generateSlugWithSuffix(name),
@@ -42,7 +41,7 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
           })
           .returning()
 
-        await tx.insert(members).values({
+        await tx.insert(schema.members).values({
           userId,
           orgId: createdOrg.id,
           role: 'OWNER',

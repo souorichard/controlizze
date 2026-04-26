@@ -2,8 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { categories } from '../../../db/schema/categories.ts'
-import { recurringTransactions } from '../../../db/schema/recurring-transactions.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
@@ -86,11 +85,16 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
 
       const [category] = await db
         .select({
-          id: categories.id,
-          type: categories.type,
+          id: schema.categories.id,
+          type: schema.categories.type,
         })
-        .from(categories)
-        .where(and(eq(categories.id, categoryId), eq(categories.orgId, org.id)))
+        .from(schema.categories)
+        .where(
+          and(
+            eq(schema.categories.id, categoryId),
+            eq(schema.categories.orgId, org.id),
+          ),
+        )
         .limit(1)
 
       if (!category) {
@@ -102,7 +106,7 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
       }
 
       const [recurringTransaction] = await db
-        .insert(recurringTransactions)
+        .insert(schema.recurringTransactions)
         .values({
           title,
           description,
@@ -113,12 +117,13 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
           frequency,
           interval,
           startDate,
+          nextExecutionDate: startDate,
           endDate: endDate ?? null,
           ownerId: userId,
           orgId: org.id,
         })
         .returning({
-          id: recurringTransactions.id,
+          id: schema.recurringTransactions.id,
         })
 
       return reply.status(201).send({

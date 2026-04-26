@@ -3,8 +3,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { members } from '../../../db/schema/members.ts'
-import { organizations } from '../../../db/schema/organizations.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -47,10 +46,13 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
       }
 
       const [transferToMembership] = await db
-        .select({ id: members.id })
-        .from(members)
+        .select({ id: schema.members.id })
+        .from(schema.members)
         .where(
-          and(eq(members.orgId, organizations.id), eq(members.userId, userId)),
+          and(
+            eq(schema.members.orgId, schema.organizations.id),
+            eq(schema.members.userId, userId),
+          ),
         )
         .limit(1)
 
@@ -62,30 +64,35 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
 
       await db.transaction(async (tx) => {
         await tx
-          .update(members)
+          .update(schema.members)
           .set({
             role: 'OWNER',
           })
           .where(
             and(
-              eq(members.orgId, org.id),
-              eq(members.userId, transferToUserId),
+              eq(schema.members.orgId, org.id),
+              eq(schema.members.userId, transferToUserId),
             ),
           )
 
         await tx
-          .update(members)
+          .update(schema.members)
           .set({
             role: 'ADMIN',
           })
-          .where(and(eq(members.orgId, org.id), eq(members.userId, userId)))
+          .where(
+            and(
+              eq(schema.members.orgId, org.id),
+              eq(schema.members.userId, userId),
+            ),
+          )
 
         await tx
-          .update(organizations)
+          .update(schema.organizations)
           .set({
             ownerId: transferToUserId,
           })
-          .where(eq(organizations.id, org.id))
+          .where(eq(schema.organizations.id, org.id))
       })
 
       return reply.status(204).send()

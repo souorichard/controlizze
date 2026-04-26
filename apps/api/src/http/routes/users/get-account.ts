@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
@@ -31,13 +31,13 @@ export const getAccount: FastifyPluginAsyncZod = async (app) => {
 
       const [user] = await db
         .select({
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          avatarUrl: users.avatarUrl,
+          id: schema.users.id,
+          name: schema.users.name,
+          email: schema.users.email,
+          avatarUrl: schema.users.avatarUrl,
         })
-        .from(users)
-        .where(eq(users.id, userId))
+        .from(schema.users)
+        .where(eq(schema.users.id, userId))
         .limit(1)
 
       if (!user) {

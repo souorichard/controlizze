@@ -3,8 +3,7 @@ import { asc, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { members } from '../../../db/schema/members.ts'
-import { users } from '../../../db/schema/users.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -52,17 +51,17 @@ export const getOrgMembers: FastifyPluginAsyncZod = async (app) => {
 
       const membersWithRole = await db
         .select({
-          id: members.id,
-          name: users.name,
-          email: users.email,
-          role: members.role,
-          avatarUrl: users.avatarUrl,
-          userId: users.id,
+          id: schema.members.id,
+          name: schema.users.name,
+          email: schema.users.email,
+          role: schema.members.role,
+          avatarUrl: schema.users.avatarUrl,
+          userId: schema.users.id,
         })
-        .from(members)
-        .innerJoin(users, eq(members.userId, users.id))
-        .where(eq(members.orgId, org.id))
-        .orderBy(asc(members.role))
+        .from(schema.members)
+        .innerJoin(schema.users, eq(schema.members.userId, schema.users.id))
+        .where(eq(schema.members.orgId, org.id))
+        .orderBy(asc(schema.members.role))
 
       return {
         members: membersWithRole,

@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { categories } from '../../../db/schema/categories.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { users } from '../../../db/schema/users.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -55,19 +55,19 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
 
       const allCategories = await db
         .select({
-          id: categories.id,
-          name: categories.name,
-          color: categories.color,
-          type: categories.type,
+          id: schema.categories.id,
+          name: schema.categories.name,
+          color: schema.categories.color,
+          type: schema.categories.type,
           owner: {
             id: users.id,
             name: users.name,
             avatarUrl: users.avatarUrl,
           },
         })
-        .from(categories)
-        .innerJoin(users, eq(categories.ownerId, users.id))
-        .where(eq(categories.orgId, org.id))
+        .from(schema.categories)
+        .innerJoin(users, eq(schema.categories.ownerId, users.id))
+        .where(eq(schema.categories.orgId, org.id))
 
       return {
         categories: allCategories,

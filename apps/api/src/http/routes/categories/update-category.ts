@@ -2,7 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
-import { categories } from '../../../db/schema/categories.ts'
+import { schema } from '../../../db/schema/index.ts'
 import { createSlug } from '../../../utils/create-slug.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
@@ -50,11 +50,14 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
 
       const category = await db
         .select({
-          id: categories.id,
+          id: schema.categories.id,
         })
-        .from(categories)
+        .from(schema.categories)
         .where(
-          and(eq(categories.slug, categorySlug), eq(categories.orgId, org.id)),
+          and(
+            eq(schema.categories.slug, categorySlug),
+            eq(schema.categories.orgId, org.id),
+          ),
         )
 
       if (!category) {
@@ -62,7 +65,7 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
       }
 
       await db
-        .update(categories)
+        .update(schema.categories)
         .set({
           name,
           slug: createSlug(name),
@@ -70,7 +73,10 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
           type,
         })
         .where(
-          and(eq(categories.slug, categorySlug), eq(categories.orgId, org.id)),
+          and(
+            eq(schema.categories.slug, categorySlug),
+            eq(schema.categories.orgId, org.id),
+          ),
         )
 
       return reply.status(204).send()

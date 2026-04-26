@@ -27,6 +27,7 @@ export const recurringTransactions = pgTable('recurring_transactions', {
   startDate: timestamp().notNull(),
   endDate: timestamp(),
 
+  nextExecutionDate: timestamp().notNull(),
   lastGeneratedAt: timestamp(),
 
   ownerId: uuid()
