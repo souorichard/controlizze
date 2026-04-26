@@ -202,3 +202,91 @@ authorization: Bearer {{token}}
 # @name removeMember
 DELETE {{baseUrl}}/orgs/acme-inc-9ee7c8/members/{{memberId}}
 authorization: Bearer {{token}}
+
+###
+
+# @name createCategory
+POST {{baseUrl}}/orgs/acme-inc-9ee7c8/categories
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "name": "Food",
+  "color": "#6366f1",
+  "type": "EXPENSE"
+}
+
+###
+
+# @name getCategories
+GET {{baseUrl}}/orgs/acme-inc-9ee7c8/categories
+authorization: Bearer {{token}}
+
+###
+
+# @name updateCategory
+PUT {{baseUrl}}/orgs/acme-inc-9ee7c8/categories/food
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "name": "Food",
+  "color": "#f43f5e",
+  "type": "EXPENSE"
+}
+
+###
+
+# @name deleteCategory
+DELETE {{baseUrl}}/orgs/acme-inc-9ee7c8/categories/food
+authorization: Bearer {{token}}
+
+###
+
+# @name createTransaction
+POST {{baseUrl}}/orgs/acme-inc-9ee7c8/transactions
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "title": "Supermarket of April",
+  "type": "EXPENSE",
+  "categoryId": "019dc6c9-e69a-792d-a44b-303c3fb58f65",
+  "amount": "1129.90",
+  "status": "COMPLETED",
+  "transactionDate": "2026-04-25T12:30:00.000Z",
+  "recurringTransactionId": null
+}
+
+###
+
+# @name getTransactions
+GET {{baseUrl}}/orgs/acme-inc-9ee7c8/transactions
+authorization: Bearer {{token}}
+
+###
+
+@transactionId = 019dc6d3-39a0-7a5b-b1b4-2413f3f54d52
+
+###
+
+# @name updateTransaction
+PUT {{baseUrl}}/orgs/acme-inc-9ee7c8/transactions/{{transactionId}}
+content-type: application/json
+authorization: Bearer {{token}}
+
+{
+  "title": "Supermarket of March",
+  "type": "EXPENSE",
+  "categoryId": "019dc6c9-e69a-792d-a44b-303c3fb58f65",
+  "amount": "1029.90",
+  "status": "COMPLETED",
+  "transactionDate": "2026-04-25T12:30:00.000Z",
+  "recurringTransactionId": null
+}
+
+###
+
+# @name deleteTransaction
+DELETE {{baseUrl}}/orgs/acme-inc-9ee7c8/transactions/{{transactionId}}
+authorization: Bearer {{token}}

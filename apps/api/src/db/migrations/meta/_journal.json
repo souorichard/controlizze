@@ -22,6 +22,13 @@
       "when": 1776736539483,
       "tag": "0002_silky_groot",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777153561965,
+      "tag": "0003_pink_robbie_robertson",
+      "breakpoints": true
     }
   ]
 }

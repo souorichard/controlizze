@@ -1,4 +1,4 @@
-import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 import { categories } from './categories.ts'
 import { statusEnum, typeEnum } from './enums.ts'
@@ -17,7 +17,7 @@ export const transactions = pgTable('transactions', {
 
   categoryId: uuid().references(() => categories.id, { onDelete: 'set null' }),
 
-  amount: numeric().notNull(),
+  amount: integer().notNull(),
   status: statusEnum().notNull().default('PENDING'),
 
   transactionDate: timestamp().notNull().defaultNow(),
