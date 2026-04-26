@@ -1,7 +1,10 @@
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import fastifySwagger from '@fastify/swagger'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import fastify from 'fastify'
 import {
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
@@ -25,6 +28,34 @@ export function buildApp() {
   })
 
   app.setErrorHandler(errorHandler)
+
+  app.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: 'Controlizze API',
+        description:
+          'Full-stack SaaS app with multi-tenant architecture & RBAC.',
+        version: '1.0.0',
+      },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
+    },
+    transform: jsonSchemaTransform,
+  })
+
+  app.register(scalarFastifyApiReference, {
+    routePrefix: '/docs',
+    configuration: {
+      theme: 'kepler',
+    },
+  })
 
   for (const route of routes) {
     app.register(route.plugin, { prefix: route.prefix })
