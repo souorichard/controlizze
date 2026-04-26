@@ -18,6 +18,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
           email: z.email('Invalid email address').min(1, 'Email is required'),
           password: z
             .string()
+            .min(1, 'Password is required')
             .min(8, 'Password must be at least 6 characters long'),
         }),
         response: {
@@ -38,12 +39,12 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
         throw new ConflictError('User with this email already exists')
       }
 
-      const hashPassword = await hash(password, 8)
+      const passwordHash = await hash(password, 8)
 
       await db.insert(schema.users).values({
         name,
         email,
-        hashPassword,
+        passwordHash,
       })
 
       return reply.status(201).send()

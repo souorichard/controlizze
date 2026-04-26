@@ -9,15 +9,14 @@ export const categories = pgTable(
   {
     id: uuid()
       .primaryKey()
-      .notNull()
       .$defaultFn(() => uuidv7()),
 
     name: text().notNull(),
-    slug: text().notNull().unique(),
     color: text().notNull(),
     type: typeEnum().notNull().default('EXPENSE'),
 
     ownerId: uuid().references(() => users.id, { onDelete: 'set null' }),
+
     orgId: uuid()
       .notNull()
       .references(() => organizations.id, { onDelete: 'cascade' }),
@@ -25,12 +24,10 @@ export const categories = pgTable(
     createdAt: timestamp().notNull().defaultNow(),
   },
   (table) => [
-    unique('slug_type').on(table.slug, table.type),
-    unique('name_slug_type_orgid').on(
-      table.name,
-      table.slug,
-      table.type,
+    unique('categories_org_id_name_type_unique').on(
       table.orgId,
+      table.name,
+      table.type,
     ),
   ],
 )

@@ -1,17 +1,23 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 
-export const users = pgTable('users', {
-  id: uuid()
-    .primaryKey()
-    .$defaultFn(() => uuidv7()),
+export const users = pgTable(
+  'users',
+  {
+    id: uuid()
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
 
-  name: text(),
-  email: text().notNull().unique(),
-  hashPassword: text(),
+    name: text(),
 
-  avatarUrl: text(),
-  avatarKey: text(),
+    email: text().notNull(),
 
-  createdAt: timestamp().notNull().defaultNow(),
-})
+    passwordHash: text(),
+
+    avatarUrl: text(),
+    avatarKey: text(),
+
+    createdAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [unique('users_email_unique').on(table.email)],
+)

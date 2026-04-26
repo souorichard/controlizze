@@ -1,21 +1,36 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+  index,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 import { users } from './users.ts'
 
-export const organizations = pgTable('organizations', {
-  id: uuid()
-    .primaryKey()
-    .$defaultFn(() => uuidv7()),
+export const organizations = pgTable(
+  'organizations',
+  {
+    id: uuid()
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
 
-  name: text().notNull(),
-  slug: text().notNull().unique(),
+    name: text().notNull(),
 
-  avatarUrl: text(),
-  avatarKey: text(),
+    slug: text().notNull(),
 
-  ownerId: uuid()
-    .notNull()
-    .references(() => users.id),
+    avatarUrl: text(),
+    avatarKey: text(),
 
-  createdAt: timestamp().notNull().defaultNow(),
-})
+    ownerId: uuid()
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+
+    createdAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique('organizations_slug_unique').on(table.slug),
+    index('organizations_owner_id_idx').on(table.ownerId),
+  ],
+)

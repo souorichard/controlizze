@@ -8,15 +8,23 @@ export const authAccounts = pgTable(
   {
     id: uuid()
       .primaryKey()
-      .notNull()
       .$defaultFn(() => uuidv7()),
 
     provider: accountProviderEnum().notNull(),
-    providerAccountId: text().notNull().unique(),
+    providerAccountId: text().notNull(),
 
     userId: uuid()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
   },
-  (table) => [unique('provider_userid').on(table.provider, table.userId)],
+  (table) => [
+    unique('auth_accounts_provider_provider_account_id_unique').on(
+      table.provider,
+      table.providerAccountId,
+    ),
+    unique('auth_accounts_provider_user_id_unique').on(
+      table.provider,
+      table.userId,
+    ),
+  ],
 )

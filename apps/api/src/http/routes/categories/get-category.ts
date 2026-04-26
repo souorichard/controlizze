@@ -18,14 +18,13 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
-          categorySlug: z.string(),
+          categoryId: z.string(),
         }),
         response: {
           200: z.object({
             category: z.object({
               id: z.uuid(),
               name: z.string(),
-              slug: z.string(),
               color: z.string(),
               type: typeSchema,
               owner: z.object({
@@ -40,7 +39,7 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { slug, categorySlug } = request.params
+      const { slug, categoryId } = request.params
 
       const userId = await request.getCurrentUserId()
       const { org, membership } = await request.getUserMembership(slug)
@@ -57,7 +56,6 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
         .select({
           id: schema.categories.id,
           name: schema.categories.name,
-          slug: schema.categories.slug,
           color: schema.categories.color,
           type: schema.categories.type,
           owner: {
@@ -71,7 +69,7 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
         .innerJoin(schema.users, eq(schema.categories.ownerId, schema.users.id))
         .where(
           and(
-            eq(schema.categories.slug, categorySlug),
+            eq(schema.categories.id, categoryId),
             eq(schema.categories.orgId, org.id),
           ),
         )

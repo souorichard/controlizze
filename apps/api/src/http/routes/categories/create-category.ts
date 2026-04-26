@@ -2,7 +2,6 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
-import { createSlug } from '../../../utils/create-slug.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -49,7 +48,6 @@ export const createCategory: FastifyPluginAsyncZod = async (app) => {
         .insert(schema.categories)
         .values({
           name,
-          slug: createSlug(name),
           color,
           type,
           ownerId: userId,

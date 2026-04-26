@@ -36,7 +36,7 @@ async function seed() {
       .values({
         name: 'John Doe',
         email: 'john@example.com',
-        hashPassword: 'hashed_password_123',
+        passwordHash: 'hashed_password_123',
         avatarUrl: 'https://api.example.com/avatars/john.jpg',
       })
       .returning()
@@ -47,7 +47,7 @@ async function seed() {
       .values({
         name: 'Jane Smith',
         email: 'jane@example.com',
-        hashPassword: 'hashed_password_456',
+        passwordHash: 'hashed_password_456',
         avatarUrl: 'https://api.example.com/avatars/jane.jpg',
       })
       .returning()
@@ -58,7 +58,7 @@ async function seed() {
       .values({
         name: 'Bob Johnson',
         email: 'bob@example.com',
-        hashPassword: 'hashed_password_789',
+        passwordHash: 'hashed_password_789',
       })
       .returning()
       .then((result) => result[0])
@@ -110,7 +110,6 @@ async function seed() {
       .insert(schema.categories)
       .values({
         name: 'Food',
-        slug: createSlug('Food'),
         color: '#FF6B6B',
         type: 'EXPENSE',
         orgId: org1.id,
@@ -123,7 +122,6 @@ async function seed() {
       .insert(schema.categories)
       .values({
         name: 'Transportation',
-        slug: createSlug('Transportation'),
         color: '#4ECDC4',
         type: 'EXPENSE',
         orgId: org1.id,
@@ -136,7 +134,6 @@ async function seed() {
       .insert(schema.categories)
       .values({
         name: 'Utilities',
-        slug: createSlug('Utilities'),
         color: '#45B7D1',
         type: 'EXPENSE',
         orgId: org1.id,
@@ -149,7 +146,6 @@ async function seed() {
       .insert(schema.categories)
       .values({
         name: 'Salary',
-        slug: createSlug('Salary'),
         color: '#96CEB4',
         type: 'INCOME',
         orgId: org1.id,
@@ -162,7 +158,6 @@ async function seed() {
       .insert(schema.categories)
       .values({
         name: 'Bonuses',
-        slug: createSlug('Bonuses'),
         color: '#FFEAA7',
         type: 'INCOME',
         orgId: org1.id,

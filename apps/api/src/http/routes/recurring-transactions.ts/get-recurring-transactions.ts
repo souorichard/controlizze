@@ -36,7 +36,6 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
                   .object({
                     id: z.uuid(),
                     name: z.string(),
-                    slug: z.string(),
                     color: z.string(),
                   })
                   .nullable(),
@@ -75,7 +74,6 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
           category: {
             id: schema.categories.id,
             name: schema.categories.name,
-            slug: schema.categories.slug,
             color: schema.categories.color,
           },
           amount: schema.recurringTransactions.amount,

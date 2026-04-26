@@ -17,7 +17,7 @@ export const deleteCategory: FastifyPluginAsyncZod = async (app) => {
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
-          categorySlug: z.string(),
+          categoryId: z.string(),
         }),
         response: {
           204: z.void(),
@@ -25,7 +25,7 @@ export const deleteCategory: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { slug, categorySlug } = request.params
+      const { slug, categoryId } = request.params
 
       const userId = await request.getCurrentUserId()
       const { org, membership } = await request.getUserMembership(slug)
@@ -42,7 +42,7 @@ export const deleteCategory: FastifyPluginAsyncZod = async (app) => {
         .delete(schema.categories)
         .where(
           and(
-            eq(schema.categories.slug, categorySlug),
+            eq(schema.categories.id, categoryId),
             eq(schema.categories.orgId, org.id),
           ),
         )
