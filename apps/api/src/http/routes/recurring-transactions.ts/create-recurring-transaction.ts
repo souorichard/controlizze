@@ -3,38 +3,56 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { categories } from '../../../db/schema/categories.ts'
-import { transactions } from '../../../db/schema/transactions.ts'
+import { recurringTransactions } from '../../../db/schema/recurring-transactions.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { statusSchema, typeSchema } from '../../schemas/index.ts'
+import {
+  frequencySchema,
+  recurringStatusSchema,
+  typeSchema,
+} from '../../schemas/index.ts'
 
-export const createTransaction: FastifyPluginAsyncZod = async (app) => {
+export const createRecurringTransaction: FastifyPluginAsyncZod = async (
+  app,
+) => {
   app.register(auth).post(
     '/',
     {
       schema: {
-        tags: ['Transaction'],
-        summary: 'Create a new transaction',
+        tags: ['Recurring transaction'],
+        summary: 'Create a new recurring transaction',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
         }),
-        body: z.object({
-          title: z.string(),
-          description: z.string().nullable().optional(),
-          type: typeSchema,
-          categoryId: z.uuid(),
-          amount: z.coerce.number(),
-          status: statusSchema,
-          transactionDate: z.coerce.date().optional(),
-          recurringTransactionId: z.uuid().nullable().optional(),
-        }),
+        body: z
+          .object({
+            title: z.string(),
+            description: z.string().nullable().optional(),
+            type: typeSchema,
+            categoryId: z.uuid(),
+            amount: z.coerce.number(),
+            status: recurringStatusSchema,
+            frequency: frequencySchema,
+            interval: z.coerce.number(),
+            startDate: z.coerce.date(),
+            endDate: z.coerce.date().optional(),
+          })
+          .superRefine((data, ctx) => {
+            if (data.endDate && data.endDate <= data.startDate) {
+              ctx.addIssue({
+                code: 'custom',
+                message: 'End date must be after start date',
+                path: ['endDate'],
+              })
+            }
+          }),
         response: {
           201: z.object({
-            transactionId: z.uuid(),
+            recurringTransactionId: z.uuid(),
           }),
         },
       },
@@ -48,7 +66,9 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
       const { cannot } = getUserPermissions(userId, membership.role)
 
       if (cannot('create', 'Transaction')) {
-        throw new UnauthorizedError(`You're not allowed to create transactions`)
+        throw new UnauthorizedError(
+          `You're not allowed to create recurring transactions`,
+        )
       }
 
       const {
@@ -58,8 +78,10 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
         categoryId,
         amount,
         status,
-        transactionDate,
-        recurringTransactionId,
+        frequency,
+        interval,
+        startDate,
+        endDate,
       } = request.body
 
       const [category] = await db
@@ -79,8 +101,8 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
         throw new BadRequestError('Category must match transaction type')
       }
 
-      const [transaction] = await db
-        .insert(transactions)
+      const [recurringTransaction] = await db
+        .insert(recurringTransactions)
         .values({
           title,
           description,
@@ -88,17 +110,19 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
           categoryId,
           amount: realToCents(amount),
           status,
-          transactionDate: transactionDate ?? new Date(),
-          recurringTransactionId,
+          frequency,
+          interval,
+          startDate,
+          endDate: endDate ?? null,
           ownerId: userId,
           orgId: org.id,
         })
         .returning({
-          id: transactions.id,
+          id: recurringTransactions.id,
         })
 
       return reply.status(201).send({
-        transactionId: transaction.id,
+        recurringTransactionId: recurringTransaction.id,
       })
     },
   )

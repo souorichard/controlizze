@@ -70,8 +70,6 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
           status,
           transactionDate: transactionDate ?? new Date(),
           recurringTransactionId,
-          ownerId: userId,
-          orgId: org.id,
         })
         .where(
           and(

@@ -1,11 +1,4 @@
-import {
-  integer,
-  numeric,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core'
+import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 import { categories } from './categories.ts'
 import { frequencyEnum, recurringStatusEnum, typeEnum } from './enums.ts'
@@ -25,7 +18,7 @@ export const recurringTransactions = pgTable('recurring_transactions', {
     .notNull()
     .references(() => categories.id),
 
-  amount: numeric().notNull(),
+  amount: integer().notNull(),
   status: recurringStatusEnum().notNull().default('ACTIVE'),
 
   frequency: frequencyEnum().notNull().default('MONTHLY'),

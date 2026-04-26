@@ -19,6 +19,10 @@ import { shutdownOrg } from './orgs/shutdown-org.ts'
 import { transferOrg } from './orgs/transfer-org.ts'
 import { updateOrgAvatar } from './orgs/update-org-avatar.ts'
 import { updateOrgName } from './orgs/update-org-name.ts'
+import { createRecurringTransaction } from './recurring-transactions.ts/create-recurring-transaction.ts'
+import { deleteRecurringTransaction } from './recurring-transactions.ts/delete-recurring-transaction.ts'
+import { getRecurringTransactions } from './recurring-transactions.ts/get-recurring-transactions.ts'
+import { updateRecurringTransaction } from './recurring-transactions.ts/update-recurring-transaction.ts'
 import { healthCheck } from './server/health-check.ts'
 import { createTransaction } from './transactions/create-transaction.ts'
 import { deleteTransaction } from './transactions/delete-transaction.ts'
@@ -167,5 +171,23 @@ export const routes: Route[] = [
   {
     plugin: deleteTransaction,
     prefix: '/orgs/:slug/transactions/:transactionId',
+  },
+
+  // Recurring transactions
+  {
+    plugin: createRecurringTransaction,
+    prefix: '/orgs/:slug/recurring-transactions',
+  },
+  {
+    plugin: getRecurringTransactions,
+    prefix: '/orgs/:slug/recurring-transactions',
+  },
+  {
+    plugin: updateRecurringTransaction,
+    prefix: '/orgs/:slug/recurring-transactions/:recurringTransactionId',
+  },
+  {
+    plugin: deleteRecurringTransaction,
+    prefix: '/orgs/:slug/recurring-transactions/:recurringTransactionId',
   },
 ]
