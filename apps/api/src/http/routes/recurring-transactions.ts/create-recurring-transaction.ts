@@ -3,6 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { calculateNextExecutionDate } from '../../../services/recurring-transactions/calculate-next-execution-date.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
@@ -105,26 +106,58 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
         throw new BadRequestError('Category must match transaction type')
       }
 
-      const [recurringTransaction] = await db
-        .insert(schema.recurringTransactions)
-        .values({
-          title,
-          description,
-          type,
-          categoryId,
-          amount: realToCents(amount),
-          status,
-          frequency,
-          interval,
-          startDate,
-          nextExecutionDate: startDate,
-          endDate: endDate ?? null,
-          ownerId: userId,
-          orgId: org.id,
-        })
-        .returning({
-          id: schema.recurringTransactions.id,
-        })
+      const recurringTransaction = await db.transaction(async (tx) => {
+        const amountInCents = realToCents(amount)
+        const now = new Date()
+        const shouldCreateFirstTransaction = startDate <= now
+
+        const nextExecutionDate = shouldCreateFirstTransaction
+          ? calculateNextExecutionDate({
+              date: startDate,
+              frequency,
+              interval,
+            })
+          : startDate
+
+        const [createdRecurringTransaction] = await tx
+          .insert(schema.recurringTransactions)
+          .values({
+            title,
+            description,
+            type,
+            categoryId,
+            amount: amountInCents,
+            status,
+            frequency,
+            interval,
+            startDate,
+            endDate: endDate ?? null,
+            lastGeneratedAt: shouldCreateFirstTransaction ? startDate : null,
+            nextExecutionDate,
+            ownerId: userId,
+            orgId: org.id,
+          })
+          .returning({
+            id: schema.recurringTransactions.id,
+          })
+
+        if (shouldCreateFirstTransaction) {
+          await tx.insert(schema.transactions).values({
+            title,
+            description,
+            type,
+            categoryId,
+            amount: amountInCents,
+            status: 'PENDING',
+            transactionDate: startDate,
+            recurringTransactionId: createdRecurringTransaction.id,
+            ownerId: userId,
+            orgId: org.id,
+          })
+        }
+
+        return createdRecurringTransaction
+      })
 
       return reply.status(201).send({
         recurringTransactionId: recurringTransaction.id,
