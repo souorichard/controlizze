@@ -17,6 +17,7 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
           email: z.email('Invalid email address').min(1, 'Email is required'),
           password: z
             .string()
+            .min(1, 'Password is required')
             .min(8, 'Password must be at least 6 characters long'),
         }),
         response: {
@@ -32,7 +33,7 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
       const [userFromEmail] = await db
         .select({
           id: schema.users.id,
-          hashPassword: schema.users.hashPassword,
+          hashPassword: schema.users.passwordHash,
         })
         .from(schema.users)
         .where(eq(schema.users.email, email))
