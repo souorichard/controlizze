@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { hasZodFastifySchemaValidationErrors } from 'fastify-type-provider-zod'
+import { env } from '../env.ts'
 import { BadRequestError } from './errors/bad-request-error.ts'
 import { ConflictError } from './errors/conflict-error.ts'
 import { ForbiddenError } from './errors/forbidden-error.ts'
@@ -40,6 +41,12 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   if (error instanceof UnauthorizedError) {
     return reply.status(401).send({ message: error.message })
   }
+
+  if (env.NODE_ENV !== 'production') {
+    console.log(error)
+  }
+
+  // TODO: send error to some observalibity plataform
 
   return reply.status(500).send({ message: 'Internal server error' })
 }

@@ -18,6 +18,9 @@ import {
   removeMember,
   updateMemberRole,
 } from './members/index.ts'
+import { getTransactionsAmountMetrics } from './metrics/get-transactions-amount-metrics.ts'
+import { getTransactionsBalanceAmountMetrics } from './metrics/get-transactions-balance-amount-metrics.ts'
+import { getTransactionsPerPeriod } from './metrics/get-transactions-per-period.ts'
 import {
   createOrg,
   getOrg,
@@ -213,5 +216,19 @@ export const routes: Route[] = [
   {
     plugin: deleteRecurringTransaction,
     prefix: '/orgs/:slug/recurring-transactions/:recurringTransactionId',
+  },
+
+  // Metrics
+  {
+    plugin: getTransactionsAmountMetrics,
+    prefix: '/orgs/:slug/metrics/transactions-amount',
+  },
+  {
+    plugin: getTransactionsBalanceAmountMetrics,
+    prefix: '/orgs/:slug/metrics/transactions-balance',
+  },
+  {
+    plugin: getTransactionsPerPeriod,
+    prefix: '/orgs/:slug/metrics/transactions-per-period',
   },
 ]

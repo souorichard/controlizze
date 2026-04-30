@@ -2,6 +2,10 @@ import { env } from '../env.ts'
 import { generateRecurringTransactions } from '../services/recurring-transactions/generate-recurring-transactions.ts'
 
 export function startRecurringTransactionsJob() {
+  if (env.NODE_ENV !== 'production') {
+    console.log('[RecurringJob] Started!')
+  }
+
   const INTERVAL = 1000 * 60 * 5 // 5 min
 
   let isRunning = false

@@ -1,3 +1,4 @@
+import { hash } from 'bcryptjs'
 import { createSlug } from '../utils/create-slug.ts'
 import { db } from './index.ts'
 import { schema } from './schema/index.ts'
@@ -31,12 +32,15 @@ async function seed() {
   try {
     // 1. Create test users
     console.log('📝 Creating test users...')
+
+    const passwordHash = await hash('hashed_password_123', 8)
+
     const user1 = await db
       .insert(schema.users)
       .values({
         name: 'John Doe',
         email: 'john@example.com',
-        passwordHash: 'hashed_password_123',
+        passwordHash,
         avatarUrl: 'https://api.example.com/avatars/john.jpg',
       })
       .returning()
@@ -47,7 +51,7 @@ async function seed() {
       .values({
         name: 'Jane Smith',
         email: 'jane@example.com',
-        passwordHash: 'hashed_password_456',
+        passwordHash,
         avatarUrl: 'https://api.example.com/avatars/jane.jpg',
       })
       .returning()
@@ -58,7 +62,7 @@ async function seed() {
       .values({
         name: 'Bob Johnson',
         email: 'bob@example.com',
-        passwordHash: 'hashed_password_789',
+        passwordHash,
       })
       .returning()
       .then((result) => result[0])
