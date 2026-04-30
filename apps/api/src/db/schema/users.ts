@@ -14,6 +14,10 @@ export const users = pgTable(
 
     passwordHash: text(),
 
+    emailVerifiedAt: timestamp(),
+
+    lastLoginAt: timestamp(),
+
     avatarUrl: text(),
     avatarKey: text(),
 

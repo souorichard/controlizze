@@ -7,6 +7,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
+import { billingCycleEnum, planEnum } from './enums.ts'
 import { users } from './users.ts'
 
 export const organizations = pgTable(
@@ -17,11 +18,15 @@ export const organizations = pgTable(
       .$defaultFn(() => uuidv7()),
 
     name: text().notNull(),
-
     slug: text().notNull(),
+
+    description: text(),
 
     avatarUrl: text(),
     avatarKey: text(),
+
+    plan: planEnum().notNull().default('FREE'),
+    billingCycle: billingCycleEnum().default('MONTHLY'),
 
     ownerId: uuid()
       .notNull()

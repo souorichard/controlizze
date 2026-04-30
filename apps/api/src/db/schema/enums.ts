@@ -6,6 +6,10 @@ export const tokenTypeEnum = pgEnum('token_type_enum', ['PASSWORD_RECOVER'])
 
 export const roleEnum = pgEnum('role_enum', ['OWNER', 'ADMIN', 'MEMBER'])
 
+export const planEnum = pgEnum('plan_enum', ['FREE', 'PRO'])
+
+export const billingCycleEnum = pgEnum('billing_cycle', ['MONTHLY', 'YEARLY'])
+
 export const typeEnum = pgEnum('type_enum', ['EXPENSE', 'INCOME'])
 
 export const statusEnum = pgEnum('status_enum', [
