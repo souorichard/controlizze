@@ -34,6 +34,6 @@ export function startRecurringTransactionsJob() {
   // run immediately
   run()
 
-  // each 5 minutes
+  // every 5 minutes
   cron.schedule('*/5 * * * *', run)
 }
