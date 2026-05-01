@@ -18,6 +18,8 @@ import {
   removeMember,
   updateMemberRole,
 } from './members/index.ts'
+import { getBalanceEvolution } from './metrics/get-balance-evolution.ts'
+import { getTopExpenseCategories } from './metrics/get-top-expense-categories.ts'
 import { getTransactionsAmountMetrics } from './metrics/get-transactions-amount-metrics.ts'
 import { getTransactionsBalanceAmountMetrics } from './metrics/get-transactions-balance-amount-metrics.ts'
 import { getTransactionsPerPeriod } from './metrics/get-transactions-per-period.ts'
@@ -230,5 +232,13 @@ export const routes: Route[] = [
   {
     plugin: getTransactionsPerPeriod,
     prefix: '/orgs/:slug/metrics/transactions-per-period',
+  },
+  {
+    plugin: getTopExpenseCategories,
+    prefix: '/orgs/:slug/metrics/top-expense-categories',
+  },
+  {
+    plugin: getBalanceEvolution,
+    prefix: '/orgs/:slug/metrics/balance-evolution',
   },
 ]

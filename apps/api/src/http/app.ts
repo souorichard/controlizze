@@ -53,7 +53,7 @@ export function buildApp() {
   app.register(scalarFastifyApiReference, {
     routePrefix: '/docs',
     configuration: {
-      theme: 'kepler',
+      theme: 'deepSpace',
     },
   })
 
