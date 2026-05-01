@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1775676216628,
-      "tag": "0000_salty_marauders",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1776701403085,
-      "tag": "0001_bitter_supernaut",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1776736539483,
-      "tag": "0002_silky_groot",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1777153561965,
-      "tag": "0003_pink_robbie_robertson",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1777211662598,
-      "tag": "0004_demonic_black_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1777219640263,
-      "tag": "0005_tense_the_santerians",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1777513058213,
-      "tag": "0006_glamorous_skreet",
+      "when": 1777657379207,
+      "tag": "0000_smart_proudstar",
       "breakpoints": true
     }
   ]

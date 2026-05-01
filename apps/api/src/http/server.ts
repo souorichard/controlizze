@@ -1,5 +1,5 @@
 import { env } from '../env.ts'
-import { startRecurringTransactionsJob } from '../jobs/start-recurring-transactions-job.ts'
+import { registerJobs } from '../jobs/index.ts'
 import { buildApp } from './app.ts'
 
 const app = buildApp()
@@ -11,4 +11,4 @@ app.listen({ host: '0.0.0.0', port: env.SERVER_PORT }).then(() => {
   }
 })
 
-startRecurringTransactionsJob()
+registerJobs()

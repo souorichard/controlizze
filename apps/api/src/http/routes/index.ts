@@ -13,6 +13,13 @@ import {
   getCategory,
   updateCategory,
 } from './categories/index.ts'
+import { acceptInvite } from './invites/accept-invite.ts'
+import { createInvite } from './invites/create-invite.ts'
+import { getInvite } from './invites/get-invite.ts'
+import { getInvites } from './invites/get-invites.ts'
+import { getPendingInvites } from './invites/get-pending-invites.ts'
+import { rejectInvite } from './invites/reject-invite.ts'
+import { revokeInvite } from './invites/revoke-invite.ts'
 import {
   getOrgMembers,
   removeMember,
@@ -160,6 +167,36 @@ export const routes: Route[] = [
   {
     plugin: removeMember,
     prefix: '/orgs/:slug/members/:memberId',
+  },
+
+  // Invites
+  {
+    plugin: createInvite,
+    prefix: '/orgs/:slug/invites',
+  },
+  {
+    plugin: getInvite,
+    prefix: '/invites',
+  },
+  {
+    plugin: getInvites,
+    prefix: '/orgs/:slug/invites',
+  },
+  {
+    plugin: revokeInvite,
+    prefix: '/orgs/:slug/invites/:inviteId',
+  },
+  {
+    plugin: getPendingInvites,
+    prefix: '/pending-invites',
+  },
+  {
+    plugin: acceptInvite,
+    prefix: '/invites/:inviteId/accept',
+  },
+  {
+    plugin: rejectInvite,
+    prefix: '/invites/:inviteId/reject',
   },
 
   // Categories

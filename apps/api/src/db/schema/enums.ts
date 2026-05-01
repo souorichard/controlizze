@@ -30,3 +30,11 @@ export const frequencyEnum = pgEnum('frequency_enum', [
   'MONTHLY',
   'YEARLY',
 ])
+
+export const inviteStatusEnum = pgEnum('invite_status_enum', [
+  'PENDING',
+  'ACCEPTED',
+  'REJECTED',
+  'REJECTED',
+  'EXPIRED',
+])

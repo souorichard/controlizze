@@ -13,16 +13,28 @@ export const permissions: Record<Role, PermissionsRole> = {
     can(['update', 'transfer_ownership'], 'Organization', {
       ownerId: { $eq: user.id },
     })
+
+    cannot('leave', 'Organization')
   },
-  ADMIN(_, { can }) {
-    can(['read', 'invite'], 'User')
+  ADMIN(user, { can, cannot }) {
+    can('read', 'User')
+    can('update', 'User', { id: { $eq: user.id } })
+
+    cannot(['update', 'delete'], 'Member')
+    can(['update', 'delete'], 'Member', {
+      id: { $ne: user.id },
+      role: { $ne: 'OWNER' },
+    })
 
     can(['read', 'leave'], 'Organization')
 
-    can('manage', ['Transaction', 'Category', 'Invite'])
+    can('manage', ['Transaction', 'Category'])
+
+    can(['create', 'read', 'revoke'], 'Invite')
   },
   MEMBER(user, { can }) {
     can('read', 'User')
+    can('update', 'User', { id: { $eq: user.id } })
 
     can(['read', 'leave'], 'Organization')
 

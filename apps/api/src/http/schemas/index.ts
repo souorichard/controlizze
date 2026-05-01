@@ -18,3 +18,13 @@ export const frequencySchema = z
     z.literal('YEARLY'),
   ])
   .default('DAILY')
+
+export const inviteStatusSchema = z
+  .union([
+    z.literal('PENDING'),
+    z.literal('ACCEPTED'),
+    z.literal('REJECTED'),
+    z.literal('REJECTED'),
+    z.literal('EXPIRED'),
+  ])
+  .default('PENDING')

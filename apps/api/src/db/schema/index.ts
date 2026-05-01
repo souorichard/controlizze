@@ -1,5 +1,6 @@
 import { authAccounts } from './auth-accounts.ts'
 import { categories } from './categories.ts'
+import { invites } from './invites.ts'
 import { members } from './members.ts'
 import { organizations } from './organizations.ts'
 import { recurringTransactions } from './recurring-transactions.ts'
@@ -13,6 +14,7 @@ export const schema = {
   tokens,
   organizations,
   members,
+  invites,
   categories,
   transactions,
   recurringTransactions,
