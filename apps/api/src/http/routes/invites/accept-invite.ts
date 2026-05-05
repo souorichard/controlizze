@@ -68,7 +68,12 @@ export const acceptInvite: FastifyPluginAsyncZod = async (app) => {
           orgId: invite.orgId,
         })
 
-        await tx.delete(schema.invites).where(eq(schema.invites.id, inviteId))
+        await tx
+          .update(schema.invites)
+          .set({
+            status: 'ACCEPTED',
+          })
+          .where(eq(schema.invites.id, inviteId))
       })
 
       return reply.status(204).send()
