@@ -6,6 +6,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { emails } from '../../../services/emails/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 import { ConflictError } from '../../errors/conflict-error.ts'
@@ -96,8 +97,19 @@ export const createInvite: FastifyPluginAsyncZod = async (app) => {
           id: schema.invites.id,
         })
 
-      // todo: send email with code
-      // await sendInviteEmail(email, code)
+      const [author] = await db
+        .select({ name: schema.users.name })
+        .from(schema.users)
+        .where(eq(schema.users.id, userId))
+        .limit(1)
+
+      await emails.sendInviteEmail({
+        to: email,
+        code,
+        orgName: org.name,
+        authorName: author.name,
+        role,
+      })
 
       return reply.status(201).send({
         inviteId: invite.id,

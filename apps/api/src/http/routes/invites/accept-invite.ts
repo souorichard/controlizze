@@ -3,6 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { hashToken } from '../../../utils/hash-token.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -15,8 +16,8 @@ export const acceptInvite: FastifyPluginAsyncZod = async (app) => {
         tags: ['Invite'],
         summary: 'Accept invite',
         security: [{ bearerAuth: [] }],
-        params: z.object({
-          inviteId: z.uuid(),
+        querystring: z.object({
+          code: z.string(),
         }),
         response: {
           204: z.void(),
@@ -24,7 +25,9 @@ export const acceptInvite: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { inviteId } = request.params
+      const { code } = request.query
+
+      const codeHash = hashToken(code)
 
       const userId = await request.getCurrentUserId()
 
@@ -33,7 +36,7 @@ export const acceptInvite: FastifyPluginAsyncZod = async (app) => {
         .from(schema.invites)
         .where(
           and(
-            eq(schema.invites.id, inviteId),
+            eq(schema.invites.tokenHash, codeHash),
             eq(schema.invites.status, 'PENDING'),
             gt(schema.invites.expiresAt, new Date()),
           ),
@@ -41,7 +44,7 @@ export const acceptInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!invite) {
-        throw new NotFoundError('Invite not found or expired')
+        throw new BadRequestError('Invalid or expired invite')
       }
 
       const [user] = await db
@@ -73,7 +76,7 @@ export const acceptInvite: FastifyPluginAsyncZod = async (app) => {
           .set({
             status: 'ACCEPTED',
           })
-          .where(eq(schema.invites.id, inviteId))
+          .where(eq(schema.invites.id, invite.id))
       })
 
       return reply.status(204).send()

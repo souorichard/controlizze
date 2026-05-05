@@ -192,11 +192,11 @@ export const routes: Route[] = [
   },
   {
     plugin: acceptInvite,
-    prefix: '/invites/:inviteId/accept',
+    prefix: '/invites/accept',
   },
   {
     plugin: rejectInvite,
-    prefix: '/invites/:inviteId/reject',
+    prefix: '/invites/reject',
   },
 
   // Categories

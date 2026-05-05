@@ -1,5 +1,5 @@
 import { hash } from 'bcryptjs'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, gt } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -14,8 +14,10 @@ export const resetPassword: FastifyPluginAsyncZod = async (app) => {
       schema: {
         tags: ['Authentication'],
         summary: 'Reset password',
-        body: z.object({
+        querystring: z.object({
           code: z.string(),
+        }),
+        body: z.object({
           password: z
             .string()
             .min(1, 'Password is required')
@@ -27,7 +29,8 @@ export const resetPassword: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { code, password } = request.body
+      const { code } = request.query
+      const { password } = request.body
 
       const codeHash = hashToken(code)
 
@@ -41,7 +44,7 @@ export const resetPassword: FastifyPluginAsyncZod = async (app) => {
           and(
             eq(schema.tokens.tokenHash, codeHash),
             eq(schema.tokens.type, 'PASSWORD_RECOVER'),
-            eq(schema.tokens.expiresAt, new Date()),
+            gt(schema.tokens.expiresAt, new Date()),
           ),
         )
         .limit(1)

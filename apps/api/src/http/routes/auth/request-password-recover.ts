@@ -4,6 +4,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { emails } from '../../../services/emails/index.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 
 export const requestPasswordRecover: FastifyPluginAsyncZod = async (app) => {
@@ -27,6 +28,8 @@ export const requestPasswordRecover: FastifyPluginAsyncZod = async (app) => {
       const [userFromEmail] = await db
         .select({
           id: schema.users.id,
+          name: schema.users.name,
+          email: schema.users.email,
         })
         .from(schema.users)
         .where(eq(schema.users.email, email))
@@ -39,7 +42,7 @@ export const requestPasswordRecover: FastifyPluginAsyncZod = async (app) => {
       const code = randomBytes(32).toString('hex')
       const codeHash = hashToken(code)
 
-      const expiresAt = new Date(Date.now() + 1000 * 60 * 30) // 30 min
+      const expiresAt = new Date(Date.now() + 1000 * 60 * 60) // 1 hour
 
       await db.insert(schema.tokens).values({
         tokenHash: codeHash,
@@ -48,8 +51,11 @@ export const requestPasswordRecover: FastifyPluginAsyncZod = async (app) => {
         expiresAt,
       })
 
-      // todo: send email with code
-      // await sendRecoverPasswordEmail(user, code)
+      await emails.sendRecoverPasswordEmail({
+        to: userFromEmail.email,
+        code,
+        userName: userFromEmail.name,
+      })
 
       return reply.status(201).send()
     },
