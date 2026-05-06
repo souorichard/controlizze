@@ -5,6 +5,7 @@ import {
   authenticateWithPassword,
   requestPasswordRecover,
   resetPassword,
+  verifyEmail,
 } from './auth/index.ts'
 import {
   createCategory,
@@ -115,6 +116,10 @@ export const routes: Route[] = [
   {
     plugin: resetPassword,
     prefix: '/sessions/forgot-password/reset',
+  },
+  {
+    plugin: verifyEmail,
+    prefix: '/sessions/verify-email',
   },
 
   // Organizations

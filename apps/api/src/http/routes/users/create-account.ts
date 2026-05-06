@@ -1,9 +1,13 @@
+import { randomBytes } from 'node:crypto'
 import { hash } from 'bcryptjs'
+import dayjs from 'dayjs'
 import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { emails } from '../../../services/emails/index.ts'
+import { hashToken } from '../../../utils/hash-token.ts'
 import { ConflictError } from '../../errors/conflict-error.ts'
 
 export const createAccount: FastifyPluginAsyncZod = async (app) => {
@@ -19,7 +23,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
           password: z
             .string()
             .min(1, 'Password is required')
-            .min(8, 'Password must be at least 6 characters long'),
+            .min(8, 'Password must be at least 8 characters long'),
         }),
         response: {
           201: z.void(),
@@ -41,10 +45,33 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
 
       const passwordHash = await hash(password, 8)
 
-      await db.insert(schema.users).values({
-        name,
-        email,
-        passwordHash,
+      const code = randomBytes(32).toString('hex')
+      const codeHash = hashToken(code)
+
+      const expiresAt = dayjs(new Date()).add(24, 'hour').toDate()
+
+      await db.transaction(async (tx) => {
+        const [user] = await tx
+          .insert(schema.users)
+          .values({
+            name,
+            email,
+            passwordHash,
+          })
+          .returning()
+
+        await tx.insert(schema.tokens).values({
+          tokenHash: codeHash,
+          type: 'EMAIL_VERIFICATION',
+          userId: user.id,
+          expiresAt,
+        })
+      })
+
+      await emails.sendVerifyEmailEmail({
+        to: email,
+        code,
+        userName: name,
       })
 
       return reply.status(201).send()

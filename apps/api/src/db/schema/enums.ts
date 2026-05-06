@@ -2,7 +2,10 @@ import { pgEnum } from 'drizzle-orm/pg-core'
 
 export const accountProviderEnum = pgEnum('account_enum', ['GOOGLE', 'GITHUB'])
 
-export const tokenTypeEnum = pgEnum('token_type_enum', ['PASSWORD_RECOVER'])
+export const tokenTypeEnum = pgEnum('token_type_enum', [
+  'PASSWORD_RECOVER',
+  'EMAIL_VERIFICATION',
+])
 
 export const roleEnum = pgEnum('role_enum', ['OWNER', 'ADMIN', 'MEMBER'])
 
