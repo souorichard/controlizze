@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { and, count, eq, ilike } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -24,6 +24,17 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
         params: z.object({
           slug: z.string(),
         }),
+        querystring: z.object({
+          title: z
+            .string()
+            .min(3, 'Search term must be at least 3 characters')
+            .optional(),
+          type: typeSchema.optional(),
+          status: recurringStatusSchema.optional(),
+          frequency: frequencySchema.optional(),
+          page: z.coerce.number().min(1).default(1),
+          perPage: z.coerce.number().min(1).max(50).default(10),
+        }),
         response: {
           200: z.object({
             recurringTransactions: z.array(
@@ -47,12 +58,19 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
                 endDate: z.date().nullable(),
               }),
             ),
+            meta: z.object({
+              page: z.number(),
+              perPage: z.number(),
+              total: z.number(),
+              totalPages: z.number(),
+            }),
           }),
         },
       },
     },
     async (request, reply) => {
       const { slug } = request.params
+      const { title, type, status, frequency, page, perPage } = request.query
 
       const userId = await request.getCurrentUserId()
       const { org, membership } = await request.getUserMembership(slug)
@@ -65,7 +83,24 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
         )
       }
 
-      const allRecurringTransactions = await db
+      const filters = and(
+        eq(schema.recurringTransactions.orgId, org.id),
+        title
+          ? ilike(schema.recurringTransactions.title, `%${title}%`)
+          : undefined,
+        type ? eq(schema.recurringTransactions.type, type) : undefined,
+        status ? eq(schema.recurringTransactions.status, status) : undefined,
+        frequency
+          ? eq(schema.recurringTransactions.frequency, frequency)
+          : undefined,
+      )
+
+      const [{ total }] = await db
+        .select({ total: count() })
+        .from(schema.recurringTransactions)
+        .where(filters)
+
+      const recurringTransactions = await db
         .select({
           id: schema.recurringTransactions.id,
           title: schema.recurringTransactions.title,
@@ -88,10 +123,12 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
           schema.categories,
           eq(schema.recurringTransactions.categoryId, schema.categories.id),
         )
-        .where(eq(schema.recurringTransactions.orgId, org.id))
+        .where(filters)
+        .limit(perPage)
+        .offset((page - 1) * perPage)
 
-      const allRecurringTransactionsWithFormattedAmount =
-        allRecurringTransactions.map((transaction) => {
+      const recurringTransactionsWithFormattedAmount =
+        recurringTransactions.map((transaction) => {
           return {
             ...transaction,
             amount: centsToReal(transaction.amount),
@@ -99,7 +136,13 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
         })
 
       return {
-        recurringTransactions: allRecurringTransactionsWithFormattedAmount,
+        recurringTransactions: recurringTransactionsWithFormattedAmount,
+        meta: {
+          page,
+          perPage,
+          total,
+          totalPages: Math.ceil(total / perPage),
+        },
       }
     },
   )

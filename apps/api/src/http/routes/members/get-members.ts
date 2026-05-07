@@ -1,5 +1,5 @@
 import { roleSchema } from '@controlizze/rbac'
-import { asc, eq } from 'drizzle-orm'
+import { asc, count, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -8,7 +8,7 @@ import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
-export const getOrgMembers: FastifyPluginAsyncZod = async (app) => {
+export const getMembers: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
     '/',
     {
@@ -18,6 +18,10 @@ export const getOrgMembers: FastifyPluginAsyncZod = async (app) => {
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
+        }),
+        querystring: z.object({
+          page: z.coerce.number().min(1).default(1),
+          perPage: z.coerce.number().min(1).max(50).default(10),
         }),
         response: {
           200: z.object({
@@ -31,12 +35,19 @@ export const getOrgMembers: FastifyPluginAsyncZod = async (app) => {
                 userId: z.uuid(),
               }),
             ),
+            meta: z.object({
+              page: z.number(),
+              perPage: z.number(),
+              total: z.number(),
+              totalPages: z.number(),
+            }),
           }),
         },
       },
     },
     async (request, reply) => {
       const { slug } = request.params
+      const { page, perPage } = request.query
 
       const userId = await request.getCurrentUserId()
       const { org, membership } = await request.getUserMembership(slug)
@@ -48,6 +59,11 @@ export const getOrgMembers: FastifyPluginAsyncZod = async (app) => {
           `You're not allowed to see organization members`,
         )
       }
+
+      const [{ total }] = await db
+        .select({ total: count() })
+        .from(schema.members)
+        .where(eq(schema.members.orgId, org.id))
 
       const membersWithRole = await db
         .select({
@@ -61,10 +77,18 @@ export const getOrgMembers: FastifyPluginAsyncZod = async (app) => {
         .from(schema.members)
         .innerJoin(schema.users, eq(schema.members.userId, schema.users.id))
         .where(eq(schema.members.orgId, org.id))
+        .limit(perPage)
+        .offset((page - 1) * perPage)
         .orderBy(asc(schema.members.role))
 
       return {
         members: membersWithRole,
+        meta: {
+          page,
+          perPage,
+          total,
+          totalPages: Math.ceil(total / perPage),
+        },
       }
     },
   )

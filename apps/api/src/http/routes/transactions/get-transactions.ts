@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { and, count, eq, gte, ilike, lte } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -20,6 +20,19 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         params: z.object({
           slug: z.string(),
         }),
+        querystring: z.object({
+          title: z
+            .string()
+            .min(3, 'Search term must be at least 3 characters')
+            .optional(),
+          type: typeSchema.optional(),
+          status: statusSchema.optional(),
+          categoryId: z.uuid().optional(),
+          startDate: z.coerce.date().optional(),
+          endDate: z.coerce.date().optional(),
+          page: z.coerce.number().min(1).default(1),
+          perPage: z.coerce.number().min(1).max(50).default(10),
+        }),
         response: {
           200: z.object({
             transactions: z.array(
@@ -40,12 +53,28 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
                 transactionDate: z.date(),
               }),
             ),
+            meta: z.object({
+              page: z.number(),
+              perPage: z.number(),
+              total: z.number(),
+              totalPages: z.number(),
+            }),
           }),
         },
       },
     },
     async (request, reply) => {
       const { slug } = request.params
+      const {
+        title,
+        type,
+        status,
+        categoryId,
+        startDate,
+        endDate,
+        page,
+        perPage,
+      } = request.query
 
       const userId = await request.getCurrentUserId()
       const { org, membership } = await request.getUserMembership(slug)
@@ -58,7 +87,24 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         )
       }
 
-      const allTransactions = await db
+      const filters = and(
+        eq(schema.transactions.orgId, org.id),
+        title ? ilike(schema.transactions.title, `%${title}%`) : undefined,
+        type ? eq(schema.transactions.type, type) : undefined,
+        status ? eq(schema.transactions.status, status) : undefined,
+        categoryId ? eq(schema.transactions.categoryId, categoryId) : undefined,
+        startDate
+          ? gte(schema.transactions.transactionDate, startDate)
+          : undefined,
+        endDate ? lte(schema.transactions.transactionDate, endDate) : undefined,
+      )
+
+      const [{ total }] = await db
+        .select({ total: count() })
+        .from(schema.transactions)
+        .where(filters)
+
+      const transactions = await db
         .select({
           id: schema.transactions.id,
           title: schema.transactions.title,
@@ -78,9 +124,11 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
           schema.categories,
           eq(schema.transactions.categoryId, schema.categories.id),
         )
-        .where(eq(schema.transactions.orgId, org.id))
+        .where(filters)
+        .limit(perPage)
+        .offset((page - 1) * perPage)
 
-      const allTransactionsWithFormattedAmount = allTransactions.map(
+      const transactionsWithFormattedAmount = transactions.map(
         (transaction) => {
           return {
             ...transaction,
@@ -90,7 +138,13 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
       )
 
       return {
-        transactions: allTransactionsWithFormattedAmount,
+        transactions: transactionsWithFormattedAmount,
+        meta: {
+          page,
+          perPage,
+          total,
+          totalPages: Math.ceil(total / perPage),
+        },
       }
     },
   )

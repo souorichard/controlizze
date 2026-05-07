@@ -21,11 +21,7 @@ import { getInvites } from './invites/get-invites.ts'
 import { getPendingInvites } from './invites/get-pending-invites.ts'
 import { rejectInvite } from './invites/reject-invite.ts'
 import { revokeInvite } from './invites/revoke-invite.ts'
-import {
-  getOrgMembers,
-  removeMember,
-  updateMemberRole,
-} from './members/index.ts'
+import { getMembers, removeMember, updateMemberRole } from './members/index.ts'
 import { getBalanceEvolution } from './metrics/get-balance-evolution.ts'
 import { getTopExpenseCategories } from './metrics/get-top-expense-categories.ts'
 import { getTransactionsAmountMetrics } from './metrics/get-transactions-amount-metrics.ts'
@@ -162,7 +158,7 @@ export const routes: Route[] = [
 
   // Members
   {
-    plugin: getOrgMembers,
+    plugin: getMembers,
     prefix: '/orgs/:slug/members',
   },
   {

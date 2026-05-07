@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { and, count, eq, ilike } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -20,8 +20,17 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
         params: z.object({
           slug: z.string(),
         }),
+        querystring: z.object({
+          name: z
+            .string()
+            .min(3, 'Search term must be at least 3 characters')
+            .optional(),
+          type: typeSchema.optional(),
+          page: z.coerce.number().min(1).default(1),
+          perPage: z.coerce.number().min(1).max(50).default(10),
+        }),
         response: {
-          201: z.object({
+          200: z.object({
             categories: z.array(
               z.object({
                 id: z.uuid(),
@@ -35,12 +44,19 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
                 }),
               }),
             ),
+            meta: z.object({
+              page: z.number(),
+              perPage: z.number(),
+              total: z.number(),
+              totalPages: z.number(),
+            }),
           }),
         },
       },
     },
     async (request, reply) => {
       const { slug } = request.params
+      const { name, type, page, perPage } = request.query
 
       const userId = await request.getCurrentUserId()
       const { org, membership } = await request.getUserMembership(slug)
@@ -53,7 +69,18 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
         )
       }
 
-      const allCategories = await db
+      const filters = and(
+        eq(schema.categories.orgId, org.id),
+        name ? ilike(schema.categories.name, `%${name}%`) : undefined,
+        type ? eq(schema.categories.type, type) : undefined,
+      )
+
+      const [{ total }] = await db
+        .select({ total: count() })
+        .from(schema.categories)
+        .where(filters)
+
+      const categories = await db
         .select({
           id: schema.categories.id,
           name: schema.categories.name,
@@ -67,10 +94,18 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
         })
         .from(schema.categories)
         .innerJoin(users, eq(schema.categories.ownerId, users.id))
-        .where(eq(schema.categories.orgId, org.id))
+        .where(filters)
+        .limit(perPage)
+        .offset((page - 1) * perPage)
 
       return {
-        categories: allCategories,
+        categories,
+        meta: {
+          page,
+          perPage,
+          total,
+          totalPages: Math.ceil(total / perPage),
+        },
       }
     },
   )
