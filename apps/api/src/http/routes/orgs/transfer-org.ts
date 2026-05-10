@@ -33,7 +33,8 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
       const { transferToUserId } = request.body
 
       const userId = await request.getCurrentUserId()
-      const { org, membership } = await request.getUserMembership(slug)
+      await request.verifyEmailVerification(userId)
+      const { org, membership } = await request.getUserMembership(slug, userId)
 
       const authOrganization = organizationSchema.parse(org)
 

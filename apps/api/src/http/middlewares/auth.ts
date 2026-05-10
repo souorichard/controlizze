@@ -1,9 +1,11 @@
+import dayjs from 'dayjs'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 import { db } from '../../db/index.ts'
-import { members } from '../../db/schema/members.ts'
-import { organizations } from '../../db/schema/organizations.ts'
+import { schema } from '../../db/schema/index.ts'
+import { ForbiddenError } from '../errors/forbidden-error.ts'
+import { UnauthorizedError } from '../errors/unauthorized-error.ts'
 
 export const auth = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('preHandler', async (request) => {
@@ -17,17 +19,46 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
       }
     }
 
-    request.getUserMembership = async (slug: string) => {
-      const userId = await request.getCurrentUserId()
+    request.verifyEmailVerification = async (userId: string) => {
+      const [user] = await db
+        .select({
+          emailVerifiedAt: schema.users.emailVerifiedAt,
+          createdAt: schema.users.createdAt,
+        })
+        .from(schema.users)
+        .where(eq(schema.users.id, userId))
+        .limit(1)
 
+      if (!user) {
+        throw new UnauthorizedError('User not found')
+      }
+
+      if (!user.emailVerifiedAt) {
+        const hoursSinceCreation = dayjs().diff(dayjs(user.createdAt), 'hour')
+
+        if (hoursSinceCreation > 24) {
+          throw new ForbiddenError('Email verification required')
+        }
+      }
+    }
+
+    request.getUserMembership = async (slug: string, userId: string) => {
       const [member] = await db
         .select({
-          organization: organizations,
-          membership: members,
+          organization: schema.organizations,
+          membership: schema.members,
         })
-        .from(members)
-        .innerJoin(organizations, eq(members.orgId, organizations.id))
-        .where(and(eq(members.userId, userId), eq(organizations.slug, slug)))
+        .from(schema.members)
+        .innerJoin(
+          schema.organizations,
+          eq(schema.members.orgId, schema.organizations.id),
+        )
+        .where(
+          and(
+            eq(schema.members.userId, userId),
+            eq(schema.organizations.slug, slug),
+          ),
+        )
         .limit(1)
 
       if (!member) {

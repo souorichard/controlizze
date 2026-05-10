@@ -28,7 +28,8 @@ export const shutdownOrg: FastifyPluginAsyncZod = async (app) => {
       const { slug } = request.params
 
       const userId = await request.getCurrentUserId()
-      const { org, membership } = await request.getUserMembership(slug)
+      await request.verifyEmailVerification(userId)
+      const { org, membership } = await request.getUserMembership(slug, userId)
 
       const authOrganization = organizationSchema.parse(org)
 

@@ -45,6 +45,8 @@ export const getTransactionsPerPeriod: FastifyPluginAsyncZod = async (app) => {
       const { slug } = request.params
       const { lastMonths } = request.query
 
+      const userId = await request.getCurrentUserId()
+      await request.verifyEmailVerification(userId)
       const { org } = await request.getUserMembership(slug)
 
       const startDate = dayjs().subtract(lastMonths, 'months').startOf('month')

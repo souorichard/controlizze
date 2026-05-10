@@ -328,7 +328,11 @@ async function seed() {
   }
 }
 
-seed().catch((error) => {
-  console.error('Fatal error:', error)
-  process.exit(1)
-})
+seed()
+  .catch((error) => {
+    console.error('Fatal error:', error)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await db.$client.end()
+  })

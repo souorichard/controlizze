@@ -29,7 +29,9 @@ export const getOrgMembership: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { slug } = request.params
 
-      const { membership } = await request.getUserMembership(slug)
+      const userId = await request.getCurrentUserId()
+      await request.verifyEmailVerification(userId)
+      const { membership } = await request.getUserMembership(slug, userId)
 
       return {
         membership: {

@@ -31,6 +31,7 @@ export const getOrgs: FastifyPluginAsyncZod = async (app) => {
     },
     async (request, reply) => {
       const userId = await request.getCurrentUserId()
+      await request.verifyEmailVerification(userId)
 
       const orgs = await db
         .select({

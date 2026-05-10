@@ -50,7 +50,8 @@ export const getMembers: FastifyPluginAsyncZod = async (app) => {
       const { page, perPage } = request.query
 
       const userId = await request.getCurrentUserId()
-      const { org, membership } = await request.getUserMembership(slug)
+      await request.verifyEmailVerification(userId)
+      const { org, membership } = await request.getUserMembership(slug, userId)
 
       const { cannot } = getUserPermissions(userId, membership.role)
 

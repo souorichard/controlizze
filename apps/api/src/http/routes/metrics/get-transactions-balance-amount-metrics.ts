@@ -27,6 +27,8 @@ export const getTransactionsBalanceAmountMetrics: FastifyPluginAsyncZod =
       async (request, reply) => {
         const { slug } = request.params
 
+        const userId = await request.getCurrentUserId()
+        await request.verifyEmailVerification(userId)
         const { org } = await request.getUserMembership(slug)
 
         const [income, expense] = await Promise.all([

@@ -33,6 +33,8 @@ export const getTopExpenseCategories: FastifyPluginAsyncZod = async (app) => {
     async (request) => {
       const { slug } = request.params
 
+      const userId = await request.getCurrentUserId()
+      await request.verifyEmailVerification(userId)
       const { org } = await request.getUserMembership(slug)
 
       const amountSum = sql<number>`coalesce(sum(${schema.transactions.amount}), 0)`

@@ -41,6 +41,8 @@ export const getBalanceEvolution: FastifyPluginAsyncZod = async (app) => {
       const { slug } = request.params
       const { year } = request.query
 
+      const userId = await request.getCurrentUserId()
+      await request.verifyEmailVerification(userId)
       const { org } = await request.getUserMembership(slug)
 
       const start = dayjs().year(Number(year)).startOf('year')

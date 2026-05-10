@@ -27,6 +27,7 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
     },
     async (request, reply) => {
       const userId = await request.getCurrentUserId()
+      await request.verifyEmailVerification(userId)
 
       const { name, avatarUrl } = request.body
 

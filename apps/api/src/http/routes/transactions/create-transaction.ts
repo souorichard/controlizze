@@ -42,7 +42,8 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
       const { slug } = request.params
 
       const userId = await request.getCurrentUserId()
-      const { org, membership } = await request.getUserMembership(slug)
+      await request.verifyEmailVerification(userId)
+      const { org, membership } = await request.getUserMembership(slug, userId)
 
       const { cannot } = getUserPermissions(userId, membership.role)
 

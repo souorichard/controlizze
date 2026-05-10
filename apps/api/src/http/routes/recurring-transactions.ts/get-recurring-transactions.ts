@@ -73,7 +73,8 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
       const { title, type, status, frequency, page, perPage } = request.query
 
       const userId = await request.getCurrentUserId()
-      const { org, membership } = await request.getUserMembership(slug)
+      await request.verifyEmailVerification(userId)
+      const { org, membership } = await request.getUserMembership(slug, userId)
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
