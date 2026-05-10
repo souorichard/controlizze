@@ -8,6 +8,13 @@
       "when": 1777657379207,
       "tag": "0000_smart_proudstar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778429976414,
+      "tag": "0001_plain_randall_flagg",
+      "breakpoints": true
     }
   ]
 }

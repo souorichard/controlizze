@@ -1,0 +1,1 @@
+ALTER TYPE "public"."token_type_enum" ADD VALUE 'EMAIL_VERIFICATION';

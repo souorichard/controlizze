@@ -1,6 +1,7 @@
 export * from './authenticate-with-github.ts'
 export * from './authenticate-with-google.ts'
 export * from './authenticate-with-password.ts'
+export * from './create-account.ts'
 export * from './request-password-recover.ts'
 export * from './reset-password.ts'
 export * from './verify-email.ts'

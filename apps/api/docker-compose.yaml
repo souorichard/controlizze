@@ -8,4 +8,14 @@ services:
       POSTGRES_DB: controlizze-db
     ports:
       - "5432:5432"
+
+  postgres_test:
+    image: postgres:17
+    container_name: controlizze-db-test
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: controlizze-db-test
+    ports:
+      - "5433:5432"
     

@@ -15,7 +15,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
     '/',
     {
       schema: {
-        tags: ['User'],
+        tags: ['Authentication'],
         summary: 'Create a new account',
         body: z.object({
           name: z.string().min(1, 'Name is required'),

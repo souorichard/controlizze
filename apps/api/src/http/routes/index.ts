@@ -3,6 +3,7 @@ import {
   authenticateWithGithub,
   authenticateWithGoogle,
   authenticateWithPassword,
+  createAccount,
   requestPasswordRecover,
   resetPassword,
   verifyEmail,
@@ -52,7 +53,6 @@ import {
   updateTransaction,
 } from './transactions/index.ts'
 import {
-  createAccount,
   deleteAccount,
   getAccount,
   updateAccountAvatar,
@@ -72,10 +72,6 @@ export const routes: Route[] = [
 
   // Users
   {
-    plugin: createAccount,
-    prefix: '/accounts',
-  },
-  {
     plugin: getAccount,
     prefix: '/me',
   },
@@ -93,6 +89,10 @@ export const routes: Route[] = [
   },
 
   // Authentication
+  {
+    plugin: createAccount,
+    prefix: '/accounts',
+  },
   {
     plugin: authenticateWithPassword,
     prefix: '/sessions',
