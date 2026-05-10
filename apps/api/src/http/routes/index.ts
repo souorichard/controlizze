@@ -211,15 +211,15 @@ export const routes: Route[] = [
   },
   {
     plugin: getCategory,
-    prefix: '/orgs/:slug/categories/:categorySlug',
+    prefix: '/orgs/:slug/categories/:categoryId',
   },
   {
     plugin: updateCategory,
-    prefix: '/orgs/:slug/categories/:categorySlug',
+    prefix: '/orgs/:slug/categories/:categoryId',
   },
   {
     plugin: deleteCategory,
-    prefix: '/orgs/:slug/categories/:categorySlug',
+    prefix: '/orgs/:slug/categories/:categoryId',
   },
 
   // Transactions

@@ -4,6 +4,7 @@ import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
+import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 import { typeSchema } from '../../schemas/index.ts'
@@ -75,6 +76,10 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
           ),
         )
         .limit(1)
+
+      if (!category) {
+        throw new NotFoundError('Category not found')
+      }
 
       return {
         category,

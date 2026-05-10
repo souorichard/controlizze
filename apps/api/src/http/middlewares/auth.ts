@@ -15,7 +15,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
 
         return sub
       } catch {
-        throw new Error('Invalid auth token')
+        throw new UnauthorizedError('Invalid auth token')
       }
     }
 
@@ -62,7 +62,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
         .limit(1)
 
       if (!member) {
-        throw new Error(`You're not a member of this organization`)
+        throw new UnauthorizedError(`You're not a member of this organization`)
       }
 
       return {

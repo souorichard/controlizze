@@ -1,10 +1,8 @@
-import { hash } from 'bcryptjs'
 import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { db } from '../../../db/index.ts'
-import { schema } from '../../../db/schema/index.ts'
 import { createTestApp } from '../../helpers/app.ts'
 import { cleanDatabase } from '../../helpers/db.ts'
+import { makeUser } from '../../helpers/factories.ts'
 
 describe('POST /sessions/password', () => {
   let app: Awaited<ReturnType<typeof createTestApp>>
@@ -12,12 +10,6 @@ describe('POST /sessions/password', () => {
   beforeEach(async () => {
     app = await createTestApp()
     await cleanDatabase()
-
-    await db.insert(schema.users).values({
-      name: 'John Doe',
-      email: 'john@example.com',
-      passwordHash: await hash('12345678', 8),
-    })
   })
 
   afterEach(async () => {
@@ -25,6 +17,8 @@ describe('POST /sessions/password', () => {
   })
 
   it('should be able to authenticate with valid credentials', async () => {
+    await makeUser()
+
     const response = await supertest(app.server).post('/sessions').send({
       email: 'john@example.com',
       password: '12345678',
@@ -36,6 +30,8 @@ describe('POST /sessions/password', () => {
   })
 
   it('should not be able to authenticate with wrong password', async () => {
+    await makeUser()
+
     const response = await supertest(app.server).post('/sessions').send({
       email: 'john@example.com',
       password: 'wrong-password',
@@ -54,11 +50,7 @@ describe('POST /sessions/password', () => {
   })
 
   it('should not be able to authenticate without password set', async () => {
-    await db.insert(schema.users).values({
-      name: 'No Password',
-      email: 'nopassword@example.com',
-      passwordHash: null,
-    })
+    await makeUser({ email: 'nopassword@example.com', passwordHash: null })
 
     const response = await supertest(app.server).post('/sessions').send({
       email: 'nopassword@example.com',

@@ -48,7 +48,7 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
 
       const { name, color, type } = request.body
 
-      const category = await db
+      const [category] = await db
         .select({
           id: schema.categories.id,
         })

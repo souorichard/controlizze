@@ -1,10 +1,9 @@
 import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { db } from '../../../db/index.ts'
-import { schema } from '../../../db/schema/index.ts'
 import * as emailsModule from '../../../services/emails/index.ts'
 import { createTestApp } from '../../helpers/app.ts'
 import { cleanDatabase } from '../../helpers/db.ts'
+import { makeUser } from '../../helpers/factories.ts'
 
 vi.mock('../../../services/emails/index.ts', () => ({
   emails: {
@@ -21,12 +20,6 @@ describe('POST /sessions/forgot-password', () => {
     vi.clearAllMocks()
     app = await createTestApp()
     await cleanDatabase()
-
-    await db.insert(schema.users).values({
-      name: 'John Doe',
-      email: 'john@example.com',
-      passwordHash: null,
-    })
   })
 
   afterEach(async () => {
@@ -34,6 +27,8 @@ describe('POST /sessions/forgot-password', () => {
   })
 
   it('should be able to send recovery email when user exists', async () => {
+    await makeUser()
+
     const response = await supertest(app.server)
       .post('/sessions/forgot-password')
       .send({ email: 'john@example.com' })

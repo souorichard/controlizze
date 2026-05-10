@@ -8,35 +8,14 @@ import { schema } from '../../../db/schema/index.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 import { createTestApp } from '../../helpers/app.ts'
 import { cleanDatabase } from '../../helpers/db.ts'
+import { makeUser } from '../../helpers/factories.ts'
 
 describe('POST /sessions/verify-email', () => {
   let app: Awaited<ReturnType<typeof createTestApp>>
-  let userId: string
-  let validCode: string
 
   beforeEach(async () => {
     app = await createTestApp()
     await cleanDatabase()
-
-    const [user] = await db
-      .insert(schema.users)
-      .values({
-        name: 'John Doe',
-        email: 'john@example.com',
-        passwordHash: null,
-      })
-      .returning({ id: schema.users.id })
-
-    userId = user.id
-    validCode = randomBytes(32).toString('hex')
-    const tokenHash = hashToken(validCode)
-
-    await db.insert(schema.tokens).values({
-      tokenHash,
-      type: 'EMAIL_VERIFICATION',
-      userId,
-      expiresAt: dayjs().add(24, 'hour').toDate(),
-    })
   })
 
   afterEach(async () => {
@@ -44,18 +23,28 @@ describe('POST /sessions/verify-email', () => {
   })
 
   it('should be able to verify email with valid token', async () => {
+    const user = await makeUser()
+    const code = randomBytes(32).toString('hex')
+
+    await db.insert(schema.tokens).values({
+      tokenHash: hashToken(code),
+      type: 'EMAIL_VERIFICATION',
+      userId: user.id,
+      expiresAt: dayjs().add(24, 'hour').toDate(),
+    })
+
     const response = await supertest(app.server).post(
-      `/sessions/verify-email?code=${validCode}`,
+      `/sessions/verify-email?code=${code}`,
     )
 
     expect(response.status).toBe(204)
 
-    const [user] = await db
+    const [updated] = await db
       .select({ emailVerifiedAt: schema.users.emailVerifiedAt })
       .from(schema.users)
-      .where(eq(schema.users.id, userId))
+      .where(eq(schema.users.id, user.id))
 
-    expect(user.emailVerifiedAt).not.toBeNull()
+    expect(updated.emailVerifiedAt).not.toBeNull()
   })
 
   it('should not be able to verify email with invalid token', async () => {
@@ -67,17 +56,18 @@ describe('POST /sessions/verify-email', () => {
   })
 
   it('should not be able to verify email with expired token', async () => {
-    const expiredCode = randomBytes(32).toString('hex')
+    const user = await makeUser()
+    const code = randomBytes(32).toString('hex')
 
     await db.insert(schema.tokens).values({
-      tokenHash: hashToken(expiredCode),
+      tokenHash: hashToken(code),
       type: 'EMAIL_VERIFICATION',
-      userId,
+      userId: user.id,
       expiresAt: dayjs().subtract(1, 'hour').toDate(),
     })
 
     const response = await supertest(app.server).post(
-      `/sessions/verify-email?code=${expiredCode}`,
+      `/sessions/verify-email?code=${code}`,
     )
 
     expect(response.status).toBe(400)

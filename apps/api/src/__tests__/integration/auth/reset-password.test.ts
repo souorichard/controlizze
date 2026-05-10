@@ -9,35 +9,14 @@ import { schema } from '../../../db/schema/index.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 import { createTestApp } from '../../helpers/app.ts'
 import { cleanDatabase } from '../../helpers/db.ts'
+import { makeUser } from '../../helpers/factories.ts'
 
 describe('POST /sessions/forgot-password/reset', () => {
   let app: Awaited<ReturnType<typeof createTestApp>>
-  let userId: string
-  let validCode: string
 
   beforeEach(async () => {
     app = await createTestApp()
     await cleanDatabase()
-
-    const [user] = await db
-      .insert(schema.users)
-      .values({
-        name: 'John Doe',
-        email: 'john@example.com',
-        passwordHash: null,
-      })
-      .returning({ id: schema.users.id })
-
-    userId = user.id
-    validCode = randomBytes(32).toString('hex')
-    const tokenHash = hashToken(validCode)
-
-    await db.insert(schema.tokens).values({
-      tokenHash,
-      type: 'PASSWORD_RECOVER',
-      userId,
-      expiresAt: dayjs().add(1, 'hour').toDate(),
-    })
   })
 
   afterEach(async () => {
@@ -45,23 +24,32 @@ describe('POST /sessions/forgot-password/reset', () => {
   })
 
   it('should be able to reset password with valid token', async () => {
+    const user = await makeUser()
+    const code = randomBytes(32).toString('hex')
+
+    await db.insert(schema.tokens).values({
+      tokenHash: hashToken(code),
+      type: 'PASSWORD_RECOVER',
+      userId: user.id,
+      expiresAt: dayjs().add(1, 'hour').toDate(),
+    })
+
     const response = await supertest(app.server)
-      .post(`/sessions/forgot-password/reset?code=${validCode}`)
+      .post(`/sessions/forgot-password/reset?code=${code}`)
       .send({ password: 'newpassword123' })
 
     expect(response.status).toBe(204)
 
-    const [user] = await db
+    const [updated] = await db
       .select({ passwordHash: schema.users.passwordHash })
       .from(schema.users)
-      .where(eq(schema.users.id, userId))
+      .where(eq(schema.users.id, user.id))
 
-    expect(user.passwordHash).not.toBeNull()
+    expect(updated.passwordHash).not.toBeNull()
     const passwordUpdated = await compare(
       'newpassword123',
-      user.passwordHash as string,
+      updated.passwordHash as string,
     )
-
     expect(passwordUpdated).toBe(true)
   })
 
@@ -74,15 +62,18 @@ describe('POST /sessions/forgot-password/reset', () => {
   })
 
   it('should not be able to reset password with expired token', async () => {
+    const user = await makeUser()
+    const code = randomBytes(32).toString('hex')
+
     await db.insert(schema.tokens).values({
-      tokenHash: hashToken('expiredcode'),
+      tokenHash: hashToken(code),
       type: 'PASSWORD_RECOVER',
-      userId,
+      userId: user.id,
       expiresAt: dayjs().subtract(1, 'hour').toDate(),
     })
 
     const response = await supertest(app.server)
-      .post('/sessions/forgot-password/reset?code=expiredcode')
+      .post(`/sessions/forgot-password/reset?code=${code}`)
       .send({ password: 'newpassword123' })
 
     expect(response.status).toBe(400)
