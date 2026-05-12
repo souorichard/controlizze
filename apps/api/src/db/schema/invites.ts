@@ -29,7 +29,6 @@ export const invites = pgTable(
   },
   (table) => [
     unique('invites_token_hash_unique').on(table.tokenHash),
-    unique('invites_email_unique').on(table.email),
     unique('invites_email_org_id_unique').on(table.email, table.orgId),
   ],
 )

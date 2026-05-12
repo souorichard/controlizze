@@ -1,6 +1,9 @@
+import { randomBytes } from 'node:crypto'
 import { hash } from 'bcryptjs'
+import dayjs from 'dayjs'
 import { db } from '../../db/index.ts'
 import { schema } from '../../db/schema/index.ts'
+import { hashToken } from '../../utils/hash-token.ts'
 
 export async function makeUser(
   override?: Partial<typeof schema.users.$inferInsert>,
@@ -68,4 +71,28 @@ export async function makeCategory(
     .returning()
 
   return category
+}
+
+export async function makeInvite(
+  orgId: string,
+  authorId: string,
+  email: string,
+  override?: Partial<typeof schema.invites.$inferInsert>,
+) {
+  const code = randomBytes(32).toString('hex')
+
+  const [invite] = await db
+    .insert(schema.invites)
+    .values({
+      email,
+      role: 'MEMBER',
+      tokenHash: hashToken(code),
+      orgId,
+      authorId,
+      expiresAt: dayjs().add(7, 'days').toDate(),
+      ...override,
+    })
+    .returning()
+
+  return { invite, code }
 }

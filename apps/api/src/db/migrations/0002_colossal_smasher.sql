@@ -1,0 +1,1 @@
+ALTER TABLE "invites" DROP CONSTRAINT "invites_email_unique";
