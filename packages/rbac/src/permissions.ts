@@ -20,6 +20,8 @@ export const permissions: Record<Role, PermissionsRole> = {
     can('read', 'User')
     can('update', 'User', { id: { $eq: user.id } })
 
+    can('read', 'Member')
+
     cannot(['update', 'delete'], 'Member')
     can(['update', 'delete'], 'Member', {
       id: { $ne: user.id },
@@ -37,6 +39,8 @@ export const permissions: Record<Role, PermissionsRole> = {
     can('update', 'User', { id: { $eq: user.id } })
 
     can(['read', 'leave'], 'Organization')
+
+    can('read', 'Member')
 
     can(['create', 'read'], 'Transaction')
     can(['update', 'delete'], 'Transaction', {

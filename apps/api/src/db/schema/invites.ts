@@ -18,8 +18,8 @@ export const invites = pgTable(
 
     status: inviteStatusEnum().notNull().default('PENDING'),
 
-    expiresAt: timestamp().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 
     authorId: uuid().references(() => users.id, { onDelete: 'set null' }),
 

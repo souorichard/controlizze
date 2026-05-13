@@ -34,7 +34,7 @@ export const removeMember: FastifyPluginAsyncZod = async (app) => {
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('delete', 'User')) {
+      if (cannot('delete', 'Member')) {
         throw new UnauthorizedError(
           `You're not allowed to remove members from organization`,
         )

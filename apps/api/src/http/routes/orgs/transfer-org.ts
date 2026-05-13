@@ -51,8 +51,8 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
         .from(schema.members)
         .where(
           and(
-            eq(schema.members.orgId, schema.organizations.id),
-            eq(schema.members.userId, userId),
+            eq(schema.members.orgId, org.id),
+            eq(schema.members.userId, transferToUserId),
           ),
         )
         .limit(1)

@@ -13,7 +13,7 @@ declare module 'fastify' {
     verifyEmailVerification(userId: string): Promise<void>
     getUserMembership(
       slug: string,
-      userId?: string,
+      userId: string,
     ): Promise<{ org: Organization; membership: Member }>
   }
 }

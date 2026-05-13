@@ -38,7 +38,7 @@ export const updateMemberRole: FastifyPluginAsyncZod = async (app) => {
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('update', 'User')) {
+      if (cannot('update', 'Member')) {
         throw new UnauthorizedError(`You're not allowed to update this member`)
       }
 

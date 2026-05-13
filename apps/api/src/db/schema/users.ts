@@ -14,14 +14,14 @@ export const users = pgTable(
 
     passwordHash: text(),
 
-    emailVerifiedAt: timestamp(),
+    emailVerifiedAt: timestamp({ withTimezone: true }),
 
-    lastLoginAt: timestamp(),
+    lastLoginAt: timestamp({ withTimezone: true }),
 
     avatarUrl: text(),
     avatarKey: text(),
 
-    createdAt: timestamp().notNull().defaultNow(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [unique('users_email_unique').on(table.email)],
 )

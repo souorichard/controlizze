@@ -21,7 +21,7 @@ export const categories = pgTable(
       .notNull()
       .references(() => organizations.id, { onDelete: 'cascade' }),
 
-    createdAt: timestamp().notNull().defaultNow(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     unique('categories_org_id_name_type_unique').on(

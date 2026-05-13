@@ -32,7 +32,7 @@ export const organizations = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
 
-    createdAt: timestamp().notNull().defaultNow(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     unique('organizations_slug_unique').on(table.slug),

@@ -50,7 +50,12 @@ export async function makeMember(
   orgId: string,
   role: 'ADMIN' | 'MEMBER' = 'MEMBER',
 ) {
-  await db.insert(schema.members).values({ userId, orgId, role })
+  const [member] = await db
+    .insert(schema.members)
+    .values({ userId, orgId, role })
+    .returning()
+
+  return member
 }
 
 export async function makeCategory(

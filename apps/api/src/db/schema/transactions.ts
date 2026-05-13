@@ -32,7 +32,7 @@ export const transactions = pgTable(
     amount: integer().notNull(),
     status: statusEnum().notNull().default('PENDING'),
 
-    transactionDate: timestamp().notNull().defaultNow(),
+    transactionDate: timestamp({ withTimezone: true }).notNull().defaultNow(),
 
     recurringTransactionId: uuid().references(() => recurringTransactions.id, {
       onDelete: 'set null',
@@ -46,7 +46,7 @@ export const transactions = pgTable(
       .notNull()
       .references(() => organizations.id, { onDelete: 'cascade' }),
 
-    createdAt: timestamp().notNull().defaultNow(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('transactions_org_id_transaction_date_idx').on(

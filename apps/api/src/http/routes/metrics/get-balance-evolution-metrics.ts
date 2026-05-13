@@ -8,7 +8,9 @@ import { schema } from '../../../db/schema/index.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { auth } from '../../middlewares/auth.ts'
 
-export const getBalanceEvolution: FastifyPluginAsyncZod = async (app) => {
+export const getBalanceEvolutionMetrics: FastifyPluginAsyncZod = async (
+  app,
+) => {
   app.register(auth).get(
     '/',
     {
@@ -43,7 +45,7 @@ export const getBalanceEvolution: FastifyPluginAsyncZod = async (app) => {
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
-      const { org } = await request.getUserMembership(slug)
+      const { org } = await request.getUserMembership(slug, userId)
 
       const start = dayjs().year(Number(year)).startOf('year')
       const end = dayjs().year(Number(year)).endOf('year')

@@ -7,7 +7,9 @@ import { schema } from '../../../db/schema/index.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { auth } from '../../middlewares/auth.ts'
 
-export const getTopExpenseCategories: FastifyPluginAsyncZod = async (app) => {
+export const getTopExpenseCategoriesMetrics: FastifyPluginAsyncZod = async (
+  app,
+) => {
   app.register(auth).get(
     '/',
     {
@@ -35,7 +37,7 @@ export const getTopExpenseCategories: FastifyPluginAsyncZod = async (app) => {
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
-      const { org } = await request.getUserMembership(slug)
+      const { org } = await request.getUserMembership(slug, userId)
 
       const amountSum = sql<number>`coalesce(sum(${schema.transactions.amount}), 0)`
 

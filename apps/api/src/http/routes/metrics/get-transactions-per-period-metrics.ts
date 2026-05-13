@@ -14,7 +14,9 @@ type PeriodTransaction = {
   expenses: number
 }
 
-export const getTransactionsPerPeriod: FastifyPluginAsyncZod = async (app) => {
+export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
+  app,
+) => {
   app.register(auth).get(
     '/',
     {
@@ -47,7 +49,7 @@ export const getTransactionsPerPeriod: FastifyPluginAsyncZod = async (app) => {
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
-      const { org } = await request.getUserMembership(slug)
+      const { org } = await request.getUserMembership(slug, userId)
 
       const startDate = dayjs().subtract(lastMonths, 'months').startOf('month')
       const endDate = dayjs().endOf('day')

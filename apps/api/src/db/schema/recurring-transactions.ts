@@ -33,11 +33,11 @@ export const recurringTransactions = pgTable(
     frequency: frequencyEnum().notNull().default('MONTHLY'),
     interval: integer().notNull().default(1),
 
-    startDate: timestamp().notNull(),
-    endDate: timestamp(),
+    startDate: timestamp({ withTimezone: true }).notNull(),
+    endDate: timestamp({ withTimezone: true }),
 
-    nextExecutionDate: timestamp().notNull(),
-    lastGeneratedAt: timestamp(),
+    nextExecutionDate: timestamp({ withTimezone: true }).notNull(),
+    lastGeneratedAt: timestamp({ withTimezone: true }),
 
     ownerId: uuid()
       .notNull()
@@ -47,7 +47,7 @@ export const recurringTransactions = pgTable(
       .notNull()
       .references(() => organizations.id, { onDelete: 'cascade' }),
 
-    createdAt: timestamp().notNull().defaultNow(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('recurring_transactions_org_id_idx').on(table.orgId),

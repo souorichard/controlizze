@@ -25,8 +25,8 @@ export const tokens = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
 
-    expiresAt: timestamp().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     unique('tokens_token_hash_unique').on(table.tokenHash),

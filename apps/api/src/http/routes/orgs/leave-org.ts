@@ -64,7 +64,7 @@ export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
         .delete(schema.members)
         .where(
           and(
-            eq(schema.members.orgId, schema.organizations.id),
+            eq(schema.members.orgId, org.id),
             eq(schema.members.userId, userId),
           ),
         )

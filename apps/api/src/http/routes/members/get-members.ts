@@ -55,7 +55,7 @@ export const getMembers: FastifyPluginAsyncZod = async (app) => {
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('read', 'User')) {
+      if (cannot('read', 'Member')) {
         throw new UnauthorizedError(
           `You're not allowed to see organization members`,
         )

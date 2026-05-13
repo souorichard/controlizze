@@ -15,19 +15,23 @@ import {
   getCategory,
   updateCategory,
 } from './categories/index.ts'
-import { acceptInvite } from './invites/accept-invite.ts'
-import { createInvite } from './invites/create-invite.ts'
-import { getInvite } from './invites/get-invite.ts'
-import { getInvites } from './invites/get-invites.ts'
-import { getPendingInvites } from './invites/get-pending-invites.ts'
-import { rejectInvite } from './invites/reject-invite.ts'
-import { revokeInvite } from './invites/revoke-invite.ts'
+import {
+  acceptInvite,
+  createInvite,
+  getInvite,
+  getInvites,
+  getPendingInvites,
+  rejectInvite,
+  revokeInvite,
+} from './invites/index.ts'
 import { getMembers, removeMember, updateMemberRole } from './members/index.ts'
-import { getBalanceEvolution } from './metrics/get-balance-evolution.ts'
-import { getTopExpenseCategories } from './metrics/get-top-expense-categories.ts'
-import { getTransactionsAmountMetrics } from './metrics/get-transactions-amount-metrics.ts'
-import { getTransactionsBalanceAmountMetrics } from './metrics/get-transactions-balance-amount-metrics.ts'
-import { getTransactionsPerPeriod } from './metrics/get-transactions-per-period.ts'
+import {
+  getBalanceEvolutionMetrics,
+  getTopExpenseCategoriesMetrics,
+  getTransactionsAmountMetrics,
+  getTransactionsBalanceAmountMetrics,
+  getTransactionsPerPeriodMetrics,
+} from './metrics/index.ts'
 import {
   createOrg,
   getOrg,
@@ -268,15 +272,15 @@ export const routes: Route[] = [
     prefix: '/orgs/:slug/metrics/transactions-balance',
   },
   {
-    plugin: getTransactionsPerPeriod,
+    plugin: getTransactionsPerPeriodMetrics,
     prefix: '/orgs/:slug/metrics/transactions-per-period',
   },
   {
-    plugin: getTopExpenseCategories,
+    plugin: getTopExpenseCategoriesMetrics,
     prefix: '/orgs/:slug/metrics/top-expense-categories',
   },
   {
-    plugin: getBalanceEvolution,
+    plugin: getBalanceEvolutionMetrics,
     prefix: '/orgs/:slug/metrics/balance-evolution',
   },
 ]
