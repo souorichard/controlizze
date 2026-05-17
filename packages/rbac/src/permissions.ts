@@ -30,7 +30,7 @@ export const permissions: Record<Role, PermissionsRole> = {
 
     can(['read', 'leave'], 'Organization')
 
-    can('manage', ['Transaction', 'Category'])
+    can('manage', ['Transaction', 'RecurringTransaction', 'Category'])
 
     can(['create', 'read', 'revoke'], 'Invite')
   },
@@ -42,8 +42,8 @@ export const permissions: Record<Role, PermissionsRole> = {
 
     can('read', 'Member')
 
-    can(['create', 'read'], 'Transaction')
-    can(['update', 'delete'], 'Transaction', {
+    can(['create', 'read'], ['Transaction', 'RecurringTransaction'])
+    can(['update', 'delete'], ['Transaction', 'RecurringTransaction'], {
       ownerId: { $eq: user.id },
     })
 
