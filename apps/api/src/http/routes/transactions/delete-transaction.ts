@@ -1,3 +1,4 @@
+import { transactionSchema } from '@controlizze/rbac'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
@@ -34,13 +35,10 @@ export const deleteTransaction: FastifyPluginAsyncZod = async (app) => {
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('delete', 'Transaction')) {
-        throw new UnauthorizedError(`You're not allowed to delete transactions`)
-      }
-
       const [transaction] = await db
         .select({
           id: schema.transactions.id,
+          ownerId: schema.transactions.ownerId,
         })
         .from(schema.transactions)
         .where(
@@ -53,6 +51,14 @@ export const deleteTransaction: FastifyPluginAsyncZod = async (app) => {
 
       if (!transaction) {
         throw new NotFoundError('Transaction not found')
+      }
+
+      const authTransaction = transactionSchema.parse(transaction)
+
+      if (cannot('delete', authTransaction)) {
+        throw new UnauthorizedError(
+          `You're not allowed to delete this transaction`,
+        )
       }
 
       await db

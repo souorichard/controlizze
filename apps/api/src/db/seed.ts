@@ -185,7 +185,7 @@ async function seed() {
         type: 'EXPENSE',
         categoryId: categoryExpenseFood.id,
         amount: 4500, // $45.00
-        status: 'COMPLETED',
+        status: 'PAID',
         transactionDate: oneWeekAgo,
         ownerId: user1.id,
         orgId: org1.id,
@@ -196,7 +196,7 @@ async function seed() {
         type: 'INCOME',
         categoryId: categoryIncomeSalary.id,
         amount: 500000, // $5000.00
-        status: 'COMPLETED',
+        status: 'PAID',
         transactionDate: twoWeeksAgo,
         ownerId: user1.id,
         orgId: org1.id,
@@ -207,7 +207,7 @@ async function seed() {
         type: 'EXPENSE',
         categoryId: categoryExpenseTransport.id,
         amount: 6000, // $60.00
-        status: 'COMPLETED',
+        status: 'PAID',
         transactionDate: now,
         ownerId: user2.id,
         orgId: org1.id,
@@ -229,7 +229,7 @@ async function seed() {
         type: 'INCOME',
         categoryId: categoryIncomeBonuses.id,
         amount: 50000, // $500.00
-        status: 'COMPLETED',
+        status: 'PAID',
         transactionDate: oneWeekAgo,
         ownerId: user3.id,
         orgId: org1.id,
@@ -321,7 +321,7 @@ async function seed() {
 
     console.log(`✅ Created ${4} recurring transactions`)
 
-    console.log('✨ Database seed completed successfully!')
+    console.log('✨ Database seed paid successfully!')
   } catch (error) {
     console.error('❌ Error seeding database:', error)
     throw error

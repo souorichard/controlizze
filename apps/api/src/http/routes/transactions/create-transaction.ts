@@ -8,7 +8,7 @@ import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { statusSchema, typeSchema } from '../../schemas/index.ts'
+import { statusSchema, typeSchema } from '../../schemas.ts'
 
 export const createTransaction: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).post(
@@ -24,10 +24,10 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
         body: z.object({
           title: z.string(),
           description: z.string().nullable().optional(),
-          type: typeSchema,
+          type: typeSchema.default('EXPENSE'),
           categoryId: z.uuid(),
           amount: z.coerce.number(),
-          status: statusSchema,
+          status: statusSchema.default('PENDING'),
           transactionDate: z.coerce.date().optional(),
           recurringTransactionId: z.uuid().nullable().optional(),
         }),

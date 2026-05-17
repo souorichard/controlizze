@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import type z from 'zod'
-import type { frequencySchema } from './../../http/schemas/index.ts'
+import type { frequencySchema } from './../../http/schemas.ts'
 
 type Frequency = z.infer<typeof frequencySchema>
 

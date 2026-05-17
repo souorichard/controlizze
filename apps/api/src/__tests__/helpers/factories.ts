@@ -101,3 +101,52 @@ export async function makeInvite(
 
   return { invite, code }
 }
+
+export async function makeRecurringTransaction(
+  userId: string,
+  orgId: string,
+  categoryId: string,
+  override?: Partial<typeof schema.recurringTransactions.$inferInsert>,
+) {
+  const [recurringTransaction] = await db
+    .insert(schema.recurringTransactions)
+    .values({
+      title: 'Monthly Salary',
+      type: 'INCOME',
+      amount: 500000,
+      status: 'ACTIVE',
+      frequency: 'MONTHLY',
+      interval: 1,
+      startDate: dayjs().toDate(),
+      nextExecutionDate: dayjs().add(1, 'month').toDate(),
+      ownerId: userId,
+      orgId,
+      categoryId,
+      ...override,
+    })
+    .returning()
+
+  return recurringTransaction
+}
+
+export async function makeTransaction(
+  userId: string,
+  orgId: string,
+  override?: Partial<typeof schema.transactions.$inferInsert>,
+) {
+  const [transaction] = await db
+    .insert(schema.transactions)
+    .values({
+      title: 'Test Transaction',
+      type: 'EXPENSE',
+      amount: 10000,
+      status: 'PAID',
+      transactionDate: new Date(),
+      ownerId: userId,
+      orgId,
+      ...override,
+    })
+    .returning()
+
+  return transaction
+}

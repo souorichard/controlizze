@@ -7,7 +7,7 @@ import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { inviteStatusSchema } from '../../schemas/index.ts'
+import { inviteStatusSchema } from '../../schemas.ts'
 
 export const getInvites: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(

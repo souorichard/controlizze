@@ -20,6 +20,7 @@ export const deleteAccount: FastifyPluginAsyncZod = async (app) => {
     },
     async (request, reply) => {
       const userId = await request.getCurrentUserId()
+
       await request.verifyEmailVerification(userId)
 
       await db.delete(schema.users).where(eq(schema.users.id, userId))

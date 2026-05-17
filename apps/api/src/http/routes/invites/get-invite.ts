@@ -6,7 +6,7 @@ import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
-import { inviteStatusSchema } from '../../schemas/index.ts'
+import { inviteStatusSchema } from '../../schemas.ts'
 
 export const getInvite: FastifyPluginAsyncZod = async (app) => {
   app.get(

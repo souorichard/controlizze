@@ -48,7 +48,7 @@ import {
   deleteRecurringTransaction,
   getRecurringTransactions,
   updateRecurringTransaction,
-} from './recurring-transactions.ts/index.ts'
+} from './recurring-transactions/index.ts'
 import { healthCheck } from './server/index.ts'
 import {
   createTransaction,

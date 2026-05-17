@@ -7,7 +7,7 @@ import { centsToReal } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { statusSchema, typeSchema } from '../../schemas/index.ts'
+import { statusSchema, typeSchema } from '../../schemas.ts'
 
 export const getTransactions: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(

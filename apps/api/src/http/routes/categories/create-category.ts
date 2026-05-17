@@ -5,7 +5,7 @@ import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { typeSchema } from '../../schemas/index.ts'
+import { typeSchema } from '../../schemas.ts'
 
 export const createCategory: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).post(

@@ -3,6 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { calculateNextExecutionDate } from '../../../services/recurring-transactions/calculate-next-execution-date.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
@@ -12,31 +13,30 @@ import {
   frequencySchema,
   recurringStatusSchema,
   typeSchema,
-} from '../../schemas/index.ts'
+} from '../../schemas.ts'
 
-export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
+export const createRecurringTransaction: FastifyPluginAsyncZod = async (
   app,
 ) => {
-  app.register(auth).put(
+  app.register(auth).post(
     '/',
     {
       schema: {
         tags: ['Recurring transaction'],
-        summary: 'Update recurring transaction',
+        summary: 'Create a new recurring transaction',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
-          recurringTransactionId: z.string(),
         }),
         body: z
           .object({
             title: z.string(),
             description: z.string().nullable().optional(),
-            type: typeSchema,
+            type: typeSchema.default('EXPENSE'),
             categoryId: z.uuid(),
             amount: z.coerce.number(),
-            status: recurringStatusSchema,
-            frequency: frequencySchema,
+            status: recurringStatusSchema.default('ACTIVE'),
+            frequency: frequencySchema.default('MONTHLY'),
             interval: z.coerce.number(),
             startDate: z.coerce.date(),
             endDate: z.coerce.date().optional(),
@@ -51,12 +51,14 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
             }
           }),
         response: {
-          204: z.void(),
+          201: z.object({
+            recurringTransactionId: z.uuid(),
+          }),
         },
       },
     },
     async (request, reply) => {
-      const { slug, recurringTransactionId } = request.params
+      const { slug } = request.params
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
@@ -64,9 +66,9 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('update', 'Transaction')) {
+      if (cannot('create', 'RecurringTransaction')) {
         throw new UnauthorizedError(
-          `You're not allowed to update recurring transactions`,
+          `You're not allowed to create recurring transactions`,
         )
       }
 
@@ -105,28 +107,62 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
         throw new BadRequestError('Category must match transaction type')
       }
 
-      const [recurringTransaction] = await db
-        .update(schema.recurringTransactions)
-        .set({
-          title,
-          description,
-          type,
-          categoryId,
-          amount: realToCents(amount),
-          status,
-          frequency,
-          interval,
-          startDate,
-          endDate: endDate ?? null,
-        })
-        .where(
-          and(
-            eq(schema.recurringTransactions.id, recurringTransactionId),
-            eq(schema.recurringTransactions.orgId, org.id),
-          ),
-        )
+      const recurringTransaction = await db.transaction(async (tx) => {
+        const amountInCents = realToCents(amount)
+        const now = new Date()
+        const shouldCreateFirstTransaction = startDate <= now
 
-      return reply.status(204).send()
+        const nextExecutionDate = shouldCreateFirstTransaction
+          ? calculateNextExecutionDate({
+              date: startDate,
+              frequency,
+              interval,
+            })
+          : startDate
+
+        const [createdRecurringTransaction] = await tx
+          .insert(schema.recurringTransactions)
+          .values({
+            title,
+            description,
+            type,
+            categoryId,
+            amount: amountInCents,
+            status,
+            frequency,
+            interval,
+            startDate,
+            endDate: endDate ?? null,
+            lastGeneratedAt: shouldCreateFirstTransaction ? startDate : null,
+            nextExecutionDate,
+            ownerId: userId,
+            orgId: org.id,
+          })
+          .returning({
+            id: schema.recurringTransactions.id,
+          })
+
+        if (shouldCreateFirstTransaction) {
+          await tx.insert(schema.transactions).values({
+            title,
+            description,
+            type,
+            categoryId,
+            amount: amountInCents,
+            status: 'PENDING',
+            transactionDate: startDate,
+            recurringTransactionId: createdRecurringTransaction.id,
+            ownerId: userId,
+            orgId: org.id,
+          })
+        }
+
+        return createdRecurringTransaction
+      })
+
+      return reply.status(201).send({
+        recurringTransactionId: recurringTransaction.id,
+      })
     },
   )
 }

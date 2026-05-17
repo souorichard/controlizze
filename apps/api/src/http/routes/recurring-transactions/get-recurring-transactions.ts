@@ -11,7 +11,7 @@ import {
   frequencySchema,
   recurringStatusSchema,
   typeSchema,
-} from '../../schemas/index.ts'
+} from '../../schemas.ts'
 
 export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
@@ -78,7 +78,7 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('read', 'Transaction')) {
+      if (cannot('read', 'RecurringTransaction')) {
         throw new UnauthorizedError(
           `You're not allowed to see organization recurring transactions`,
         )

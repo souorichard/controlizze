@@ -3,7 +3,7 @@ import z from 'zod'
 import { getTotalTransactionsAmount } from '../../../services/metrics/get-total-transactions-amount.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { typeSchema } from '../../schemas/index.ts'
+import { typeSchema } from '../../schemas.ts'
 
 export const getTransactionsAmountMetrics: FastifyPluginAsyncZod = async (
   app,

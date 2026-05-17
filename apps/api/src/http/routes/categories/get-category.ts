@@ -7,7 +7,7 @@ import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { typeSchema } from '../../schemas/index.ts'
+import { typeSchema } from '../../schemas.ts'
 
 export const getCategory: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(

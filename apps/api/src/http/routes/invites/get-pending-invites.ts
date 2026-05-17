@@ -6,7 +6,7 @@ import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { inviteStatusSchema } from '../../schemas/index.ts'
+import { inviteStatusSchema } from '../../schemas.ts'
 
 export const getPendingInvites: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(

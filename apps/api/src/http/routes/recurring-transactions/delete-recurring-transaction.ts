@@ -1,9 +1,11 @@
+import { recurringTransactionSchema } from '@controlizze/rbac'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
+import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
@@ -35,13 +37,34 @@ export const deleteRecurringTransaction: FastifyPluginAsyncZod = async (
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('delete', 'Transaction')) {
+      const [recurringTransaction] = await db
+        .select({
+          id: schema.recurringTransactions.id,
+          ownerId: schema.recurringTransactions.ownerId,
+        })
+        .from(schema.recurringTransactions)
+        .where(
+          and(
+            eq(schema.recurringTransactions.id, recurringTransactionId),
+            eq(schema.recurringTransactions.orgId, org.id),
+          ),
+        )
+        .limit(1)
+
+      if (!recurringTransaction) {
+        throw new NotFoundError('Recurring transaction not found')
+      }
+
+      const authRecurringTransaction =
+        recurringTransactionSchema.parse(recurringTransaction)
+
+      if (cannot('delete', authRecurringTransaction)) {
         throw new UnauthorizedError(
-          `You're not allowed to delete recurring transactions`,
+          `You're not allowed to delete this recurring transaction`,
         )
       }
 
-      const [recurringTransaction] = await db
+      await db
         .delete(schema.recurringTransactions)
         .where(
           and(
