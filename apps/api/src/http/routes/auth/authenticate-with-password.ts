@@ -1,10 +1,12 @@
 import { compare } from 'bcryptjs'
+import dayjs from 'dayjs'
 import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
+import { ForbiddenError } from '../../errors/forbidden-error.ts'
 
 export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -34,6 +36,8 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
         .select({
           id: schema.users.id,
           hashPassword: schema.users.passwordHash,
+          emailVerifiedAt: schema.users.emailVerifiedAt,
+          createdAt: schema.users.createdAt,
         })
         .from(schema.users)
         .where(eq(schema.users.email, email))
@@ -41,6 +45,17 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
 
       if (!userFromEmail) {
         throw new BadRequestError('User does not exist')
+      }
+
+      if (!userFromEmail.emailVerifiedAt) {
+        const hoursSinceCreation = dayjs().diff(
+          dayjs(userFromEmail.createdAt),
+          'hour',
+        )
+
+        if (hoursSinceCreation > 1) {
+          throw new ForbiddenError('Email verification required')
+        }
       }
 
       if (!userFromEmail.hashPassword) {

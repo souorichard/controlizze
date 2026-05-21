@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { createTestApp } from '../../helpers/app.ts'
@@ -58,5 +59,33 @@ describe('POST /sessions/password', () => {
     })
 
     expect(response.status).toBe(400)
+  })
+
+  it('should not be able to authenticate without email verification after 1 hour', async () => {
+    await makeUser({
+      emailVerifiedAt: null,
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+    })
+
+    const response = await supertest(app.server).post('/sessions').send({
+      email: 'john@example.com',
+      password: '12345678',
+    })
+
+    expect(response.status).toBe(403)
+  })
+
+  it('should be able to authenticate without email verification within 1 hour', async () => {
+    await makeUser({
+      emailVerifiedAt: null,
+      createdAt: new Date(),
+    })
+
+    const response = await supertest(app.server).post('/sessions').send({
+      email: 'john@example.com',
+      password: '12345678',
+    })
+
+    expect(response.status).toBe(200)
   })
 })

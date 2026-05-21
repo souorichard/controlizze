@@ -48,8 +48,6 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
       const code = randomBytes(32).toString('hex')
       const codeHash = hashToken(code)
 
-      const expiresAt = dayjs(new Date()).add(24, 'hour').toDate()
-
       await db.transaction(async (tx) => {
         const [user] = await tx
           .insert(schema.users)
@@ -64,7 +62,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
           tokenHash: codeHash,
           type: 'EMAIL_VERIFICATION',
           userId: user.id,
-          expiresAt,
+          expiresAt: dayjs().add(1, 'hour').toDate(),
         })
       })
 

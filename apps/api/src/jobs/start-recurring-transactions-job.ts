@@ -34,6 +34,9 @@ export function startRecurringTransactionsJob() {
   // run immediately
   run()
 
-  // every 5 minutes
-  cron.schedule('*/5 * * * *', run)
+  // every day at midnight in production, every 5 minutes in dev
+  cron.schedule(
+    env.NODE_ENV === 'production' ? '0 0 * * *' : '*/5 * * * *',
+    run,
+  )
 }

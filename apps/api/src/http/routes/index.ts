@@ -8,6 +8,7 @@ import {
   resetPassword,
   verifyEmail,
 } from './auth/index.ts'
+import { resendVerification } from './auth/resend-verification.ts'
 import {
   createCategory,
   deleteCategory,
@@ -120,6 +121,10 @@ export const routes: Route[] = [
   {
     plugin: verifyEmail,
     prefix: '/sessions/verify-email',
+  },
+  {
+    plugin: resendVerification,
+    prefix: '/sessions/resend-verification',
   },
 
   // Organizations
