@@ -1,11 +1,7 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import githubIcon from '@/assets/icons/github-icon.svg'
-import googleIcon from '@/assets/icons/google-icon.svg'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { SocialLogins } from '../_components/social-logins'
+import { SignUpForm } from './_components/sign-up-form'
 
 export default function SignUpPage() {
   return (
@@ -20,16 +16,7 @@ export default function SignUpPage() {
         </p>
       </div>
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Button size="lg" variant="outline" className="h-10 flex-1">
-            <Image src={googleIcon} alt="Google" className="size-4" />
-            Continuar com Google
-          </Button>
-          <Button size="lg" variant="outline" className="h-10 flex-1">
-            <Image src={githubIcon} alt="Github" className="size-4" />
-            Continuar com Github
-          </Button>
-        </div>
+        <SocialLogins />
         <div className="flex items-center gap-4">
           <Separator className="flex-1" />
           <span className="text-sm text-muted-foreground">
@@ -37,39 +24,7 @@ export default function SignUpPage() {
           </span>
           <Separator className="flex-1" />
         </div>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Nome</Label>
-            <Input type="text" placeholder="John Doe" className="h-10" />
-          </div>
-          <div className="space-y-2">
-            <Label>Email</Label>
-            <Input
-              type="email"
-              placeholder="john@exemplo.com"
-              className="h-10"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Senha</Label>
-            <Input
-              type="password"
-              placeholder="Digite sua senha"
-              className="h-10"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Confirmar senha</Label>
-            <Input
-              type="password"
-              placeholder="Digite sua senha novamente"
-              className="h-10"
-            />
-          </div>
-          <Button size="lg" className="w-full h-10">
-            Criar nova conta
-          </Button>
-        </div>
+        <SignUpForm />
         <p className="text-sm text-muted-foreground text-center">
           Já tem uma conta?{' '}
           <Link
