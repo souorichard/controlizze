@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import { SocialLogins } from '../_components/social-logins'
 import { SignUpForm } from './_components/sign-up-form'
+
+export const metadata: Metadata = {
+  title: 'Crie sua conta',
+}
 
 export default function SignUpPage() {
   return (

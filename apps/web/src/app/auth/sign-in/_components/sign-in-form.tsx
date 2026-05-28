@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Loader2 } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '@/components/error-message'
@@ -12,6 +13,11 @@ import { signIn } from '../actions'
 import { type SignInData, signInSchema } from '../schemas'
 
 export function SignInForm() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const email = searchParams.get('email') ?? ''
+
   const {
     register,
     handleSubmit,
@@ -19,7 +25,7 @@ export function SignInForm() {
   } = useForm<SignInData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: '',
+      email,
       password: '',
     },
   })
@@ -35,7 +41,7 @@ export function SignInForm() {
       return
     }
 
-    toast.success(message)
+    router.push('/')
   }
 
   return (

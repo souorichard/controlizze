@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import { SocialLogins } from '../_components/social-logins'
 import { SignInForm } from './_components/sign-in-form'
+
+export const metadata: Metadata = {
+  title: 'Acesse sua conta',
+}
 
 export default function SignInPage() {
   return (
