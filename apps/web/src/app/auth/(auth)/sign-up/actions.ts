@@ -13,7 +13,7 @@ export async function signUp({
   try {
     await createAccount({ name, email, password })
   } catch (error) {
-    return actionError(error)
+    return await actionError(error)
   }
 
   return {

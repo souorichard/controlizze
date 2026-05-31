@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import type { Metadata } from 'next'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '@/components/error-message'
@@ -19,7 +19,6 @@ export const metadata: Metadata = {
 
 export function SignUpForm() {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const {
     register,

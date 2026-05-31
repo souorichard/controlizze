@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { SocialLogins } from '../_components/social-logins'
 import { SignInForm } from './_components/sign-in-form'
@@ -26,7 +27,9 @@ export default function SignInPage() {
           <span className="text-sm text-muted-foreground">ou continue com</span>
           <Separator className="flex-1" />
         </div>
-        <SignInForm />
+        <Suspense>
+          <SignInForm />
+        </Suspense>
         <p className="text-sm text-muted-foreground text-center">
           Ainda não tem uma conta?{' '}
           <Link

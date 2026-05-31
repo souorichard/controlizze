@@ -16,7 +16,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: {
     default: 'Controlizze',
-    template: '%s - Controlizze',
+    template: '%s • Controlizze',
   },
 }
 

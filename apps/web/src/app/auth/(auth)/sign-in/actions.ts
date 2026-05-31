@@ -19,7 +19,7 @@ export async function signIn({
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
   } catch (error) {
-    return actionError(error)
+    return await actionError(error)
   }
 
   return {

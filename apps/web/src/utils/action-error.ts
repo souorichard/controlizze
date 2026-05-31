@@ -3,7 +3,7 @@ import type { ActionResponse } from '@/interfaces/action-interface'
 
 export async function actionError(error: unknown): Promise<ActionResponse> {
   if (error instanceof HTTPError) {
-    const { message } = await error.response.json()
+    const { message } = await error.response.clone().json()
 
     return {
       success: false,
