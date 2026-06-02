@@ -44,7 +44,7 @@ export const rejectInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!invite) {
-        throw new BadRequestError('Invalid or expired invite')
+        throw new BadRequestError('Convite inválido ou expirado')
       }
 
       const [user] = await db
@@ -57,11 +57,11 @@ export const rejectInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!user) {
-        throw new NotFoundError('User not found')
+        throw new NotFoundError('Usuário não encontrado')
       }
 
       if (invite.email !== user.email) {
-        throw new BadRequestError('This invite belongs to another user')
+        throw new BadRequestError('Este convite pertence a outro usuário')
       }
 
       await db

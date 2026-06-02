@@ -23,7 +23,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         querystring: z.object({
           title: z
             .string()
-            .min(3, 'Search term must be at least 3 characters')
+            .min(3, 'Termo de busca deve ter pelo menos 3 caracteres')
             .optional(),
           type: typeSchema.optional(),
           status: statusSchema.optional(),
@@ -84,7 +84,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Transaction')) {
         throw new UnauthorizedError(
-          `You're not allowed to see organization transactions`,
+          `Você não tem permissão para visualizar transações desta organização`,
         )
       }
 

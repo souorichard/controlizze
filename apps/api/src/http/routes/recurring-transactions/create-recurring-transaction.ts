@@ -45,7 +45,7 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
             if (data.endDate && data.endDate <= data.startDate) {
               ctx.addIssue({
                 code: 'custom',
-                message: 'End date must be after start date',
+                message: 'Data de término deve ser depois da data de início',
                 path: ['endDate'],
               })
             }
@@ -68,7 +68,7 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
 
       if (cannot('create', 'RecurringTransaction')) {
         throw new UnauthorizedError(
-          `You're not allowed to create recurring transactions`,
+          `Você não tem permissão para criar transações recorrentes`,
         )
       }
 
@@ -100,11 +100,13 @@ export const createRecurringTransaction: FastifyPluginAsyncZod = async (
         .limit(1)
 
       if (!category) {
-        throw new BadRequestError('Category not found')
+        throw new BadRequestError('Categoria não encontrada')
       }
 
       if (category.type !== type) {
-        throw new BadRequestError('Category must match transaction type')
+        throw new BadRequestError(
+          'Categoria deve corresponder ao tipo de transação',
+        )
       }
 
       const recurringTransaction = await db.transaction(async (tx) => {

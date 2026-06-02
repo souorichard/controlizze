@@ -20,7 +20,7 @@ export const updateOrgName: FastifyPluginAsyncZod = async (app) => {
           slug: z.string(),
         }),
         body: z.object({
-          name: z.string().min(1, 'Name is required'),
+          name: z.string().min(1, 'Nome é obrigatório'),
         }),
         response: {
           204: z.void(),
@@ -42,7 +42,7 @@ export const updateOrgName: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('update', authOrganization)) {
         throw new UnauthorizedError(
-          `You're not allowed to update this organization`,
+          `Você não tem permissão para atualizar esta organização`,
         )
       }
 

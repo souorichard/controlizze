@@ -48,7 +48,9 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
       const { cannot } = getUserPermissions(userId, membership.role)
 
       if (cannot('create', 'Transaction')) {
-        throw new UnauthorizedError(`You're not allowed to create transactions`)
+        throw new UnauthorizedError(
+          `Você não tem permissão para criar transações`,
+        )
       }
 
       const {
@@ -77,11 +79,13 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!category) {
-        throw new BadRequestError('Category not found')
+        throw new BadRequestError('Categoria não encontrada')
       }
 
       if (category.type !== type) {
-        throw new BadRequestError('Category must match transaction type')
+        throw new BadRequestError(
+          'Categoria deve corresponder ao tipo de transação',
+        )
       }
 
       const [transaction] = await db

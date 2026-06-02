@@ -42,7 +42,7 @@ export const updateOrgAvatar: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('update', authOrganization)) {
         throw new UnauthorizedError(
-          `You're not allowed to update this organization`,
+          `Você não tem permissão para atualizar esta organização`,
         )
       }
 

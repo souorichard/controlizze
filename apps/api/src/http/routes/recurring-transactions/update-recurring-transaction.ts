@@ -47,7 +47,7 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
             if (data.endDate && data.endDate <= data.startDate) {
               ctx.addIssue({
                 code: 'custom',
-                message: 'End date must be after start date',
+                message: 'Data de término deve ser depois da data de início',
                 path: ['endDate'],
               })
             }
@@ -94,11 +94,13 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
         .limit(1)
 
       if (!category) {
-        throw new NotFoundError('Category not found')
+        throw new NotFoundError('Categoria não encontrada')
       }
 
       if (category.type !== type) {
-        throw new BadRequestError('Category must match transaction type')
+        throw new BadRequestError(
+          'Categoria deve corresponder ao tipo de transação',
+        )
       }
 
       const [recurringTransaction] = await db
@@ -116,7 +118,7 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
         .limit(1)
 
       if (!recurringTransaction) {
-        throw new NotFoundError('Recurring transaction not found')
+        throw new NotFoundError('Transação recorrente não encontrada')
       }
 
       const authRecurringTransaction =
@@ -124,7 +126,7 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
 
       if (cannot('update', authRecurringTransaction)) {
         throw new UnauthorizedError(
-          `You're not allowed to update this recurring transaction`,
+          `Você não tem permissão para atualizar esta transação recorrente`,
         )
       }
 

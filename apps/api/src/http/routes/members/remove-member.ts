@@ -36,7 +36,7 @@ export const removeMember: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('delete', 'Member')) {
         throw new UnauthorizedError(
-          `You're not allowed to remove members from organization`,
+          `Você não tem permissão para remover membros desta organização`,
         )
       }
 
@@ -54,7 +54,7 @@ export const removeMember: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!member) {
-        throw new NotFoundError('Member not found')
+        throw new NotFoundError('Membro não encontrado')
       }
 
       await db

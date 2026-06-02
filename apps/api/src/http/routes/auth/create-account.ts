@@ -18,12 +18,14 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
         tags: ['Authentication'],
         summary: 'Create a new account',
         body: z.object({
-          name: z.string().min(1, 'Name is required'),
-          email: z.email('Invalid email address').min(1, 'Email is required'),
+          name: z.string().min(1, 'Nome é obrigatório'),
+          email: z
+            .email('Endereço de email inválido')
+            .min(1, 'Email é obrigatório'),
           password: z
             .string()
-            .min(1, 'Password is required')
-            .min(8, 'Password must be at least 8 characters long'),
+            .min(1, 'Senha é obrigatória')
+            .min(8, 'Senha deve ter pelo menos 8 caracteres'),
         }),
         response: {
           201: z.void(),
@@ -40,7 +42,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (userWithSameEmail) {
-        throw new ConflictError('User with this email already exists')
+        throw new ConflictError('Usuário com este e-mail já existe')
       }
 
       const passwordHash = await hash(password, 8)

@@ -35,7 +35,9 @@ export const revokeInvite: FastifyPluginAsyncZod = async (app) => {
       const { cannot } = getUserPermissions(userId, membership.role)
 
       if (cannot('revoke', 'Invite')) {
-        throw new UnauthorizedError(`You're not allowed to revoke invites`)
+        throw new UnauthorizedError(
+          `Você não tem permissão para revogar convites`,
+        )
       }
 
       const [invite] = await db
@@ -50,7 +52,7 @@ export const revokeInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!invite) {
-        throw new NotFoundError('Invite not found')
+        throw new NotFoundError('Convite não encontrado')
       }
 
       await db.delete(schema.invites).where(eq(schema.invites.id, inviteId))

@@ -15,7 +15,9 @@ export const requestPasswordRecover: FastifyPluginAsyncZod = async (app) => {
         tags: ['Authentication'],
         summary: 'Request password recover',
         body: z.object({
-          email: z.email('Invalid email address').min(1, 'Email is required'),
+          email: z
+            .email('Endereço de email inválido')
+            .min(1, 'Email é obrigatório'),
         }),
         response: {
           201: z.void(),

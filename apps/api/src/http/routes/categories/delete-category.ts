@@ -35,7 +35,7 @@ export const deleteCategory: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('delete', 'Category')) {
         throw new UnauthorizedError(
-          `You're not allowed to delete organization categories`,
+          'Você não tem permissão para deletar categorias nesta organização',
         )
       }
 

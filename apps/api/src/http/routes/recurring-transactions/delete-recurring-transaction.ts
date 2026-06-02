@@ -52,7 +52,7 @@ export const deleteRecurringTransaction: FastifyPluginAsyncZod = async (
         .limit(1)
 
       if (!recurringTransaction) {
-        throw new NotFoundError('Recurring transaction not found')
+        throw new NotFoundError('Transação recorrente não encontrada')
       }
 
       const authRecurringTransaction =
@@ -60,7 +60,7 @@ export const deleteRecurringTransaction: FastifyPluginAsyncZod = async (
 
       if (cannot('delete', authRecurringTransaction)) {
         throw new UnauthorizedError(
-          `You're not allowed to delete this recurring transaction`,
+          `Você não tem permissão para deletar esta transação recorrente`,
         )
       }
 

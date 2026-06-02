@@ -23,7 +23,7 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
         querystring: z.object({
           name: z
             .string()
-            .min(3, 'Search term must be at least 3 characters')
+            .min(3, 'Termo de busca deve ter pelo menos 3 caracteres')
             .optional(),
           type: typeSchema.optional(),
           page: z.coerce.number().min(1).default(1),
@@ -66,7 +66,7 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Category')) {
         throw new UnauthorizedError(
-          `You're not allowed to see organization categories`,
+          'Você não tem permissão para visualizar categorias nesta organização',
         )
       }
 

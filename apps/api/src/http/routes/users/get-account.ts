@@ -42,7 +42,7 @@ export const getAccount: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!user) {
-        throw new NotFoundError('User does not exist')
+        throw new NotFoundError('Usuário não existe')
       }
 
       return {
