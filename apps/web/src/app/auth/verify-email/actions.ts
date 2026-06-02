@@ -4,7 +4,13 @@ import { verifyEmail } from '@/http/auth/verifiy-email'
 import type { ActionResponse } from '@/interfaces/action-interface'
 import { actionError } from '@/utils/action-error'
 
-export async function verifyEmailAction(code: string): Promise<ActionResponse> {
+interface VerifyEmailActionProps {
+  code: string
+}
+
+export async function verifyEmailAction({
+  code,
+}: VerifyEmailActionProps): Promise<ActionResponse> {
   try {
     await verifyEmail({ code })
   } catch (error) {

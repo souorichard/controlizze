@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Loader2 } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -9,6 +10,7 @@ import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { PasswordInput } from '../../_components/password-input'
 import { signIn } from '../actions'
 import { type SignInData, signInSchema } from '../schemas'
 
@@ -51,7 +53,6 @@ export function SignInForm() {
         <Input
           type="email"
           placeholder="john@exemplo.com"
-          className="h-10"
           disabled={isSubmitting}
           {...register('email')}
         />
@@ -59,11 +60,17 @@ export function SignInForm() {
       </div>
 
       <div className="space-y-2">
-        <Label>Senha</Label>
-        <Input
-          type="password"
+        <div className="flex justify-between items-center gap-3">
+          <Label>Senha</Label>
+          <Link
+            href="/auth/forgot-password"
+            className="text-xs text-primary transition-colors hover:text-primary/85"
+          >
+            Esqueceu sua senha?
+          </Link>
+        </div>
+        <PasswordInput
           placeholder="• • • • • • • •"
-          className="h-10"
           disabled={isSubmitting}
           {...register('password')}
         />
@@ -72,12 +79,7 @@ export function SignInForm() {
         )}
       </div>
 
-      <Button
-        type="submit"
-        size="lg"
-        className="w-full h-10"
-        disabled={isSubmitting}
-      >
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (
           <Loader2 className="size-4 animate-spin" />
         ) : (

@@ -5,8 +5,8 @@ import controlizzeLogo from '@/assets/brand/controlizze-logo.svg'
 
 export default function AuthLayout({ children }: PropsWithChildren) {
   return (
-    <div className="h-screen grid grid-cols-2">
-      <div className="p-10 flex flex-col justify-between bg-auth-hero bg-cover bg-bottom">
+    <div className="h-screen grid xl:grid-cols-2">
+      <div className="p-10 hidden xl:flex flex-col justify-between bg-auth-hero bg-cover bg-bottom">
         <div>
           <Image
             src={controlizzeLogo}

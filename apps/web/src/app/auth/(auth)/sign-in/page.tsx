@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export default function SignInPage() {
   return (
     <div className="max-w-lg w-full space-y-12">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-medium font-heading tracking-wide">
+      <div className="space-y-3">
+        <h1 className="text-3xl font-medium font-heading tracking-wide">
           Bem-vindo de volta!
         </h1>
         <p className="text-muted-foreground">

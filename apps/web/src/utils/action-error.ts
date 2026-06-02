@@ -2,17 +2,20 @@ import { HTTPError } from 'ky'
 import type { ActionResponse } from '@/interfaces/action-interface'
 
 export async function actionError(error: unknown): Promise<ActionResponse> {
+  const defaultMessage =
+    'Ocorreu um erro inesperado. Por favor, tente novamente'
+
   if (error instanceof HTTPError) {
-    const { message } = await error.response.clone().json()
+    const data = (await error.data) as { message?: string } | undefined
 
     return {
       success: false,
-      message,
+      message: data?.message ?? defaultMessage,
     }
   }
 
   return {
     success: false,
-    message: 'Ocorreu um erro inesperado. Por favor, tente novamente',
+    message: defaultMessage,
   }
 }

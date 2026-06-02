@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { TypingText } from '@/components/typing-text'
 import { Separator } from '@/components/ui/separator'
 import { SocialLogins } from '../_components/social-logins'
 import { SignUpForm } from './_components/sign-up-form'
@@ -11,9 +12,14 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <div className="max-w-lg w-full space-y-12">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-medium font-heading tracking-wide">
-          Controle financeiro <br /> simples, claro e eficiente
+      <div className="space-y-3">
+        <h1 className="text-3xl font-medium font-heading tracking-wide">
+          Controle financeiro <br /> simples, claro e{' '}
+          <TypingText
+            text="eficiente"
+            speed={150}
+            className="bg-linear-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent animate-shimmer"
+          />
         </h1>
         <p className="text-muted-foreground">
           Organize suas finanças, acompanhe resultados em tempo real e tome

@@ -2,50 +2,39 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Loader2 } from 'lucide-react'
-import type { Metadata } from 'next'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { PasswordInput } from '../../_components/password-input'
-import { signUp } from '../actions'
-import { type SignUpData, signUpSchema } from '../schemas'
+import { PasswordInput } from '../../../_components/password-input'
+import { resetPasswordAction } from '../actions'
+import { type ResetPasswordData, resetPasswordSchema } from '../schemas'
 
-export const metadata: Metadata = {
-  title: 'Criar nova conta',
+interface ResetPasswordFormProps {
+  code: string
 }
 
-export function SignUpForm() {
+export function ResetPasswordForm({ code }: ResetPasswordFormProps) {
   const router = useRouter()
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignUpData>({
-    resolver: zodResolver(signUpSchema),
+  } = useForm<ResetPasswordData>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      name: '',
-      email: '',
       password: '',
       confirmPassword: '',
     },
   })
 
-  async function handleSignUp({
-    name,
-    email,
-    password,
-    confirmPassword,
-  }: SignUpData) {
-    const { success, message } = await signUp({
-      name,
-      email,
+  async function handleRequestPasswordRecover({ password }: ResetPasswordData) {
+    const { success, message } = await resetPasswordAction({
+      code,
       password,
-      confirmPassword,
     })
 
     if (!success) {
@@ -55,35 +44,16 @@ export function SignUpForm() {
 
     toast.success(message)
 
-    router.push(`/auth/sign-in?email=${encodeURIComponent(email)}`)
+    router.push('/auth/sign-in')
   }
 
   return (
-    <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
-      <div className="space-y-1">
-        <Label>Nome</Label>
-        <Input
-          type="text"
-          placeholder="John Doe"
-          disabled={isSubmitting}
-          {...register('name')}
-        />
-        {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
-      </div>
-
+    <form
+      onSubmit={handleSubmit(handleRequestPasswordRecover)}
+      className="space-y-4"
+    >
       <div className="space-y-2">
-        <Label>Email</Label>
-        <Input
-          type="email"
-          placeholder="john@exemplo.com"
-          disabled={isSubmitting}
-          {...register('email')}
-        />
-        {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-      </div>
-
-      <div className="space-y-2">
-        <Label>Senha</Label>
+        <Label>Nova senha</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
@@ -95,7 +65,7 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-2">
-        <Label>Confirmar senha</Label>
+        <Label>Confirmar nova senha</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
@@ -111,7 +81,7 @@ export function SignUpForm() {
           <Loader2 className="size-4 animate-spin" />
         ) : (
           <>
-            <span>Criar minha conta</span>
+            Redefinir senha
             <ArrowRight className="size-4" />
           </>
         )}

@@ -13,13 +13,11 @@ export async function createAccount({
   email,
   password,
 }: CreateAccountRequest): Promise<CreateAccountResponse> {
-  await api
-    .post('/accounts', {
-      json: {
-        name,
-        email,
-        password,
-      },
-    })
-    .json<CreateAccountResponse>()
+  await api.post('/accounts', {
+    json: {
+      name,
+      email,
+      password,
+    },
+  })
 }

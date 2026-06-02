@@ -9,11 +9,9 @@ type VerifyEmailResponse = void
 export async function verifyEmail({
   code,
 }: VerifyEmailRequest): Promise<VerifyEmailResponse> {
-  await api
-    .post('/sessions/verify-email', {
-      searchParams: {
-        code,
-      },
-    })
-    .json<VerifyEmailResponse>()
+  await api.post('/sessions/verify-email', {
+    searchParams: {
+      code,
+    },
+  })
 }
