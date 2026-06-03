@@ -28,6 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${spaceGroteskSans.variable} ${geistSans.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">

@@ -14,21 +14,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(getUrl('/auth/sign-in')))
   }
 
-  // if (
-  //   pathname.includes('/reset') &&
-  //   !request.nextUrl.searchParams.get('code')
-  // ) {
-  //   return NextResponse.redirect(new URL(getUrl('/auth/forgot-password')))
-  // }
-
   const response = NextResponse.next()
 
   if (pathname.startsWith('/orgs')) {
     const [, , slug] = pathname.split('/')
 
-    response.cookies.set('organization', slug)
+    response.cookies.set('org', slug)
   } else {
-    response.cookies.delete('organization')
+    response.cookies.delete('org')
   }
 
   return response
