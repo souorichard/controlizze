@@ -29,10 +29,12 @@ export function ContainerHeader({ className, children }: GenericProps) {
 }
 
 export function ContainerMain({ className, children }: GenericProps) {
+  return <div className={cn('px-5 py-8', className)}>{children}</div>
+}
+
+export function ContainerMainWrapper({ className, children }: GenericProps) {
   return (
-    <div
-      className={cn('max-w-7xl w-full mx-auto space-y-8 px-5 py-8', className)}
-    >
+    <div className={cn('max-w-7xl w-full mx-auto space-y-8', className)}>
       {children}
     </div>
   )

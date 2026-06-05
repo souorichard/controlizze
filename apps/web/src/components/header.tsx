@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import controlizzeIcon from '@/assets/brand/controlizze-icon.svg'
-import { AccountButton } from './account-button'
+import { AccountMenu } from './account-menu'
 import { OrganizationSwitcher } from './organization-switcher'
 import { Separator } from './ui/separator'
 
@@ -26,7 +26,7 @@ export function Header() {
         <Separator orientation="vertical" className="h-5! lg:hidden" />
 
         <div className="flex items-center gap-2">
-          <AccountButton />
+          <AccountMenu />
         </div>
       </div>
     </header>
