@@ -6,4 +6,4 @@ export const transactionSchema = z.object({
   __typename: z.literal('Transaction').default('Transaction'),
 })
 
-export type transaction = z.infer<typeof transactionSchema>
+export type Transaction = z.infer<typeof transactionSchema>
