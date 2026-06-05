@@ -17,7 +17,7 @@ export const typeEnum = pgEnum('type_enum', ['EXPENSE', 'INCOME'])
 
 export const statusEnum = pgEnum('status_enum', ['PENDING', 'PAID', 'CANCELED'])
 
-export const recurringStatusEnum = pgEnum('recurring_status_enum', [
+export const recurrencesStatusEnum = pgEnum('recurrences_status_enum', [
   'ACTIVE',
   'PAUSED',
   'CANCELED',

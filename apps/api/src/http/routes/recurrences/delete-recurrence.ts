@@ -1,4 +1,4 @@
-import { recurringTransactionSchema } from '@controlizze/rbac'
+import { recurrenceSchema } from '@controlizze/rbac'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
@@ -9,19 +9,17 @@ import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
-export const deleteRecurringTransaction: FastifyPluginAsyncZod = async (
-  app,
-) => {
+export const deleteRecurrence: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).delete(
     '/',
     {
       schema: {
-        tags: ['Recurring transaction'],
-        summary: 'Delete recurring transaction',
+        tags: ['Recurrence'],
+        summary: 'Delete recurrence',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
-          recurringTransactionId: z.string(),
+          recurrenceId: z.string(),
         }),
         response: {
           204: z.void(),
@@ -29,7 +27,7 @@ export const deleteRecurringTransaction: FastifyPluginAsyncZod = async (
       },
     },
     async (request, reply) => {
-      const { slug, recurringTransactionId } = request.params
+      const { slug, recurrenceId } = request.params
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
@@ -37,39 +35,38 @@ export const deleteRecurringTransaction: FastifyPluginAsyncZod = async (
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      const [recurringTransaction] = await db
+      const [recurrence] = await db
         .select({
-          id: schema.recurringTransactions.id,
-          ownerId: schema.recurringTransactions.ownerId,
+          id: schema.recurrences.id,
+          ownerId: schema.recurrences.ownerId,
         })
-        .from(schema.recurringTransactions)
+        .from(schema.recurrences)
         .where(
           and(
-            eq(schema.recurringTransactions.id, recurringTransactionId),
-            eq(schema.recurringTransactions.orgId, org.id),
+            eq(schema.recurrences.id, recurrenceId),
+            eq(schema.recurrences.orgId, org.id),
           ),
         )
         .limit(1)
 
-      if (!recurringTransaction) {
-        throw new NotFoundError('Transação recorrente não encontrada')
+      if (!recurrence) {
+        throw new NotFoundError('Recorrência não encontrada')
       }
 
-      const authRecurringTransaction =
-        recurringTransactionSchema.parse(recurringTransaction)
+      const authRecurrence = recurrenceSchema.parse(recurrence)
 
-      if (cannot('delete', authRecurringTransaction)) {
+      if (cannot('delete', authRecurrence)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para deletar esta transação recorrente`,
+          `Você não tem permissão para deletar esta recorrência`,
         )
       }
 
       await db
-        .delete(schema.recurringTransactions)
+        .delete(schema.recurrences)
         .where(
           and(
-            eq(schema.recurringTransactions.id, recurringTransactionId),
-            eq(schema.recurringTransactions.orgId, org.id),
+            eq(schema.recurrences.id, recurrenceId),
+            eq(schema.recurrences.orgId, org.id),
           ),
         )
 

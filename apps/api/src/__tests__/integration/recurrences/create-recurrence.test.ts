@@ -1,4 +1,4 @@
-// src/__tests__/integration/recurring-transactions/create-recurring-transaction.test.ts
+// src/__tests__/integration/recurrences/create-recurrence.test.ts
 import dayjs from 'dayjs'
 import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
@@ -12,7 +12,7 @@ import {
   makeUser,
 } from '../../helpers/factories.ts'
 
-describe('POST /orgs/:slug/recurring-transactions', () => {
+describe('POST /orgs/:slug/recurrences', () => {
   let app: Awaited<ReturnType<typeof createTestApp>>
 
   beforeEach(async () => {
@@ -24,7 +24,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     await app.close()
   })
 
-  it('should be able to create a recurring transaction', async () => {
+  it('should be able to create a recurrence', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, {
@@ -35,7 +35,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/recurring-transactions`)
+      .post(`/orgs/${org.slug}/recurrences`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Monthly Salary',
@@ -49,10 +49,10 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
       })
 
     expect(response.status).toBe(201)
-    expect(response.body).toHaveProperty('recurringTransactionId')
+    expect(response.body).toHaveProperty('recurrenceId')
   })
 
-  it('should not be able to create a recurring transaction with mismatched category type', async () => {
+  it('should not be able to create a recurrence with mismatched category type', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, {
@@ -63,7 +63,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/recurring-transactions`)
+      .post(`/orgs/${org.slug}/recurrences`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Monthly Salary',
@@ -79,7 +79,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     expect(response.status).toBe(400)
   })
 
-  it('should not be able to create a recurring transaction with endDate before startDate', async () => {
+  it('should not be able to create a recurrence with endDate before startDate', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, {
@@ -90,7 +90,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/recurring-transactions`)
+      .post(`/orgs/${org.slug}/recurrences`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Monthly Salary',
@@ -107,7 +107,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     expect(response.status).toBe(400)
   })
 
-  it('should be able to create a recurring transaction as MEMBER', async () => {
+  it('should be able to create a recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
     const category = await makeCategory(owner.id, org.id, {
@@ -121,7 +121,7 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app, 'member@example.com')
 
     const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/recurring-transactions`)
+      .post(`/orgs/${org.slug}/recurrences`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Monthly Salary',
@@ -137,12 +137,12 @@ describe('POST /orgs/:slug/recurring-transactions', () => {
     expect(response.status).toBe(201)
   })
 
-  it('should not be able to create a recurring transaction without authentication', async () => {
+  it('should not be able to create a recurrence without authentication', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
 
     const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/recurring-transactions`)
+      .post(`/orgs/${org.slug}/recurrences`)
       .send({
         title: 'Monthly Salary',
         type: 'INCOME',

@@ -102,14 +102,14 @@ export async function makeInvite(
   return { invite, code }
 }
 
-export async function makeRecurringTransaction(
+export async function makeRecurrence(
   userId: string,
   orgId: string,
   categoryId: string,
-  override?: Partial<typeof schema.recurringTransactions.$inferInsert>,
+  override?: Partial<typeof schema.recurrences.$inferInsert>,
 ) {
-  const [recurringTransaction] = await db
-    .insert(schema.recurringTransactions)
+  const [recurrence] = await db
+    .insert(schema.recurrences)
     .values({
       title: 'Monthly Salary',
       type: 'INCOME',
@@ -126,7 +126,7 @@ export async function makeRecurringTransaction(
     })
     .returning()
 
-  return recurringTransaction
+  return recurrence
 }
 
 export async function makeTransaction(

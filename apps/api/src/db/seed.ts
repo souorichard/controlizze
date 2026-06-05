@@ -9,7 +9,7 @@ async function cleanDatabase() {
   try {
     // Delete in reverse order of creation (respecting foreign keys)
     await db.delete(schema.transactions)
-    await db.delete(schema.recurringTransactions)
+    await db.delete(schema.recurrences)
     await db.delete(schema.members)
     await db.delete(schema.categories)
     await db.delete(schema.organizations)
@@ -238,8 +238,8 @@ async function seed() {
 
     console.log(`✅ Created ${5} transactions`)
 
-    // 6. Create test recurring transactions
-    console.log('🔄 Creating test recurring transactions...')
+    // 6. Create test recurrences
+    console.log('🔄 Creating test recurrences...')
     const startDate = new Date()
     const endDate = new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000) // 1 year from now
 
@@ -253,7 +253,7 @@ async function seed() {
     const dailyNextExecution = new Date(startDate)
     dailyNextExecution.setDate(dailyNextExecution.getDate() + 1)
 
-    await db.insert(schema.recurringTransactions).values([
+    await db.insert(schema.recurrences).values([
       {
         title: 'Monthly Rent',
         description: 'House rent payment',
@@ -319,7 +319,7 @@ async function seed() {
       },
     ])
 
-    console.log(`✅ Created ${4} recurring transactions`)
+    console.log(`✅ Created ${4} recurrences`)
 
     console.log('✨ Database seed paid successfully!')
   } catch (error) {

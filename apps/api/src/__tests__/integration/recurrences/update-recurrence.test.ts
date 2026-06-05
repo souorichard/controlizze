@@ -1,4 +1,4 @@
-// src/__tests__/integration/recurring-transactions/update-recurring-transaction.test.ts
+// src/__tests__/integration/recurrences/update-recurrence.test.ts
 import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { createTestApp } from '../../helpers/app.ts'
@@ -8,11 +8,11 @@ import {
   makeCategory,
   makeMember,
   makeOrganization,
-  makeRecurringTransaction,
+  makeRecurrence,
   makeUser,
 } from '../../helpers/factories.ts'
 
-describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () => {
+describe('PUT /orgs/:slug/recurrences/:recurrenceId', () => {
   let app: Awaited<ReturnType<typeof createTestApp>>
 
   beforeEach(async () => {
@@ -24,22 +24,16 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     await app.close()
   })
 
-  it('should be able to update a recurring transaction as OWNER', async () => {
+  it('should be able to update a recurrence as OWNER', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
-    const recurringTransaction = await makeRecurringTransaction(
-      user.id,
-      org.id,
-      category.id,
-    )
+    const recurrence = await makeRecurrence(user.id, org.id, category.id)
 
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .put(
-        `/orgs/${org.slug}/recurring-transactions/${recurringTransaction.id}`,
-      )
+      .put(`/orgs/${org.slug}/recurrences/${recurrence.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Updated Salary',
@@ -55,7 +49,7 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     expect(response.status).toBe(204)
   })
 
-  it('should be able to update own recurring transaction as MEMBER', async () => {
+  it('should be able to update own recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
     const category = await makeCategory(owner.id, org.id, { type: 'INCOME' })
@@ -63,18 +57,12 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
 
-    const recurringTransaction = await makeRecurringTransaction(
-      member.id,
-      org.id,
-      category.id,
-    )
+    const recurrence = await makeRecurrence(member.id, org.id, category.id)
 
     const token = await authenticate(app, 'member@example.com')
 
     const response = await supertest(app.server)
-      .put(
-        `/orgs/${org.slug}/recurring-transactions/${recurringTransaction.id}`,
-      )
+      .put(`/orgs/${org.slug}/recurrences/${recurrence.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Updated Salary',
@@ -90,7 +78,7 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     expect(response.status).toBe(204)
   })
 
-  it('should not be able to update another member recurring transaction as MEMBER', async () => {
+  it('should not be able to update another member recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
     const category = await makeCategory(owner.id, org.id, { type: 'INCOME' })
@@ -98,18 +86,12 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
 
-    const recurringTransaction = await makeRecurringTransaction(
-      owner.id,
-      org.id,
-      category.id,
-    )
+    const recurrence = await makeRecurrence(owner.id, org.id, category.id)
 
     const token = await authenticate(app, 'member@example.com')
 
     const response = await supertest(app.server)
-      .put(
-        `/orgs/${org.slug}/recurring-transactions/${recurringTransaction.id}`,
-      )
+      .put(`/orgs/${org.slug}/recurrences/${recurrence.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Updated Salary',
@@ -135,18 +117,12 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
       name: 'Rent',
       type: 'EXPENSE',
     })
-    const recurringTransaction = await makeRecurringTransaction(
-      user.id,
-      org.id,
-      incomeCategory.id,
-    )
+    const recurrence = await makeRecurrence(user.id, org.id, incomeCategory.id)
 
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .put(
-        `/orgs/${org.slug}/recurring-transactions/${recurringTransaction.id}`,
-      )
+      .put(`/orgs/${org.slug}/recurrences/${recurrence.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Updated',
@@ -162,7 +138,7 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     expect(response.status).toBe(400)
   })
 
-  it('should not be able to update a non existing recurring transaction', async () => {
+  it('should not be able to update a non existing recurrence', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
@@ -170,9 +146,7 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .put(
-        `/orgs/${org.slug}/recurring-transactions/00000000-0000-0000-0000-000000000000`,
-      )
+      .put(`/orgs/${org.slug}/recurrences/00000000-0000-0000-0000-000000000000`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Updated',
@@ -188,11 +162,9 @@ describe('PUT /orgs/:slug/recurring-transactions/:recurringTransactionId', () =>
     expect(response.status).toBe(404)
   })
 
-  it('should not be able to update a recurring transaction without authentication', async () => {
+  it('should not be able to update a recurrence without authentication', async () => {
     const response = await supertest(app.server)
-      .put(
-        '/orgs/any-slug/recurring-transactions/00000000-0000-0000-0000-000000000000',
-      )
+      .put('/orgs/any-slug/recurrences/00000000-0000-0000-0000-000000000000')
       .send({
         title: 'Updated',
         type: 'INCOME',

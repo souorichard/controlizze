@@ -11,7 +11,7 @@ import { uuidv7 } from 'uuidv7'
 import { categories } from './categories.ts'
 import { statusEnum, typeEnum } from './enums.ts'
 import { organizations } from './organizations.ts'
-import { recurringTransactions } from './recurring-transactions.ts'
+import { recurrences } from './recurrences.ts'
 import { users } from './users.ts'
 
 export const transactions = pgTable(
@@ -34,7 +34,7 @@ export const transactions = pgTable(
 
     transactionDate: timestamp({ withTimezone: true }).notNull().defaultNow(),
 
-    recurringTransactionId: uuid().references(() => recurringTransactions.id, {
+    recurrenceId: uuid().references(() => recurrences.id, {
       onDelete: 'set null',
     }),
 
@@ -54,8 +54,8 @@ export const transactions = pgTable(
       table.transactionDate,
     ),
     index('transactions_org_id_status_idx').on(table.orgId, table.status),
-    unique('transactions_recurring_execution_unique').on(
-      table.recurringTransactionId,
+    unique('transactions_recurrence_execution_unique').on(
+      table.recurrenceId,
       table.transactionDate,
     ),
   ],

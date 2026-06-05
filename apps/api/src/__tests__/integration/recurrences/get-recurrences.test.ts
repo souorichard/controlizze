@@ -6,11 +6,11 @@ import { cleanDatabase } from '../../helpers/db.ts'
 import {
   makeCategory,
   makeOrganization,
-  makeRecurringTransaction,
+  makeRecurrence,
   makeUser,
 } from '../../helpers/factories.ts'
 
-describe('GET /orgs/:slug/recurring-transactions', () => {
+describe('GET /orgs/:slug/recurrences', () => {
   let app: Awaited<ReturnType<typeof createTestApp>>
 
   beforeEach(async () => {
@@ -22,26 +22,26 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     await app.close()
   })
 
-  it('should be able to get recurring transactions', async () => {
+  it('should be able to get recurrences', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
 
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
     })
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Bonus',
     })
 
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/recurring-transactions`)
+      .get(`/orgs/${org.slug}/recurrences`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
-    expect(response.body.recurringTransactions).toHaveLength(2)
+    expect(response.body.recurrences).toHaveLength(2)
     expect(response.body.meta).toMatchObject({
       page: 1,
       perPage: 10,
@@ -55,22 +55,22 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
 
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
     })
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Rent',
     })
 
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/recurring-transactions?title=sal`)
+      .get(`/orgs/${org.slug}/recurrences?title=sal`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
-    expect(response.body.recurringTransactions).toHaveLength(1)
-    expect(response.body.recurringTransactions[0].title).toBe('Salary')
+    expect(response.body.recurrences).toHaveLength(1)
+    expect(response.body.recurrences[0].title).toBe('Salary')
   })
 
   it('should be able to filter by type', async () => {
@@ -84,11 +84,11 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
       type: 'EXPENSE',
     })
 
-    await makeRecurringTransaction(user.id, org.id, incomeCategory.id, {
+    await makeRecurrence(user.id, org.id, incomeCategory.id, {
       title: 'Salary',
       type: 'INCOME',
     })
-    await makeRecurringTransaction(user.id, org.id, expenseCategory.id, {
+    await makeRecurrence(user.id, org.id, expenseCategory.id, {
       title: 'Rent',
       type: 'EXPENSE',
     })
@@ -96,12 +96,12 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/recurring-transactions?type=INCOME`)
+      .get(`/orgs/${org.slug}/recurrences?type=INCOME`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
-    expect(response.body.recurringTransactions).toHaveLength(1)
-    expect(response.body.recurringTransactions[0].title).toBe('Salary')
+    expect(response.body.recurrences).toHaveLength(1)
+    expect(response.body.recurrences[0].title).toBe('Salary')
   })
 
   it('should be able to filter by status', async () => {
@@ -109,11 +109,11 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
 
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
       status: 'ACTIVE',
     })
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Bonus',
       status: 'PAUSED',
     })
@@ -121,12 +121,12 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/recurring-transactions?status=ACTIVE`)
+      .get(`/orgs/${org.slug}/recurrences?status=ACTIVE`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
-    expect(response.body.recurringTransactions).toHaveLength(1)
-    expect(response.body.recurringTransactions[0].title).toBe('Salary')
+    expect(response.body.recurrences).toHaveLength(1)
+    expect(response.body.recurrences[0].title).toBe('Salary')
   })
 
   it('should be able to filter by frequency', async () => {
@@ -134,11 +134,11 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
 
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
       frequency: 'MONTHLY',
     })
-    await makeRecurringTransaction(user.id, org.id, category.id, {
+    await makeRecurrence(user.id, org.id, category.id, {
       title: 'Bonus',
       frequency: 'YEARLY',
     })
@@ -146,20 +146,20 @@ describe('GET /orgs/:slug/recurring-transactions', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/recurring-transactions?frequency=MONTHLY`)
+      .get(`/orgs/${org.slug}/recurrences?frequency=MONTHLY`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
-    expect(response.body.recurringTransactions).toHaveLength(1)
-    expect(response.body.recurringTransactions[0].title).toBe('Salary')
+    expect(response.body.recurrences).toHaveLength(1)
+    expect(response.body.recurrences[0].title).toBe('Salary')
   })
 
-  it('should not be able to get recurring transactions without authentication', async () => {
+  it('should not be able to get recurrences without authentication', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
 
     const response = await supertest(app.server).get(
-      `/orgs/${org.slug}/recurring-transactions`,
+      `/orgs/${org.slug}/recurrences`,
     )
 
     expect(response.status).toBe(401)

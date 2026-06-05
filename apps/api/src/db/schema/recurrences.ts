@@ -8,12 +8,12 @@ import {
 } from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 import { categories } from './categories.ts'
-import { frequencyEnum, recurringStatusEnum, typeEnum } from './enums.ts'
+import { frequencyEnum, recurrencesStatusEnum, typeEnum } from './enums.ts'
 import { organizations } from './organizations.ts'
 import { users } from './users.ts'
 
-export const recurringTransactions = pgTable(
-  'recurring_transactions',
+export const recurrences = pgTable(
+  'recurrences',
   {
     id: uuid()
       .primaryKey()
@@ -28,7 +28,7 @@ export const recurringTransactions = pgTable(
     }),
 
     amount: integer().notNull(),
-    status: recurringStatusEnum().notNull().default('ACTIVE'),
+    status: recurrencesStatusEnum().notNull().default('ACTIVE'),
 
     frequency: frequencyEnum().notNull().default('MONTHLY'),
     interval: integer().notNull().default(1),
@@ -50,8 +50,8 @@ export const recurringTransactions = pgTable(
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    index('recurring_transactions_org_id_idx').on(table.orgId),
-    index('recurring_transactions_status_next_execution_date_idx').on(
+    index('recurrences_org_id_idx').on(table.orgId),
+    index('recurrences_status_next_execution_date_idx').on(
       table.status,
       table.nextExecutionDate,
     ),

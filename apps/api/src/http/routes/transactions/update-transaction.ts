@@ -31,7 +31,7 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
           amount: z.coerce.number(),
           status: statusSchema,
           transactionDate: z.coerce.date().optional(),
-          recurringTransactionId: z.uuid().nullable().optional(),
+          recurrenceId: z.uuid().nullable().optional(),
         }),
         response: {
           204: z.void(),
@@ -55,7 +55,7 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
         amount,
         status,
         transactionDate,
-        recurringTransactionId,
+        recurrenceId,
       } = request.body
 
       const [transaction] = await db
@@ -94,7 +94,7 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
           amount: realToCents(amount),
           status,
           transactionDate: transactionDate ?? new Date(),
-          recurringTransactionId,
+          recurrenceId,
         })
         .where(
           and(

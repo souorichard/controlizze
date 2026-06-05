@@ -1,10 +1,10 @@
 import cron from 'node-cron'
 import { env } from '../env.ts'
-import { generateRecurringTransactions } from '../services/recurring-transactions/generate-recurring-transactions.ts'
+import { generateRecurrences } from '../services/recurrences/generate-recurrences.ts'
 
-export function startRecurringTransactionsJob() {
+export function startRecurrencesJob() {
   if (env.NODE_ENV !== 'production') {
-    console.log('[RecurringJob] Started!')
+    console.log('[RecurrencesJob] Started!')
   }
 
   let isRunning = false
@@ -17,15 +17,15 @@ export function startRecurringTransactionsJob() {
     const startedAt = Date.now()
 
     try {
-      const processed = await generateRecurringTransactions()
+      const processed = await generateRecurrences()
 
       if (env.NODE_ENV !== 'production' && processed > 0) {
         console.log(
-          `[RecurringJob] Processed ${processed} items in ${Date.now() - startedAt}ms`,
+          `[RecurrencesJob] Processed ${processed} items in ${Date.now() - startedAt}ms`,
         )
       }
     } catch (error) {
-      console.error('[RecurringJob] Error:', error)
+      console.error('[RecurrencesJob] Error:', error)
     } finally {
       isRunning = false
     }

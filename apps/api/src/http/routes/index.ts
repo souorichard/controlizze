@@ -45,11 +45,11 @@ import {
   updateOrgName,
 } from './orgs/index.ts'
 import {
-  createRecurringTransaction,
-  deleteRecurringTransaction,
-  getRecurringTransactions,
-  updateRecurringTransaction,
-} from './recurring-transactions/index.ts'
+  createRecurrence,
+  deleteRecurrence,
+  getRecurrences,
+  updateRecurrence,
+} from './recurrences/index.ts'
 import { healthCheck } from './server/index.ts'
 import {
   createTransaction,
@@ -249,22 +249,22 @@ export const routes: Route[] = [
     prefix: '/orgs/:slug/transactions/:transactionId',
   },
 
-  // Recurring transactions
+  // Recurrences
   {
-    plugin: createRecurringTransaction,
-    prefix: '/orgs/:slug/recurring-transactions',
+    plugin: createRecurrence,
+    prefix: '/orgs/:slug/recurrences',
   },
   {
-    plugin: getRecurringTransactions,
-    prefix: '/orgs/:slug/recurring-transactions',
+    plugin: getRecurrences,
+    prefix: '/orgs/:slug/recurrences',
   },
   {
-    plugin: updateRecurringTransaction,
-    prefix: '/orgs/:slug/recurring-transactions/:recurringTransactionId',
+    plugin: updateRecurrence,
+    prefix: '/orgs/:slug/recurrences/:recurrenceId',
   },
   {
-    plugin: deleteRecurringTransaction,
-    prefix: '/orgs/:slug/recurring-transactions/:recurringTransactionId',
+    plugin: deleteRecurrence,
+    prefix: '/orgs/:slug/recurrences/:recurrenceId',
   },
 
   // Metrics

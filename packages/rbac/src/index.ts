@@ -11,12 +11,12 @@ import { categorySubject } from './subjects/category.ts'
 import { inviteSubject } from './subjects/invite.ts'
 import { memberSubject } from './subjects/members.ts'
 import { organizationSubject } from './subjects/organization.ts'
-import { recurrencesSubject } from './subjects/recurrences.ts'
+import { recurrenceSubject } from './subjects/recurrence.ts'
 import { transactionSubject } from './subjects/transaction.ts'
 import { userSubject } from './subjects/user.ts'
 
 export * from './models/organization.ts'
-export * from './models/recurrences.ts'
+export * from './models/recurrence.ts'
 export * from './models/transaction.ts'
 export * from './models/user.ts'
 export * from './roles.ts'
@@ -25,7 +25,7 @@ const appAbilitiesSchema = z.union([
   userSubject,
   organizationSubject,
   transactionSubject,
-  recurrencesSubject,
+  recurrenceSubject,
   categorySubject,
   inviteSubject,
   memberSubject,

@@ -9,17 +9,17 @@ import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 import {
   frequencySchema,
-  recurringStatusSchema,
+  recurrenceStatusSchema,
   typeSchema,
 } from '../../schemas.ts'
 
-export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
+export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
     '/',
     {
       schema: {
-        tags: ['Recurring transaction'],
-        summary: 'Get organization recurring transactions',
+        tags: ['Recurrence'],
+        summary: 'Get organization recurrences',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
@@ -30,14 +30,14 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
             .min(3, 'Termo de busca deve ter pelo menos 3 caracteres')
             .optional(),
           type: typeSchema.optional(),
-          status: recurringStatusSchema.optional(),
+          status: recurrenceStatusSchema.optional(),
           frequency: frequencySchema.optional(),
           page: z.coerce.number().min(1).default(1),
           perPage: z.coerce.number().min(1).max(50).default(10),
         }),
         response: {
           200: z.object({
-            recurringTransactions: z.array(
+            recurrences: z.array(
               z.object({
                 id: z.uuid(),
                 title: z.string(),
@@ -51,7 +51,7 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
                   })
                   .nullable(),
                 amount: z.number(),
-                status: recurringStatusSchema,
+                status: recurrenceStatusSchema,
                 frequency: frequencySchema,
                 interval: z.number(),
                 startDate: z.date(),
@@ -78,66 +78,61 @@ export const getRecurringTransactions: FastifyPluginAsyncZod = async (app) => {
 
       const { cannot } = getUserPermissions(userId, membership.role)
 
-      if (cannot('read', 'RecurringTransaction')) {
+      if (cannot('read', 'Recurrence')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para visualizar transações recorrentes desta organização`,
+          `Você não tem permissão para visualizar recorrências desta organização`,
         )
       }
 
       const filters = and(
-        eq(schema.recurringTransactions.orgId, org.id),
-        title
-          ? ilike(schema.recurringTransactions.title, `%${title}%`)
-          : undefined,
-        type ? eq(schema.recurringTransactions.type, type) : undefined,
-        status ? eq(schema.recurringTransactions.status, status) : undefined,
-        frequency
-          ? eq(schema.recurringTransactions.frequency, frequency)
-          : undefined,
+        eq(schema.recurrences.orgId, org.id),
+        title ? ilike(schema.recurrences.title, `%${title}%`) : undefined,
+        type ? eq(schema.recurrences.type, type) : undefined,
+        status ? eq(schema.recurrences.status, status) : undefined,
+        frequency ? eq(schema.recurrences.frequency, frequency) : undefined,
       )
 
       const [{ total }] = await db
         .select({ total: count() })
-        .from(schema.recurringTransactions)
+        .from(schema.recurrences)
         .where(filters)
 
-      const recurringTransactions = await db
+      const recurrences = await db
         .select({
-          id: schema.recurringTransactions.id,
-          title: schema.recurringTransactions.title,
-          description: schema.recurringTransactions.description,
-          type: schema.recurringTransactions.type,
+          id: schema.recurrences.id,
+          title: schema.recurrences.title,
+          description: schema.recurrences.description,
+          type: schema.recurrences.type,
           category: {
             id: schema.categories.id,
             name: schema.categories.name,
             color: schema.categories.color,
           },
-          amount: schema.recurringTransactions.amount,
-          status: schema.recurringTransactions.status,
-          frequency: schema.recurringTransactions.frequency,
-          interval: schema.recurringTransactions.interval,
-          startDate: schema.recurringTransactions.startDate,
-          endDate: schema.recurringTransactions.endDate,
+          amount: schema.recurrences.amount,
+          status: schema.recurrences.status,
+          frequency: schema.recurrences.frequency,
+          interval: schema.recurrences.interval,
+          startDate: schema.recurrences.startDate,
+          endDate: schema.recurrences.endDate,
         })
-        .from(schema.recurringTransactions)
+        .from(schema.recurrences)
         .leftJoin(
           schema.categories,
-          eq(schema.recurringTransactions.categoryId, schema.categories.id),
+          eq(schema.recurrences.categoryId, schema.categories.id),
         )
         .where(filters)
         .limit(perPage)
         .offset((page - 1) * perPage)
 
-      const recurringTransactionsWithFormattedAmount =
-        recurringTransactions.map((transaction) => {
-          return {
-            ...transaction,
-            amount: centsToReal(transaction.amount),
-          }
-        })
+      const recurrencesWithFormattedAmount = recurrences.map((transaction) => {
+        return {
+          ...transaction,
+          amount: centsToReal(transaction.amount),
+        }
+      })
 
       return {
-        recurringTransactions: recurringTransactionsWithFormattedAmount,
+        recurrences: recurrencesWithFormattedAmount,
         meta: {
           page,
           perPage,

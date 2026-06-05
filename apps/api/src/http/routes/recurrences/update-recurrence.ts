@@ -1,4 +1,4 @@
-import { recurringTransactionSchema } from '@controlizze/rbac'
+import { recurrenceSchema } from '@controlizze/rbac'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
@@ -12,23 +12,21 @@ import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 import {
   frequencySchema,
-  recurringStatusSchema,
+  recurrenceStatusSchema,
   typeSchema,
 } from '../../schemas.ts'
 
-export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
-  app,
-) => {
+export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).put(
     '/',
     {
       schema: {
-        tags: ['Recurring transaction'],
-        summary: 'Update recurring transaction',
+        tags: ['Recurrence transaction'],
+        summary: 'Update recurrence',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
-          recurringTransactionId: z.string(),
+          recurrenceId: z.string(),
         }),
         body: z
           .object({
@@ -37,7 +35,7 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
             type: typeSchema,
             categoryId: z.uuid(),
             amount: z.coerce.number(),
-            status: recurringStatusSchema,
+            status: recurrenceStatusSchema,
             frequency: frequencySchema,
             interval: z.coerce.number(),
             startDate: z.coerce.date(),
@@ -58,7 +56,7 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
       },
     },
     async (request, reply) => {
-      const { slug, recurringTransactionId } = request.params
+      const { slug, recurrenceId } = request.params
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
@@ -103,35 +101,34 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
         )
       }
 
-      const [recurringTransaction] = await db
+      const [recurrence] = await db
         .select({
-          id: schema.recurringTransactions.id,
-          ownerId: schema.recurringTransactions.ownerId,
+          id: schema.recurrences.id,
+          ownerId: schema.recurrences.ownerId,
         })
-        .from(schema.recurringTransactions)
+        .from(schema.recurrences)
         .where(
           and(
-            eq(schema.recurringTransactions.id, recurringTransactionId),
-            eq(schema.recurringTransactions.orgId, org.id),
+            eq(schema.recurrences.id, recurrenceId),
+            eq(schema.recurrences.orgId, org.id),
           ),
         )
         .limit(1)
 
-      if (!recurringTransaction) {
-        throw new NotFoundError('Transação recorrente não encontrada')
+      if (!recurrence) {
+        throw new NotFoundError('Recorrência não encontrada')
       }
 
-      const authRecurringTransaction =
-        recurringTransactionSchema.parse(recurringTransaction)
+      const authRecurrence = recurrenceSchema.parse(recurrence)
 
-      if (cannot('update', authRecurringTransaction)) {
+      if (cannot('update', authRecurrence)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para atualizar esta transação recorrente`,
+          `Você não tem permissão para atualizar esta recorrência`,
         )
       }
 
       await db
-        .update(schema.recurringTransactions)
+        .update(schema.recurrences)
         .set({
           title,
           description,
@@ -146,8 +143,8 @@ export const updateRecurringTransaction: FastifyPluginAsyncZod = async (
         })
         .where(
           and(
-            eq(schema.recurringTransactions.id, recurringTransactionId),
-            eq(schema.recurringTransactions.orgId, org.id),
+            eq(schema.recurrences.id, recurrenceId),
+            eq(schema.recurrences.orgId, org.id),
           ),
         )
 

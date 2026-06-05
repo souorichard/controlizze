@@ -29,7 +29,7 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
           amount: z.coerce.number(),
           status: statusSchema.default('PENDING'),
           transactionDate: z.coerce.date().optional(),
-          recurringTransactionId: z.uuid().nullable().optional(),
+          recurrenceId: z.uuid().nullable().optional(),
         }),
         response: {
           201: z.object({
@@ -61,7 +61,7 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
         amount,
         status,
         transactionDate,
-        recurringTransactionId,
+        recurrenceId,
       } = request.body
 
       const [category] = await db
@@ -98,7 +98,7 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
           amount: realToCents(amount),
           status,
           transactionDate: transactionDate ?? new Date(),
-          recurringTransactionId,
+          recurrenceId,
           ownerId: userId,
           orgId: org.id,
         })

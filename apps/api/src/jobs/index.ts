@@ -1,7 +1,7 @@
 import { expireInvitesJob } from './expire-invites-job.ts'
-import { startRecurringTransactionsJob } from './start-recurring-transactions-job.ts'
+import { startRecurrencesJob } from './start-recurrences-job.ts'
 
 export function registerJobs() {
-  startRecurringTransactionsJob()
+  startRecurrencesJob()
   expireInvitesJob()
 }

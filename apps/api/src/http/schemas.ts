@@ -8,7 +8,7 @@ export const statusSchema = z.union([
   z.literal('CANCELED'),
 ])
 
-export const recurringStatusSchema = z.union([
+export const recurrenceStatusSchema = z.union([
   z.literal('ACTIVE'),
   z.literal('PAUSED'),
   z.literal('CANCELED'),
