@@ -1,21 +1,16 @@
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 import { AnimatedBackground } from '@/components/animated-background'
 import {
   Container,
   ContainerHeader,
   ContainerMain,
-  ContainerMainWrapper,
 } from '@/components/container'
 import { Header } from '@/components/header'
 import { Tabs } from '@/components/tabs'
 
-interface OrganizationLayoutProps {
-  children: ReactNode
-}
-
 export default async function OrganizationLayout({
   children,
-}: OrganizationLayoutProps) {
+}: PropsWithChildren) {
   return (
     <Container>
       <AnimatedBackground />
@@ -25,9 +20,7 @@ export default async function OrganizationLayout({
         <Tabs />
       </ContainerHeader>
 
-      <ContainerMain>
-        <ContainerMainWrapper>{children}</ContainerMainWrapper>
-      </ContainerMain>
+      <ContainerMain>{children}</ContainerMain>
     </Container>
   )
 }

@@ -29,13 +29,36 @@ export function ContainerHeader({ className, children }: GenericProps) {
 }
 
 export function ContainerMain({ className, children }: GenericProps) {
-  return <div className={cn('px-5 py-8', className)}>{children}</div>
+  return <div className={cn('px-5 py-10 md:py-12', className)}>{children}</div>
 }
 
-export function ContainerMainWrapper({ className, children }: GenericProps) {
+export function ContainerWrapper({ className, children }: GenericProps) {
   return (
     <div className={cn('max-w-7xl w-full mx-auto space-y-8', className)}>
       {children}
     </div>
+  )
+}
+
+export function ContainerWrapperHeader({ className, children }: GenericProps) {
+  return <div className={cn('space-y-1', className)}>{children}</div>
+}
+
+export function ContainerWrapperTitle({ className, children }: GenericProps) {
+  return (
+    <h1
+      className={cn('text-4xl font-bold font-heading tracking-wide', className)}
+    >
+      {children}
+    </h1>
+  )
+}
+
+export function ContainerWrapperDescription({
+  className,
+  children,
+}: GenericProps) {
+  return (
+    <span className={cn('text-muted-foreground', className)}>{children}</span>
   )
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { Providers } from './providers'
 
 const spaceGroteskSans = Space_Grotesk({
   variable: '--font-space-grotesk-sans',
@@ -28,12 +29,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressHydrationWarning
       className={`${spaceGroteskSans.variable} ${geistSans.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
-        <Toaster richColors />
+        <Providers>
+          {children}
+          <Toaster richColors />
+        </Providers>
       </body>
     </html>
   )

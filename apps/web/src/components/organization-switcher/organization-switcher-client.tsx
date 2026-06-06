@@ -1,9 +1,10 @@
+'use client'
+
+import type { Role } from '@controlizze/rbac'
 import { Check, ChevronsUpDown, CirclePlus } from 'lucide-react'
 import Link from 'next/link'
-import { getOrgs } from '@/http/orgs/get-orgs'
-import { getCurrentOrg } from '@/utils/auth'
 import { getInitials } from '@/utils/get-initials'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,18 +13,34 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu'
+} from '../ui/dropdown-menu'
 
-export async function OrganizationSwitcher() {
-  const currentOrgByCookie = await getCurrentOrg()
+interface OrganizationSwitcherClientProps {
+  currentOrg:
+    | {
+        id: string
+        name: string
+        slug: string
+        avatarUrl: string | null
+        role: Role
+      }
+    | undefined
+  orgs: {
+    id: string
+    name: string
+    slug: string
+    avatarUrl: string | null
+    role: Role
+  }[]
+}
 
-  const { orgs } = await getOrgs()
-
-  const currentOrg = orgs.find((org) => org.slug === currentOrgByCookie)
-
+export function OrganizationSwitcherClient({
+  currentOrg,
+  orgs,
+}: OrganizationSwitcherClientProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="focus-visible:ring-primary bg-background flex h-9 w-40 items-center gap-2 rounded-md border px-3 text-sm font-medium outline-none focus-visible:ring-2 sm:w-56">
+      <DropdownMenuTrigger className="focus-visible:ring-primary bg-background flex h-9 w-40 items-center gap-2 rounded-md border px-3 text-sm font-medium outline-none focus-visible:ring-2 sm:w-56 cursor-pointer">
         {currentOrg ? (
           <>
             <Avatar className="mr-1 size-5">
