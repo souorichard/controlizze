@@ -51,6 +51,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
                 amount: z.number(),
                 status: statusSchema,
                 transactionDate: z.date(),
+                createdAt: z.date(),
               }),
             ),
             meta: z.object({
@@ -119,6 +120,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
           amount: schema.transactions.amount,
           status: schema.transactions.status,
           transactionDate: schema.transactions.transactionDate,
+          createdAt: schema.transactions.createdAt,
         })
         .from(schema.transactions)
         .leftJoin(

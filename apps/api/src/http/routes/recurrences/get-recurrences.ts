@@ -56,6 +56,7 @@ export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
                 interval: z.number(),
                 startDate: z.date(),
                 endDate: z.date().nullable(),
+                createdAt: z.date(),
               }),
             ),
             meta: z.object({
@@ -114,6 +115,7 @@ export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
           interval: schema.recurrences.interval,
           startDate: schema.recurrences.startDate,
           endDate: schema.recurrences.endDate,
+          createdAt: schema.recurrences.createdAt,
         })
         .from(schema.recurrences)
         .leftJoin(

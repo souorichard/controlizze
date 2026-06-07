@@ -44,6 +44,7 @@ import {
   updateOrgAvatar,
   updateOrgName,
 } from './orgs/index.ts'
+import { getRecurrence } from './recurrences/get-recurrence.ts'
 import {
   createRecurrence,
   deleteRecurrence,
@@ -51,6 +52,7 @@ import {
   updateRecurrence,
 } from './recurrences/index.ts'
 import { healthCheck } from './server/index.ts'
+import { getTransaction } from './transactions/get-transaction.ts'
 import {
   createTransaction,
   deleteTransaction,
@@ -241,6 +243,10 @@ export const routes: Route[] = [
     prefix: '/orgs/:slug/transactions',
   },
   {
+    plugin: getTransaction,
+    prefix: '/orgs/:slug/transactions/:transactionId',
+  },
+  {
     plugin: updateTransaction,
     prefix: '/orgs/:slug/transactions/:transactionId',
   },
@@ -257,6 +263,10 @@ export const routes: Route[] = [
   {
     plugin: getRecurrences,
     prefix: '/orgs/:slug/recurrences',
+  },
+  {
+    plugin: getRecurrence,
+    prefix: '/orgs/:slug/recurrences/recurrenceId',
   },
   {
     plugin: updateRecurrence,

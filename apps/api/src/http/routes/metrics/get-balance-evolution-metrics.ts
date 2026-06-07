@@ -31,7 +31,7 @@ export const getBalanceEvolutionMetrics: FastifyPluginAsyncZod = async (
           200: z.object({
             evolutions: z.array(
               z.object({
-                date: z.string(),
+                date: z.date(),
                 balance: z.number(),
               }),
             ),
@@ -93,7 +93,7 @@ export const getBalanceEvolutionMetrics: FastifyPluginAsyncZod = async (
         runningBalance += monthBalance
 
         return {
-          date: dayjs(month.date).format('MMMM'),
+          date: month.date.toDate(),
           balance: centsToReal(runningBalance),
         }
       })

@@ -34,7 +34,7 @@ export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
           200: z.object({
             transactions: z.array(
               z.object({
-                date: z.string(),
+                date: z.date(),
                 expenses: z.number(),
                 incomes: z.number(),
               }),
@@ -67,14 +67,16 @@ export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
         ORDER BY date ASC
       `)
 
+      const transactions = (periodTransactions.rows as PeriodTransaction[]).map(
+        (item) => ({
+          date: new Date(item.date),
+          incomes: centsToReal(Number(item.incomes) || 0),
+          expenses: centsToReal(Number(item.expenses) || 0),
+        }),
+      )
+
       return {
-        transactions: (periodTransactions.rows as PeriodTransaction[]).map(
-          (item) => ({
-            date: dayjs(item.date).format('MMM DD'),
-            incomes: centsToReal(Number(item.incomes) || 0),
-            expenses: centsToReal(Number(item.expenses) || 0),
-          }),
-        ),
+        transactions,
       }
     },
   )

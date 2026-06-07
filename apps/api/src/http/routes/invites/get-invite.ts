@@ -26,7 +26,6 @@ export const getInvite: FastifyPluginAsyncZod = async (app) => {
               role: roleSchema,
               status: inviteStatusSchema,
               expiresAt: z.date(),
-              createdAt: z.date(),
               author: z
                 .object({
                   id: z.uuid(),
@@ -37,6 +36,7 @@ export const getInvite: FastifyPluginAsyncZod = async (app) => {
               org: z.object({
                 name: z.string(),
               }),
+              createdAt: z.date(),
             }),
           }),
         },
@@ -54,7 +54,6 @@ export const getInvite: FastifyPluginAsyncZod = async (app) => {
           role: schema.invites.role,
           status: schema.invites.status,
           expiresAt: schema.invites.expiresAt,
-          createdAt: schema.invites.createdAt,
           author: {
             id: schema.users.id,
             name: schema.users.name,
@@ -63,6 +62,7 @@ export const getInvite: FastifyPluginAsyncZod = async (app) => {
           org: {
             name: schema.organizations.name,
           },
+          createdAt: schema.invites.createdAt,
         })
         .from(schema.invites)
         .leftJoin(schema.users, eq(schema.invites.authorId, schema.users.id))

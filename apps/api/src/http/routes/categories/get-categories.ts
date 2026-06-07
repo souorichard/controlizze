@@ -3,7 +3,6 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
-import { users } from '../../../db/schema/users.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -42,6 +41,7 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
                   name: z.string().nullable(),
                   avatarUrl: z.url().nullable(),
                 }),
+                createdAt: z.date(),
               }),
             ),
             meta: z.object({
@@ -88,13 +88,14 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
           color: schema.categories.color,
           type: schema.categories.type,
           owner: {
-            id: users.id,
-            name: users.name,
-            avatarUrl: users.avatarUrl,
+            id: schema.users.id,
+            name: schema.users.name,
+            avatarUrl: schema.users.avatarUrl,
           },
+          createdAt: schema.categories.createdAt,
         })
         .from(schema.categories)
-        .innerJoin(users, eq(schema.categories.ownerId, users.id))
+        .innerJoin(schema.users, eq(schema.categories.ownerId, schema.users.id))
         .where(filters)
         .limit(perPage)
         .offset((page - 1) * perPage)

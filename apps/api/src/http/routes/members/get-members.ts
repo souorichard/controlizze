@@ -33,6 +33,7 @@ export const getMembers: FastifyPluginAsyncZod = async (app) => {
                 role: roleSchema,
                 avatarUrl: z.url().nullable(),
                 userId: z.uuid(),
+                createdAt: z.date(),
               }),
             ),
             meta: z.object({
@@ -74,6 +75,7 @@ export const getMembers: FastifyPluginAsyncZod = async (app) => {
           role: schema.members.role,
           avatarUrl: schema.users.avatarUrl,
           userId: schema.users.id,
+          createdAt: schema.users.createdAt,
         })
         .from(schema.members)
         .innerJoin(schema.users, eq(schema.members.userId, schema.users.id))
