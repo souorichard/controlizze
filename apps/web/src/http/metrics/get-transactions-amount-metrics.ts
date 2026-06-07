@@ -23,7 +23,7 @@ export async function getTransactionsAmountMetrics({
         accumulated,
       },
       next: {
-        tags: ['transactions-amount'],
+        tags: [`${org}/metrics/transactions-amount`],
       },
     })
     .json<GetTransactionsAmountMetricsResponse>()

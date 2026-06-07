@@ -18,17 +18,15 @@ export function BalanceCard() {
   })
 
   return (
-    <Card className="gap-5">
+    <Card className="gap-5 transition-all hover:border-primary hover:-translate-y-0.5">
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
-          <p className="text-muted-foreground text-sm font-medium">
-            SALDO DO MÊS
-          </p>
+          <p className="text-muted-foreground text-sm font-medium">SALDO</p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
-            <div className="size-8 flex items-center justify-center bg-orange-500/10 border border-orange-500 rounded-full">
-              <Wallet2 className="text-orange-500 size-4" />
+            <div className="size-8 flex items-center justify-center bg-orange-500/10 border border-primary rounded-full">
+              <Wallet2 className="text-primary size-4" />
             </div>
           )}
         </div>

@@ -18,7 +18,7 @@ export function IncomesCard() {
   })
 
   return (
-    <Card className="gap-5">
+    <Card className="gap-5 transition-all hover:border-primary hover:-translate-y-0.5">
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <p className="text-muted-foreground text-sm font-medium">RECEITAS</p>

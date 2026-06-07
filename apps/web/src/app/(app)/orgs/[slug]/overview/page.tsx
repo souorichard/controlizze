@@ -6,8 +6,11 @@ import {
   ContainerWrapperTitle,
 } from '@/components/container'
 import { BalanceCard } from './_components/balance-card'
+import { BalanceEvolutionCard } from './_components/balance-evolution-card'
 import { ExpensesCard } from './_components/expenses-card'
 import { IncomesCard } from './_components/incomes-card'
+import { SavingsRateCard } from './_components/savings-rate-card'
+import { TransactionsPerPeriodCard } from './_components/transactions-per-period-card'
 
 export const metadata: Metadata = {
   title: 'Overview',
@@ -29,11 +32,15 @@ export default function OverviewPage() {
       </ContainerWrapperHeader>
 
       <div className="flex flex-col gap-4">
-        <div className="grid items-center gap-4 lg:grid-cols-3">
-          <ExpensesCard />
+        <div className="grid items-center gap-4 lg:grid-cols-4">
           <IncomesCard />
+          <ExpensesCard />
+          <SavingsRateCard />
           <BalanceCard />
         </div>
+
+        <TransactionsPerPeriodCard />
+        <BalanceEvolutionCard />
       </div>
     </ContainerWrapper>
   )

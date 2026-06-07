@@ -15,7 +15,7 @@ export async function getTransactionsBalanceAmountMetrics({
   const response = await api
     .get(`/orgs/${org}/metrics/transactions-balance`, {
       next: {
-        tags: ['transactions-balance'],
+        tags: [`${org}/metrics/transactions-balance`],
       },
     })
     .json<GetTransactionsBalanceAmountMetricsResponse>()
