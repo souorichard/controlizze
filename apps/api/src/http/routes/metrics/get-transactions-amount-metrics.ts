@@ -13,7 +13,7 @@ export const getTransactionsAmountMetrics: FastifyPluginAsyncZod = async (
     {
       schema: {
         tags: ['Metrics'],
-        summary: 'Get organization transactions amount metrics',
+        summary: 'Get organization transactions amount',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),

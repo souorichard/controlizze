@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { and, eq, gte, lt, ne, sql } from 'drizzle-orm'
+import { and, count, eq, gte, lt, ne, sql } from 'drizzle-orm'
 import { db } from '../../db/index.ts'
 import { schema } from '../../db/schema/index.ts'
 
@@ -16,7 +16,8 @@ export async function getTotalTransactionsAmount(
   const currentMonth = today.startOf('month')
   const lastMonth = today.subtract(1, 'month')
 
-  const amountSum = sql<number>`coalesce(sum(${schema.transactions.amount}), 0)`
+  const amountSum =
+    sql<number>`coalesce(sum(${schema.transactions.amount}), 0)`.mapWith(Number)
 
   const baseFilters = [
     eq(schema.transactions.orgId, organizationId),
@@ -51,7 +52,7 @@ export async function getTotalTransactionsAmount(
     }
   }
 
-  const [total, totalLastMonth] = await Promise.all([
+  const [[total], [totalLastMonth], [{ totalCount }]] = await Promise.all([
     db
       .select({ amount: amountSum })
       .from(schema.transactions)
@@ -75,10 +76,16 @@ export async function getTotalTransactionsAmount(
           lt(schema.transactions.createdAt, currentMonth.toDate()),
         ),
       ),
+
+    db
+      .select({ totalCount: count() })
+      .from(schema.transactions)
+      .where(and(...baseFilters)),
   ])
 
   return {
-    totalAmount: total[0]?.amount ?? 0,
-    totalLastMonthAmount: totalLastMonth[0]?.amount ?? 0,
+    totalAmount: total.amount ?? 0,
+    totalLastMonthAmount: totalLastMonth.amount ?? 0,
+    totalCount: totalCount ?? 0,
   }
 }

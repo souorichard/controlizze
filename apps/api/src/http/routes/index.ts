@@ -28,6 +28,7 @@ import {
 import { getMembers, removeMember, updateMemberRole } from './members/index.ts'
 import {
   getBalanceEvolutionMetrics,
+  getSavingsRateMetrics,
   getTopExpenseCategoriesMetrics,
   getTransactionsAmountMetrics,
   getTransactionsBalanceAmountMetrics,
@@ -297,5 +298,9 @@ export const routes: Route[] = [
   {
     plugin: getBalanceEvolutionMetrics,
     prefix: '/orgs/:slug/metrics/balance-evolution',
+  },
+  {
+    plugin: getSavingsRateMetrics,
+    prefix: '/orgs/:slug/metrics/savings-rate',
   },
 ]
