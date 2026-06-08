@@ -2,8 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { CircleAlert, Loader2, XCircle } from 'lucide-react'
-import { useState } from 'react'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 import {
   Card,
   CardContent,
@@ -17,78 +16,46 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { useOrg } from '@/hooks/use-org'
-import { dayjs } from '@/lib/dayjs'
 import { formatDateWithMonth } from '@/utils/format-date'
-import { getBalanceEvolutionMetricsAction } from '../actions'
+import { getMonthlyExpensesMetricsAction } from '../actions'
 
 const chartConfig = {
-  evolutions: {
-    label: 'Evolução',
+  expenses: {
+    label: 'Despesas',
   },
-  balance: {
-    label: 'Saldo',
-    color: 'var(--chart-3)',
+  amount: {
+    label: 'Despesas',
+    color: 'var(--chart-5)',
   },
 } satisfies ChartConfig
 
-export function BalanceEvolutionCard() {
+export function MonthlyExpensesCard() {
   const org = useOrg()
 
-  const currentYear = dayjs().year()
-  const years = [currentYear, currentYear - 1, currentYear - 2]
-  const [year, setYear] = useState<string>(currentYear.toString())
-
-  const { data: evolutions, error } = useQuery({
-    queryKey: ['metrics', org, 'balance-evolution', year],
-    queryFn: () => getBalanceEvolutionMetricsAction({ year }),
+  const { data: monthlyExpenses, error } = useQuery({
+    queryKey: ['metrics', org, 'monthly-expenses'],
+    queryFn: () => getMonthlyExpensesMetricsAction(),
   })
 
   return (
-    <Card>
-      <CardHeader className="flex items-center justify-between">
-        <div className="space-y-1">
-          <CardTitle>Evolução do saldo</CardTitle>
-          <CardDescription>
-            Veja a evolução do seu saldo ao longo do ano selecionado
-          </CardDescription>
-        </div>
-        <div className="hidden items-center gap-3 lg:flex">
-          <span className="text-xs">Ano</span>
-          <Select defaultValue={year} onValueChange={(value) => setYear(value)}>
-            <SelectTrigger size="sm">
-              <SelectValue placeholder="Selecionar ano" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {years.map((year) => (
-                  <SelectItem key={year} value={String(year)}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+    <Card className="col-span-2">
+      <CardHeader>
+        <CardTitle>Despesas mensais</CardTitle>
+        <CardDescription>
+          Acompanhe como seus gastos variaram nos últimos seis meses
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        {evolutions ? (
-          evolutions.length > 0 ? (
+        {monthlyExpenses ? (
+          monthlyExpenses.length > 0 ? (
             <ChartContainer
               config={chartConfig}
               className="aspect-auto h-62.5 w-full"
             >
-              <BarChart
+              <LineChart
                 accessibilityLayer
-                data={evolutions}
+                data={monthlyExpenses}
                 margin={{
                   left: 12,
                   right: 12,
@@ -100,6 +67,7 @@ export function BalanceEvolutionCard() {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
+                  minTickGap={32}
                   tickFormatter={(value) => formatDateWithMonth(value)}
                 />
                 <ChartTooltip
@@ -111,20 +79,21 @@ export function BalanceEvolutionCard() {
                     />
                   }
                 />
-                <Bar
-                  dataKey="balance"
+                <Line
+                  dataKey="amount"
                   type="monotone"
-                  fill="var(--color-balance)"
-                  radius={8}
+                  strokeWidth={2}
+                  stroke="var(--color-amount)"
+                  dot={false}
                   isAnimationActive
                 />
-              </BarChart>
+              </LineChart>
             </ChartContainer>
           ) : (
             <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
               <div className="flex items-center gap-2">
                 <CircleAlert className="text-primary size-5" />
-                <span className="text-sm">Nenhuma evolução encontrada</span>
+                <span className="text-sm">Nenhuma despesa encontrada</span>
               </div>
             </div>
           )

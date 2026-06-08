@@ -48,16 +48,16 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-type Month = '1' | '3' | '6' | '9' | '12'
+type Period = '90' | '30' | '7'
 
 export function TransactionsPerPeriodCard() {
   const org = useOrg()
 
-  const [month, setMonth] = useState<Month>('1')
+  const [period, setPeriod] = useState<Period>('90')
 
   const { data: transactionsPerPeriod, error } = useQuery({
-    queryKey: ['metrics', org, 'transactions-per-period', month],
-    queryFn: () => getTransactionsPerPeriodMetricsAction({ lastMonths: month }),
+    queryKey: ['metrics', org, 'transactions-per-period', period],
+    queryFn: () => getTransactionsPerPeriodMetricsAction({ period }),
   })
 
   return (
@@ -72,19 +72,17 @@ export function TransactionsPerPeriodCard() {
         <div className="hidden items-center gap-3 lg:flex">
           <span className="text-xs">Período</span>
           <Select
-            defaultValue="1"
-            onValueChange={(value) => setMonth(value as Month)}
+            defaultValue="90"
+            onValueChange={(value) => setPeriod(value as Period)}
           >
             <SelectTrigger size="sm">
               <SelectValue placeholder="Selecionar período" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="1">Último mês</SelectItem>
-                <SelectItem value="3">Últimos 3 meses</SelectItem>
-                <SelectItem value="6">Últimos 6 meses</SelectItem>
-                <SelectItem value="9">Últimos 9 meses</SelectItem>
-                <SelectItem value="12">Últimos 12 meses</SelectItem>
+                <SelectItem value="90">Últimos 3 mês</SelectItem>
+                <SelectItem value="30">Últimos 30 dias</SelectItem>
+                <SelectItem value="7">Últimos 7 dias</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -150,6 +148,7 @@ export function TransactionsPerPeriodCard() {
                   strokeWidth={2}
                   stroke="var(--color-expenses)"
                   stackId="a"
+                  isAnimationActive
                 />
                 <Area
                   dataKey="incomes"
@@ -158,6 +157,7 @@ export function TransactionsPerPeriodCard() {
                   strokeWidth={2}
                   stroke="var(--color-incomes)"
                   stackId="a"
+                  isAnimationActive
                 />
                 <ChartLegend content={<ChartLegendContent />} />
               </AreaChart>

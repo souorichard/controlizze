@@ -1,7 +1,9 @@
 'use server'
 
 import { getBalanceEvolutionMetrics } from '@/http/metrics/get-balance-evolution-metrics'
+import { getMonthlyExpensesMetrics } from '@/http/metrics/get-monthly-expenses-metrics'
 import { getSavingsRateMetrics } from '@/http/metrics/get-savings-rate-metrics'
+import { getTopExpenseCategoriesMetrics } from '@/http/metrics/get-top-expenses-categories-metrics'
 import { getTransactionsAmountMetrics } from '@/http/metrics/get-transactions-amount-metrics'
 import { getTransactionsBalanceAmountMetrics } from '@/http/metrics/get-transactions-balance-amount-metrics'
 import { getTransactionsPerPeriodMetrics } from '@/http/metrics/get-transactions-per-period-metrics'
@@ -57,17 +59,17 @@ export async function getTransactionsBalanceAmountMetricsAction() {
 }
 
 interface GetTransactionsPerPeriodMetricsActionProps {
-  lastMonths?: string
+  period?: string
 }
 
 export async function getTransactionsPerPeriodMetricsAction({
-  lastMonths,
+  period,
 }: GetTransactionsPerPeriodMetricsActionProps) {
   const currentOrg = await getCurrentOrg()
 
   const { transactions } = await getTransactionsPerPeriodMetrics({
     org: currentOrg as string,
-    lastMonths,
+    period,
   })
 
   return transactions
@@ -88,4 +90,24 @@ export async function getBalanceEvolutionMetricsAction({
   })
 
   return evolutions
+}
+
+export async function getTopExpenseCategoriesMetricsAction() {
+  const currentOrg = await getCurrentOrg()
+
+  const { categories } = await getTopExpenseCategoriesMetrics({
+    org: currentOrg as string,
+  })
+
+  return categories
+}
+
+export async function getMonthlyExpensesMetricsAction() {
+  const currentOrg = await getCurrentOrg()
+
+  const { expenses } = await getMonthlyExpensesMetrics({
+    org: currentOrg as string,
+  })
+
+  return expenses
 }

@@ -9,7 +9,9 @@ import { BalanceCard } from './_components/balance-card'
 import { BalanceEvolutionCard } from './_components/balance-evolution-card'
 import { ExpensesCard } from './_components/expenses-card'
 import { IncomesCard } from './_components/incomes-card'
+import { MonthlyExpensesCard } from './_components/monthly-expenses-card'
 import { SavingsRateCard } from './_components/savings-rate-card'
+import { TopExpenseCategoriesCard } from './_components/top-expense-categories-card'
 import { TransactionsPerPeriodCard } from './_components/transactions-per-period-card'
 
 export const metadata: Metadata = {
@@ -41,6 +43,11 @@ export default function OverviewPage() {
 
         <TransactionsPerPeriodCard />
         <BalanceEvolutionCard />
+
+        <div className="grid items-center gap-4 lg:grid-cols-4">
+          <TopExpenseCategoriesCard />
+          <MonthlyExpensesCard />
+        </div>
       </div>
     </ContainerWrapper>
   )

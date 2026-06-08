@@ -1,9 +1,10 @@
 import { dayjs } from '@/lib/dayjs'
 
 export function formatDate(date: string) {
-  const formatted = dayjs(date).format('DD [de] MMMM')
+  const day = dayjs(date).format('DD')
+  const month = dayjs(date).format('MMMM')
 
-  return formatted.replace(/de (\w)/, (_, c) => `de ${c.toUpperCase()}`)
+  return `${day} ${month.charAt(0).toUpperCase()}${month.slice(1)}`
 }
 
 export function formatDateWithMonth(date: string) {

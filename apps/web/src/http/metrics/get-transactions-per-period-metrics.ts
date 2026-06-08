@@ -2,7 +2,7 @@ import { api } from '../api-client'
 
 interface GetTransactionsPerPeriodMetricsRequest {
   org: string
-  lastMonths?: string
+  period?: string
 }
 
 interface GetTransactionsPerPeriodMetricsResponse {
@@ -15,12 +15,12 @@ interface GetTransactionsPerPeriodMetricsResponse {
 
 export async function getTransactionsPerPeriodMetrics({
   org,
-  lastMonths,
+  period,
 }: GetTransactionsPerPeriodMetricsRequest) {
   const response = await api
     .get(`orgs/${org}/metrics/transactions-per-period`, {
       searchParams: {
-        lastMonths,
+        period,
       },
       next: {
         tags: [`${org}/metrics/transactions-per-period`],
