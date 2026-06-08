@@ -28,7 +28,7 @@ export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
           slug: z.string(),
         }),
         querystring: z.object({
-          lastMonths: z.coerce.number().optional().default(1),
+          period: z.coerce.number().optional().default(90),
         }),
         response: {
           200: z.object({
@@ -45,13 +45,15 @@ export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
     },
     async (request) => {
       const { slug } = request.params
-      const { lastMonths } = request.query
+      const { period } = request.query
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
       const { org } = await request.getUserMembership(slug, userId)
 
-      const startDate = dayjs().subtract(lastMonths, 'months').startOf('month')
+      const startDate = dayjs()
+        .subtract(period - 1, 'days')
+        .startOf('day')
       const endDate = dayjs().endOf('day')
 
       const periodTransactions = await db.execute<PeriodTransaction>(sql`

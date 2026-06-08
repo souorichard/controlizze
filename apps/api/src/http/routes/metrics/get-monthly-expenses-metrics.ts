@@ -8,31 +8,23 @@ import { schema } from '../../../db/schema/index.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { auth } from '../../middlewares/auth.ts'
 
-export const getBalanceEvolutionMetrics: FastifyPluginAsyncZod = async (
-  app,
-) => {
+export const getMonthlyExpensesMetrics: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
     '/',
     {
       schema: {
         tags: ['Metrics'],
-        summary: 'Get monthly organization balance evolution for a given year',
+        summary: 'Get last 6 months expenses amount',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
         }),
-        querystring: z.object({
-          year: z
-            .string()
-            .regex(/^\d{4}$/)
-            .default(dayjs().year().toString()),
-        }),
         response: {
           200: z.object({
-            evolutions: z.array(
+            expenses: z.array(
               z.object({
                 date: z.date(),
-                balance: z.number(),
+                amount: z.number(),
               }),
             ),
           }),
@@ -41,18 +33,16 @@ export const getBalanceEvolutionMetrics: FastifyPluginAsyncZod = async (
     },
     async (request) => {
       const { slug } = request.params
-      const { year } = request.query
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
       const { org } = await request.getUserMembership(slug, userId)
 
-      const startDate = dayjs().year(Number(year)).startOf('year')
-      const endDate = dayjs().year(Number(year)).endOf('year')
+      const startDate = dayjs().subtract(5, 'month').startOf('month')
+      const endDate = dayjs().endOf('month')
 
       const transactions = await db
         .select({
-          type: schema.transactions.type,
           amount: schema.transactions.amount,
           transactionDate: schema.transactions.transactionDate,
         })
@@ -60,45 +50,37 @@ export const getBalanceEvolutionMetrics: FastifyPluginAsyncZod = async (
         .where(
           and(
             eq(schema.transactions.orgId, org.id),
+            eq(schema.transactions.type, 'EXPENSE'),
             ne(schema.transactions.status, 'CANCELED'),
             gte(schema.transactions.transactionDate, startDate.toDate()),
             lte(schema.transactions.transactionDate, endDate.toDate()),
           ),
         )
 
-      const months = Array.from({ length: 12 }, (_, index) => ({
-        date: dayjs().year(Number(year)).month(index).startOf('month'),
-        income: 0,
-        expense: 0,
+      const months = Array.from({ length: 6 }, (_, index) => ({
+        date: startDate.add(index, 'month'),
+        amount: 0,
       }))
 
       for (const transaction of transactions) {
-        const monthIndex = transaction.transactionDate.getUTCMonth()
+        const monthIndex = dayjs(transaction.transactionDate).diff(
+          startDate,
+          'month',
+        )
+
         const month = months[monthIndex]
 
         if (!month) continue
 
-        if (transaction.type === 'INCOME') {
-          month.income += transaction.amount
-        } else {
-          month.expense += transaction.amount
-        }
+        month.amount += transaction.amount
       }
 
-      let runningBalance = 0
-
-      const evolutions = months.map((month) => {
-        const monthBalance = month.income - month.expense
-
-        runningBalance += monthBalance
-
-        return {
+      return {
+        expenses: months.map((month) => ({
           date: month.date.toDate(),
-          balance: centsToReal(runningBalance),
-        }
-      })
-
-      return { evolutions }
+          amount: centsToReal(month.amount),
+        })),
+      }
     },
   )
 }

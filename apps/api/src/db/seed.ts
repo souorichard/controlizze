@@ -174,69 +174,81 @@ async function seed() {
 
     // 5. Create test transactions
     console.log('💳 Creating test transactions...')
-    const now = new Date()
-    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-    const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000)
 
-    await db.insert(schema.transactions).values([
-      {
-        title: 'Lunch at Restaurant',
-        description: 'Team lunch',
-        type: 'EXPENSE',
-        categoryId: categoryExpenseFood.id,
-        amount: 4500, // $45.00
-        status: 'PAID',
-        transactionDate: oneWeekAgo,
-        ownerId: user1.id,
-        orgId: org1.id,
-      },
-      {
+    const transactions = []
+    const startSeedDate = new Date()
+    startSeedDate.setFullYear(startSeedDate.getFullYear() - 1)
+
+    for (let i = 0; i < 36; i++) {
+      const month = new Date(startSeedDate)
+      month.setMonth(month.getMonth() + i)
+
+      // Salary - every month
+      transactions.push({
         title: 'Monthly Salary',
-        description: 'Monthly salary payment',
-        type: 'INCOME',
+        type: 'INCOME' as const,
         categoryId: categoryIncomeSalary.id,
-        amount: 500000, // $5000.00
-        status: 'PAID',
-        transactionDate: twoWeeksAgo,
+        amount: 500000,
+        status: 'PAID' as const,
+        transactionDate: new Date(month.getFullYear(), month.getMonth(), 5),
         ownerId: user1.id,
         orgId: org1.id,
-      },
-      {
+      })
+
+      // Bonus - every 3 months
+      if (i % 3 === 0) {
+        transactions.push({
+          title: 'Project Bonus',
+          type: 'INCOME' as const,
+          categoryId: categoryIncomeBonuses.id,
+          amount: 50000,
+          status: 'PAID' as const,
+          transactionDate: new Date(month.getFullYear(), month.getMonth(), 10),
+          ownerId: user1.id,
+          orgId: org1.id,
+        })
+      }
+
+      // Food expense - every month
+      transactions.push({
+        title: 'Lunch at Restaurant',
+        type: 'EXPENSE' as const,
+        categoryId: categoryExpenseFood.id,
+        amount: Math.floor(Math.random() * 3000) + 3000,
+        status: 'PAID' as const,
+        transactionDate: new Date(month.getFullYear(), month.getMonth(), 12),
+        ownerId: user1.id,
+        orgId: org1.id,
+      })
+
+      // Transport - every month
+      transactions.push({
         title: 'Gas for car',
-        description: 'Weekly fuel',
-        type: 'EXPENSE',
+        type: 'EXPENSE' as const,
         categoryId: categoryExpenseTransport.id,
-        amount: 6000, // $60.00
-        status: 'PAID',
-        transactionDate: now,
+        amount: Math.floor(Math.random() * 2000) + 5000,
+        status: 'PAID' as const,
+        transactionDate: new Date(month.getFullYear(), month.getMonth(), 15),
         ownerId: user2.id,
         orgId: org1.id,
-      },
-      {
+      })
+
+      // Utilities - every month
+      transactions.push({
         title: 'Electric Bill',
-        description: 'Monthly electricity payment',
-        type: 'EXPENSE',
+        type: 'EXPENSE' as const,
         categoryId: categoryExpenseUtilities.id,
-        amount: 15000, // $150.00
-        status: 'PENDING',
-        transactionDate: now,
+        amount: Math.floor(Math.random() * 5000) + 10000,
+        status: i === 23 ? ('PENDING' as const) : ('PAID' as const),
+        transactionDate: new Date(month.getFullYear(), month.getMonth(), 20),
         ownerId: user1.id,
         orgId: org1.id,
-      },
-      {
-        title: 'Project Bonus',
-        description: 'Bonus for project completion',
-        type: 'INCOME',
-        categoryId: categoryIncomeBonuses.id,
-        amount: 50000, // $500.00
-        status: 'PAID',
-        transactionDate: oneWeekAgo,
-        ownerId: user3.id,
-        orgId: org1.id,
-      },
-    ])
+      })
+    }
 
-    console.log(`✅ Created ${5} transactions`)
+    await db.insert(schema.transactions).values(transactions)
+
+    console.log(`✅ Created ${transactions.length} transactions`)
 
     // 6. Create test recurrences
     console.log('🔄 Creating test recurrences...')
