@@ -2,13 +2,16 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { Loader2, PiggyBank } from 'lucide-react'
-
+import type { ComponentProps } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useOrg } from '@/hooks/use-org'
-import { getSavingRateMetricsAction } from '../actions'
-import { AmountsCardSkeleton } from './skeletons/amounts-card-skeleton'
+import { cn } from '@/lib/utils'
+import { getSavingRateMetricsAction } from '../../actions'
+import { AmountsCardSkeleton } from '../skeletons/amounts-card-skeleton'
 
-export function SavingsRateCard() {
+interface SavingsRateCardProps extends ComponentProps<'div'> {}
+
+export function SavingsRateCard({ className, ...props }: SavingsRateCardProps) {
   const org = useOrg()
 
   const { data: savings, isLoading } = useQuery({
@@ -17,7 +20,13 @@ export function SavingsRateCard() {
   })
 
   return (
-    <Card className="gap-5 transition-all hover:border-primary hover:-translate-y-0.5">
+    <Card
+      className={cn(
+        'gap-5 transition-all hover:border-primary hover:-translate-y-0.5',
+        className,
+      )}
+      {...props}
+    >
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <p className="text-muted-foreground text-sm font-medium">

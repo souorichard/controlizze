@@ -30,9 +30,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGroteskSans.variable} ${geistSans.variable} h-full antialiased dark`}
+      className={`${spaceGroteskSans.variable} ${geistSans.variable} dark antialiased select-none`}
     >
-      <body className="min-h-full flex flex-col">
+      <body>
         <Providers>
           {children}
           <Toaster richColors />

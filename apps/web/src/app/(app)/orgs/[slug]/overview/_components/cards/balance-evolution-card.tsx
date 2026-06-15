@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { CircleAlert, Loader2, XCircle } from 'lucide-react'
-import { useState } from 'react'
+import { type ComponentProps, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 import {
   Card,
@@ -28,7 +28,7 @@ import {
 import { useOrg } from '@/hooks/use-org'
 import { dayjs } from '@/lib/dayjs'
 import { formatDateWithMonth } from '@/utils/format-date'
-import { getBalanceEvolutionMetricsAction } from '../actions'
+import { getBalanceEvolutionMetricsAction } from '../../actions'
 
 const chartConfig = {
   evolutions: {
@@ -40,7 +40,9 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function BalanceEvolutionCard() {
+interface BalanceEvolutionCardProps extends ComponentProps<'div'> {}
+
+export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
   const org = useOrg()
 
   const currentYear = dayjs().year()
@@ -53,7 +55,7 @@ export function BalanceEvolutionCard() {
   })
 
   return (
-    <Card>
+    <Card {...props}>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
           <CardTitle>Evolução do saldo</CardTitle>

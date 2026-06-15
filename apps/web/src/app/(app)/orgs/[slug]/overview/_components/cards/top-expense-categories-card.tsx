@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { CircleAlert, Loader2, XCircle } from 'lucide-react'
-import { useMemo } from 'react'
+import { type ComponentProps, useMemo } from 'react'
 import { Pie, PieChart } from 'recharts'
 
 import {
@@ -23,9 +23,15 @@ import {
 } from '@/components/ui/chart'
 
 import { useOrg } from '@/hooks/use-org'
-import { getTopExpenseCategoriesMetricsAction } from '../actions'
+import { cn } from '@/lib/utils'
+import { getTopExpenseCategoriesMetricsAction } from '../../actions'
 
-export function TopExpenseCategoriesCard() {
+interface TopExpenseCategoriesCardProps extends ComponentProps<'div'> {}
+
+export function TopExpenseCategoriesCard({
+  className,
+  ...props
+}: TopExpenseCategoriesCardProps) {
   const org = useOrg()
 
   const { data: topExpenseCategories, error } = useQuery({
@@ -69,7 +75,7 @@ export function TopExpenseCategoriesCard() {
   }, [topExpenseCategories])
 
   return (
-    <Card className="col-span-2">
+    <Card className={cn('col-span-2', className)} {...props}>
       <CardHeader>
         <CardTitle>Despesas por categoria</CardTitle>
         <CardDescription>

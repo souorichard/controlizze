@@ -7,7 +7,7 @@ import { Separator } from './ui/separator'
 
 export function Header() {
   return (
-    <header className="max-w-7xl w-full mx-auto flex justify-between items-center gap-3 md:gap-4">
+    <div className="max-w-7xl w-full mx-auto flex justify-between items-center gap-3 md:gap-4">
       <div className="flex items-center gap-2 md:gap-4">
         <Link href="/">
           <Image
@@ -29,6 +29,6 @@ export function Header() {
           <AccountMenu />
         </div>
       </div>
-    </header>
+    </div>
   )
 }

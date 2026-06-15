@@ -5,29 +5,23 @@ import {
   ContainerContentHeader,
   ContainerContentTitle,
 } from '@/components/container'
-import { OverviewGrid } from './_components/overview-grid'
+import { TransactionsView } from './_components/transactions-view'
 
 export const metadata: Metadata = {
-  title: 'Overview',
+  title: 'Transações',
 }
 
-export default function OverviewPage() {
+export default function TransactionsPage() {
   return (
     <ContainerContent>
       <ContainerContentHeader>
-        <ContainerContentTitle>
-          Insights{' '}
-          <span className="bg-linear-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent animate-shimmer">
-            financeiros
-          </span>
-        </ContainerContentTitle>
-
+        <ContainerContentTitle>Transações</ContainerContentTitle>
         <ContainerContentDescription>
           Transforme dados financeiros em decisões mais inteligentes
         </ContainerContentDescription>
       </ContainerContentHeader>
 
-      <OverviewGrid />
+      <TransactionsView />
     </ContainerContent>
   )
 }

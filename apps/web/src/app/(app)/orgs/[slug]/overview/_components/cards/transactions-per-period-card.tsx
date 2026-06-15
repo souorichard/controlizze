@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, CircleAlert, Loader2, XCircle } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { type ComponentProps, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 import { Button } from '@/components/ui/button'
 import {
@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/select'
 import { useOrg } from '@/hooks/use-org'
 import { formatDate } from '@/utils/format-date'
-import { getTransactionsPerPeriodMetricsAction } from '../actions'
+import { getTransactionsPerPeriodMetricsAction } from '../../actions'
 
 const chartConfig = {
   transactions: {
@@ -50,7 +50,11 @@ const chartConfig = {
 
 type Period = '90' | '30' | '7'
 
-export function TransactionsPerPeriodCard() {
+interface TransactionsPerPeriodCardProps extends ComponentProps<'div'> {}
+
+export function TransactionsPerPeriodCard({
+  ...props
+}: TransactionsPerPeriodCardProps) {
   const org = useOrg()
 
   const [period, setPeriod] = useState<Period>('90')
@@ -61,7 +65,7 @@ export function TransactionsPerPeriodCard() {
   })
 
   return (
-    <Card>
+    <Card {...props}>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
           <CardTitle>Transações por período</CardTitle>

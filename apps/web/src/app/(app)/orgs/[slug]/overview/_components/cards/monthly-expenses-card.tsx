@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { CircleAlert, Loader2, XCircle } from 'lucide-react'
+import type { ComponentProps } from 'react'
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 import {
   Card,
@@ -17,8 +18,9 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { useOrg } from '@/hooks/use-org'
+import { cn } from '@/lib/utils'
 import { formatDateWithMonth } from '@/utils/format-date'
-import { getMonthlyExpensesMetricsAction } from '../actions'
+import { getMonthlyExpensesMetricsAction } from '../../actions'
 
 const chartConfig = {
   expenses: {
@@ -30,7 +32,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function MonthlyExpensesCard() {
+interface MonthlyExpensesCardProps extends ComponentProps<'div'> {}
+
+export function MonthlyExpensesCard({
+  className,
+  ...props
+}: MonthlyExpensesCardProps) {
   const org = useOrg()
 
   const { data: monthlyExpenses, error } = useQuery({
@@ -39,7 +46,7 @@ export function MonthlyExpensesCard() {
   })
 
   return (
-    <Card className="col-span-2">
+    <Card className={cn('col-span-2', className)} {...props}>
       <CardHeader>
         <CardTitle>Despesas mensais</CardTitle>
         <CardDescription>

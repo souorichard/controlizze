@@ -17,22 +17,24 @@ export function Container({ className, children }: GenericProps) {
 
 export function ContainerHeader({ className, children }: GenericProps) {
   return (
-    <div
+    <header
       className={cn(
         'sticky top-0 z-40 px-5 pt-5 border-b bg-background/60 backdrop-blur-xl',
         className,
       )}
     >
       {children}
-    </div>
+    </header>
   )
 }
 
 export function ContainerMain({ className, children }: GenericProps) {
-  return <div className={cn('px-5 py-10 md:py-12', className)}>{children}</div>
+  return (
+    <main className={cn('px-5 py-10 md:py-12', className)}>{children}</main>
+  )
 }
 
-export function ContainerWrapper({ className, children }: GenericProps) {
+export function ContainerContent({ className, children }: GenericProps) {
   return (
     <div className={cn('max-w-7xl w-full mx-auto space-y-8', className)}>
       {children}
@@ -40,11 +42,11 @@ export function ContainerWrapper({ className, children }: GenericProps) {
   )
 }
 
-export function ContainerWrapperHeader({ className, children }: GenericProps) {
+export function ContainerContentHeader({ className, children }: GenericProps) {
   return <div className={cn('space-y-1', className)}>{children}</div>
 }
 
-export function ContainerWrapperTitle({ className, children }: GenericProps) {
+export function ContainerContentTitle({ className, children }: GenericProps) {
   return (
     <h1
       className={cn('text-4xl font-bold font-heading tracking-wide', className)}
@@ -54,11 +56,35 @@ export function ContainerWrapperTitle({ className, children }: GenericProps) {
   )
 }
 
-export function ContainerWrapperDescription({
+export function ContainerContentDescription({
+  className,
+  children,
+}: GenericProps) {
+  return <p className={cn('text-muted-foreground', className)}>{children}</p>
+}
+
+export function ContainerContentFilter({ className, children }: GenericProps) {
+  return (
+    <div className={cn('flex items-center gap-3', className)}>{children}</div>
+  )
+}
+
+export function ContainerContentTable({ className, children }: GenericProps) {
+  return <section className={cn('space-y-3', className)}>{children}</section>
+}
+
+export function ContainerContentTableWrapper({
   className,
   children,
 }: GenericProps) {
   return (
-    <span className={cn('text-muted-foreground', className)}>{children}</span>
+    <div
+      className={cn(
+        'border-2 bg-card/40 backdrop-blur-xl ring-1 ring-foreground/10 rounded-xl overflow-hidden',
+        className,
+      )}
+    >
+      {children}
+    </div>
   )
 }

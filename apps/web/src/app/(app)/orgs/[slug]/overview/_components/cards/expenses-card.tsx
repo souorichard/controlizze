@@ -2,14 +2,16 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { Loader2, TrendingDown } from 'lucide-react'
-
+import type { ComponentProps } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useOrg } from '@/hooks/use-org'
 import { cn } from '@/lib/utils'
-import { getTransactionsAmountMetricsAction } from '../actions'
-import { AmountsCardSkeleton } from './skeletons/amounts-card-skeleton'
+import { getTransactionsAmountMetricsAction } from '../../actions'
+import { AmountsCardSkeleton } from '../skeletons/amounts-card-skeleton'
 
-export function ExpensesCard() {
+interface ExpensesCardProps extends ComponentProps<'div'> {}
+
+export function ExpensesCard({ className, ...props }: ExpensesCardProps) {
   const org = useOrg()
 
   const { data: expenses, isLoading } = useQuery({
@@ -18,7 +20,13 @@ export function ExpensesCard() {
   })
 
   return (
-    <Card className="gap-5 transition-all hover:border-primary hover:-translate-y-0.5">
+    <Card
+      className={cn(
+        'gap-5 transition-all hover:border-primary hover:-translate-y-0.5',
+        className,
+      )}
+      {...props}
+    >
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <p className="text-muted-foreground text-sm font-medium">DESPESAS</p>
