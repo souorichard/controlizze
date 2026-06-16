@@ -39,7 +39,7 @@ export async function getTotalTransactionsAmount(
           and(
             ...baseFilters,
             lt(
-              schema.transactions.createdAt,
+              schema.transactions.transactionDate,
               lastMonth.endOf('month').toDate(),
             ),
           ),
@@ -59,7 +59,7 @@ export async function getTotalTransactionsAmount(
       .where(
         and(
           ...baseFilters,
-          gte(schema.transactions.createdAt, currentMonth.toDate()),
+          gte(schema.transactions.transactionDate, currentMonth.toDate()),
         ),
       ),
 
@@ -70,17 +70,22 @@ export async function getTotalTransactionsAmount(
         and(
           ...baseFilters,
           gte(
-            schema.transactions.createdAt,
+            schema.transactions.transactionDate,
             lastMonth.startOf('month').toDate(),
           ),
-          lt(schema.transactions.createdAt, currentMonth.toDate()),
+          lt(schema.transactions.transactionDate, currentMonth.toDate()),
         ),
       ),
 
     db
       .select({ totalCount: count() })
       .from(schema.transactions)
-      .where(and(...baseFilters)),
+      .where(
+        and(
+          ...baseFilters,
+          gte(schema.transactions.transactionDate, currentMonth.toDate()),
+        ),
+      ),
   ])
 
   return {
