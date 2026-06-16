@@ -60,7 +60,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
                     'tracking-wide',
                     incomes?.diffFromLastMonth === 0
                       ? 'text-muted-foreground'
-                      : incomes?.diffFromLastMonth < 0
+                      : incomes?.diffFromLastMonth > 0
                         ? 'text-emerald-500'
                         : 'text-destructive',
                   )}

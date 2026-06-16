@@ -60,7 +60,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
                     'tracking-wide',
                     balance?.diffFromLastMonth === 0
                       ? 'text-muted-foreground'
-                      : balance?.diffFromLastMonth < 0
+                      : balance?.diffFromLastMonth > 0
                         ? 'text-emerald-500'
                         : 'text-destructive',
                   )}
