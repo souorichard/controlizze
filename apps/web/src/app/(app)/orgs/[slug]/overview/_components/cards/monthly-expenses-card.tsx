@@ -28,7 +28,7 @@ const chartConfig = {
   },
   amount: {
     label: 'Despesas',
-    color: 'var(--chart-5)',
+    color: 'var(--chart-1)',
   },
 } satisfies ChartConfig
 

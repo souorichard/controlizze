@@ -3,6 +3,7 @@ import { Geist, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import '@/lib/dayjs'
 import { Toaster } from '@/components/ui/sonner'
+import { cn } from '@/lib/utils'
 import { Providers } from './providers'
 
 const spaceGroteskSans = Space_Grotesk({
@@ -30,7 +31,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGroteskSans.variable} ${geistSans.variable} dark antialiased select-none`}
+      className={cn(
+        'dark antialiased',
+        spaceGroteskSans.variable,
+        geistSans.variable,
+      )}
     >
       <body>
         <Providers>

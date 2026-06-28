@@ -17,7 +17,7 @@ export default function OverviewPage() {
       <ContainerContentHeader>
         <ContainerContentTitle>
           Insights{' '}
-          <span className="bg-linear-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent animate-shimmer">
+          <span className="bg-linear-to-r from-primary via-primary/60 to-primary bg-clip-text text-transparent animate-shimmer">
             financeiros
           </span>
         </ContainerContentTitle>

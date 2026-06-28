@@ -1,6 +1,7 @@
 'use client'
 
-import { Trash2, TrendingDown, TrendingUp } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { Transaction } from '@/interfaces/transaction-interface'
@@ -23,15 +24,15 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
             key={transaction.id}
             className="group p-4 flex items-center gap-4 hover:bg-muted/20 transition-all border-b"
           >
-            {isExpense ? (
-              <div className="size-10 flex items-center justify-center bg-destructive/10 border border-destructive rounded-full">
-                <TrendingDown className="text-destructive size-5" />
-              </div>
-            ) : (
-              <div className="size-10 flex items-center justify-center bg-emerald-500/10 border border-emerald-500 rounded-full">
-                <TrendingUp className="text-emerald-500 size-5" />
-              </div>
-            )}
+            <Avatar
+              className={cn(
+                'size-10 border-2 rounded-full',
+                isExpense ? 'border-destructive' : 'border-emerald-500',
+              )}
+            >
+              <AvatarImage src="https://avatars.githubusercontent.com/u/101836586?s=400&u=e091da23eabfd8b6abd1515212cba9f98fc923c5&v=4" />
+              <AvatarFallback>RR</AvatarFallback>
+            </Avatar>
 
             <div className="flex-1">
               <div className="flex items-center gap-4">

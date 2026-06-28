@@ -33,7 +33,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
-            <div className="size-8 flex items-center justify-center bg-orange-500/10 border border-primary rounded-full">
+            <div className="size-8 flex items-center justify-center bg-primary/10 border border-primary rounded-full">
               <Wallet2 className="text-primary size-4" />
             </div>
           )}

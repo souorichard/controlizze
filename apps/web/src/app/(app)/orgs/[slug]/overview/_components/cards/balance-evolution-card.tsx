@@ -36,7 +36,7 @@ const chartConfig = {
   },
   balance: {
     label: 'Saldo',
-    color: 'var(--chart-3)',
+    color: 'var(--chart-4)',
   },
 } satisfies ChartConfig
 

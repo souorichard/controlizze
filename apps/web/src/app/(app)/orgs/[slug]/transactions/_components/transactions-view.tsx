@@ -39,8 +39,8 @@ export function TransactionsView() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <Input placeholder="Buscar por descrição" />
-        <Button>
+        <Input placeholder="Buscar por título" className="max-w-lg" />
+        <Button className="ml-auto">
           <CirclePlus className="size-4" />
           Nova transação
         </Button>

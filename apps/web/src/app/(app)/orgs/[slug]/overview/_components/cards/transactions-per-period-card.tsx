@@ -48,7 +48,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-type Period = '90' | '30' | '7'
+type DayPeriod = '90' | '30' | '7'
 
 interface TransactionsPerPeriodCardProps extends ComponentProps<'div'> {}
 
@@ -57,7 +57,7 @@ export function TransactionsPerPeriodCard({
 }: TransactionsPerPeriodCardProps) {
   const org = useOrg()
 
-  const [period, setPeriod] = useState<Period>('90')
+  const [period, setPeriod] = useState<DayPeriod>('90')
 
   const { data: transactionsPerPeriod, error } = useQuery({
     queryKey: ['metrics', org, 'transactions-per-period', period],
@@ -77,14 +77,14 @@ export function TransactionsPerPeriodCard({
           <span className="text-xs">Período</span>
           <Select
             defaultValue="90"
-            onValueChange={(value) => setPeriod(value as Period)}
+            onValueChange={(value) => setPeriod(value as DayPeriod)}
           >
             <SelectTrigger size="sm">
               <SelectValue placeholder="Selecionar período" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="90">Últimos 3 mês</SelectItem>
+                <SelectItem value="90">Últimos 3 meses</SelectItem>
                 <SelectItem value="30">Últimos 30 dias</SelectItem>
                 <SelectItem value="7">Últimos 7 dias</SelectItem>
               </SelectGroup>

@@ -26,11 +26,7 @@ export function PasswordInput({ className, ...props }: PasswordInputProps) {
         className="absolute top-0 right-0 h-full aspect-square px-2.5"
         onClick={() => setIsVisible(!isVisible)}
       >
-        {isVisible ? (
-          <EyeOff className="size-4 text-primary" />
-        ) : (
-          <Eye className="size-4 text-primary" />
-        )}
+        {isVisible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
       </Button>
     </div>
   )

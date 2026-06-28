@@ -18,7 +18,7 @@ export default function SignUpPage() {
           <TypingText
             text="eficiente"
             speed={150}
-            className="bg-linear-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent animate-shimmer"
+            className="bg-linear-to-r from-primary via-primary/60 to-primary bg-clip-text text-transparent animate-shimmer"
           />
         </h1>
         <p className="text-muted-foreground">
