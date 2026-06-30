@@ -28,7 +28,7 @@ export function HomeWrapper() {
       </div>
 
       <Button size="lg" asChild>
-        <Link href="/create-organization">
+        <Link href="/create-org">
           <CirclePlus className="size-5" />
           Nova organização
         </Link>

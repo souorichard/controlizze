@@ -89,7 +89,7 @@ export function OrganizationSwitcherClient({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href="/create-organization">
+          <Link href="/create-org">
             <CirclePlus className="text-primary size-5" />
             Nova organização
           </Link>

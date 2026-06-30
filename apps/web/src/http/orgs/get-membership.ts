@@ -15,7 +15,7 @@ export async function getMembership(
   organization: string,
 ): Promise<GetMembershipResponse> {
   const response = await api
-    .get(`/orgs/${organization}/membership`)
+    .get(`orgs/${organization}/membership`)
     .json<GetMembershipResponse>()
 
   return response
