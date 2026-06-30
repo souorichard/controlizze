@@ -32,7 +32,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        'dark antialiased',
+        'dark antialiased select-none',
         spaceGroteskSans.variable,
         geistSans.variable,
       )}
