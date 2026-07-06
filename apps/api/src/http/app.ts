@@ -54,6 +54,9 @@ export function buildApp() {
     routePrefix: '/docs',
     configuration: {
       theme: 'deepSpace',
+      metaData: {
+        title: 'Controlizze API',
+      },
     },
   })
 
