@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { createAvatar } from '../../../utils/create-avatar.ts'
 import { generateSlugWithSuffix } from '../../../utils/create-slug.ts'
 import { auth } from '../../middlewares/auth.ts'
 
@@ -15,7 +16,7 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
         security: [{ bearerAuth: [] }],
         body: z.object({
           name: z.string().min(1, 'Name is required'),
-          avatarUrl: z.url().nullable().optional(),
+          description: z.string().optional(),
         }),
         response: {
           201: z.object({
@@ -29,7 +30,7 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
 
-      const { name, avatarUrl } = request.body
+      const { name, description } = request.body
 
       const org = await db.transaction(async (tx) => {
         const [createdOrg] = await tx
@@ -37,7 +38,8 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
           .values({
             name,
             slug: generateSlugWithSuffix(name),
-            avatarUrl,
+            description,
+            avatarUrl: createAvatar(name, 'glass'),
             ownerId: userId,
           })
           .returning()

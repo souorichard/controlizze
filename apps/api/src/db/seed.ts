@@ -1,4 +1,5 @@
 import { hash } from 'bcryptjs'
+import { createAvatar } from '../utils/create-avatar.ts'
 import { createSlug } from '../utils/create-slug.ts'
 import { db } from './index.ts'
 import { schema } from './schema/index.ts'
@@ -41,7 +42,7 @@ async function seed() {
         name: 'John Doe',
         email: 'john@example.com',
         passwordHash,
-        avatarUrl: 'https://api.example.com/avatars/john.jpg',
+        avatarUrl: createAvatar('John Doe', 'bottts-neutral'),
       })
       .returning()
       .then((result) => result[0])
@@ -52,7 +53,7 @@ async function seed() {
         name: 'Jane Smith',
         email: 'jane@example.com',
         passwordHash,
-        avatarUrl: 'https://api.example.com/avatars/jane.jpg',
+        avatarUrl: createAvatar('Jane Smith', 'bottts-neutral'),
       })
       .returning()
       .then((result) => result[0])
@@ -63,6 +64,7 @@ async function seed() {
         name: 'Bob Johnson',
         email: 'bob@example.com',
         passwordHash,
+        avatarUrl: createAvatar('Bob Johnson', 'bottts-neutral'),
       })
       .returning()
       .then((result) => result[0])
@@ -78,7 +80,7 @@ async function seed() {
         name: 'Acme Corp',
         slug: orgSlug1,
         ownerId: user1.id,
-        avatarUrl: 'https://api.example.com/orgs/acme.jpg',
+        avatarUrl: createAvatar('Acme Corp', 'glass'),
       })
       .returning()
       .then((result) => result[0])
@@ -90,6 +92,7 @@ async function seed() {
         name: 'Tech Startup',
         slug: orgSlug2,
         ownerId: user2.id,
+        avatarUrl: createAvatar('Tech Startup', 'glass'),
       })
       .returning()
       .then((result) => result[0])

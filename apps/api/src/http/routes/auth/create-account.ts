@@ -7,6 +7,7 @@ import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { emails } from '../../../services/emails/index.ts'
+import { createAvatar } from '../../../utils/create-avatar.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 import { ConflictError } from '../../errors/conflict-error.ts'
 
@@ -44,6 +45,8 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
       }
 
       const passwordHash = await hash(password, 8)
+
+      const avatarUrl = createAvatar(name, 'bottts-neutral')
 
       const code = randomBytes(32).toString('hex')
       const codeHash = hashToken(code)
