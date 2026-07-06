@@ -45,7 +45,7 @@ export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
             if (data.endDate && data.endDate <= data.startDate) {
               ctx.addIssue({
                 code: 'custom',
-                message: 'Data de término deve ser depois da data de início',
+                message: 'The end date must be after the start date',
                 path: ['endDate'],
               })
             }
@@ -92,12 +92,12 @@ export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!category) {
-        throw new NotFoundError('Categoria não encontrada')
+        throw new NotFoundError('Category not found')
       }
 
       if (category.type !== type) {
         throw new BadRequestError(
-          'Categoria deve corresponder ao tipo de transação',
+          'The category must match the transaction type',
         )
       }
 
@@ -116,14 +116,14 @@ export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!recurrence) {
-        throw new NotFoundError('Recorrência não encontrada')
+        throw new NotFoundError('Recurrence not found')
       }
 
       const authRecurrence = recurrenceSchema.parse(recurrence)
 
       if (cannot('update', authRecurrence)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para atualizar esta recorrência`,
+          'You do not have permission to update this recurrence',
         )
       }
 

@@ -42,7 +42,7 @@ export const verifyEmail: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!tokenFromCode) {
-        throw new BadRequestError('Token inválido ou expirado')
+        throw new BadRequestError('Invalid or expired token')
       }
 
       await db.transaction(async (tx) => {

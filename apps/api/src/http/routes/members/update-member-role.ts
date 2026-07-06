@@ -40,7 +40,7 @@ export const updateMemberRole: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('update', 'Member')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para atualizar este membro`,
+          'You do not have permission to update this member',
         )
       }
 
@@ -60,7 +60,7 @@ export const updateMemberRole: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!member) {
-        throw new NotFoundError('Membro não encontrado')
+        throw new NotFoundError('Member not found')
       }
 
       await db

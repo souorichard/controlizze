@@ -73,14 +73,14 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!transaction) {
-        throw new NotFoundError('Transação não encontrada')
+        throw new NotFoundError('Transaction not found')
       }
 
       const authTransaction = transactionSchema.parse(transaction)
 
       if (cannot('update', authTransaction)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para atualizar esta transação`,
+          'You do not have permission to update this transaction',
         )
       }
 

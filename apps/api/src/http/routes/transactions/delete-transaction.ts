@@ -50,14 +50,14 @@ export const deleteTransaction: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!transaction) {
-        throw new NotFoundError('Transação não encontrada')
+        throw new NotFoundError('Transaction not found')
       }
 
       const authTransaction = transactionSchema.parse(transaction)
 
       if (cannot('delete', authTransaction)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para deletar esta transação`,
+          'You do not have permission to delete this transaction',
         )
       }
 

@@ -79,7 +79,7 @@ export const authenticateWithGithub: FastifyPluginAsyncZod = async (app) => {
 
       if (email === null) {
         throw new BadRequestError(
-          'Sua conta do Github deve ter um endereço de e-mail para autenticação ou você precisa torná-lo público',
+          'We could not retrieve your email from Github. Please make sure your email is public in your Github account settings.',
         )
       }
 

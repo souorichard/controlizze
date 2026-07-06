@@ -41,7 +41,7 @@ export const createCategory: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('create', 'Category')) {
         throw new UnauthorizedError(
-          'Você não tem permissão para criar categorias nesta organização',
+          'You do not have permission to create categories in this organization',
         )
       }
 

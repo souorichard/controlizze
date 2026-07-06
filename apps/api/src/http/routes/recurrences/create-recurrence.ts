@@ -43,7 +43,7 @@ export const createRecurrence: FastifyPluginAsyncZod = async (app) => {
             if (data.endDate && data.endDate <= data.startDate) {
               ctx.addIssue({
                 code: 'custom',
-                message: 'Data de término deve ser depois da data de início',
+                message: 'The end date must be after the start date',
                 path: ['endDate'],
               })
             }
@@ -66,7 +66,7 @@ export const createRecurrence: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('create', 'Recurrence')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para criar recorrências`,
+          'You do not have permission to create recurrences',
         )
       }
 
@@ -98,12 +98,12 @@ export const createRecurrence: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!category) {
-        throw new BadRequestError('Categoria não encontrada')
+        throw new BadRequestError('Category not found')
       }
 
       if (category.type !== type) {
         throw new BadRequestError(
-          'Categoria deve corresponder ao tipo de transação',
+          'The category must match the transaction type',
         )
       }
 

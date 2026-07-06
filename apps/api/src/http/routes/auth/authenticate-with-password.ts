@@ -16,13 +16,11 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
         tags: ['Authentication'],
         summary: 'Authenticate with email and password',
         body: z.object({
-          email: z
-            .email('Endereço de email inválido')
-            .min(1, 'Email é obrigatório'),
+          email: z.email('Invalid email address').min(1, 'Email is required'),
           password: z
             .string()
-            .min(1, 'Senha é obrigatória')
-            .min(8, 'Senha deve ter pelo menos 6 caracteres'),
+            .min(1, 'Password is required')
+            .min(8, 'Password must be at least 8 characters'),
         }),
         response: {
           200: z.object({
@@ -46,7 +44,7 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!userFromEmail) {
-        throw new BadRequestError('Usuário não encontrado')
+        throw new BadRequestError('User not found')
       }
 
       if (!userFromEmail.emailVerifiedAt) {
@@ -56,20 +54,20 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
         )
 
         if (hoursSinceCreation > 1) {
-          throw new ForbiddenError('Verificação de email necessária')
+          throw new ForbiddenError('Email verification is required')
         }
       }
 
       if (!userFromEmail.hashPassword) {
         throw new BadRequestError(
-          'Usuário não possui senha cadastrada, por favor utilize outro método de autenticação',
+          'User does not have a password registered; please use another authentication method',
         )
       }
 
       const isPassword = await compare(password, userFromEmail.hashPassword)
 
       if (!isPassword) {
-        throw new BadRequestError('Credenciais inválidas')
+        throw new BadRequestError('Invalid credentials')
       }
 
       const token = await reply.jwtSign(

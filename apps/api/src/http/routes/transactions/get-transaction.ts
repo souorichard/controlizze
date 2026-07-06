@@ -55,7 +55,7 @@ export const getTransaction: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Transaction')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para visualizar esta transação desta organização`,
+          'You do not have permission to view this transaction in this organization',
         )
       }
 
@@ -88,7 +88,7 @@ export const getTransaction: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!transaction) {
-        throw new NotFoundError('Transação não encontrada')
+        throw new NotFoundError('Transaction not found')
       }
 
       return {

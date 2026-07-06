@@ -17,7 +17,7 @@ export const resendVerification: FastifyPluginAsyncZod = async (app) => {
         tags: ['Authentication'],
         summary: 'Resend email verification',
         body: z.object({
-          email: z.email('Endereço de email inválido'),
+          email: z.email('Invalid email address'),
         }),
         response: {
           201: z.void(),

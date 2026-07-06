@@ -20,8 +20,8 @@ export const resetPassword: FastifyPluginAsyncZod = async (app) => {
         body: z.object({
           password: z
             .string()
-            .min(1, 'Senha é obrigatória')
-            .min(8, 'Senha deve ter pelo menos 6 caracteres'),
+            .min(1, 'Password is required')
+            .min(8, 'Password must be at least 8 characters'),
         }),
         response: {
           204: z.void(),
@@ -50,7 +50,7 @@ export const resetPassword: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!tokenFromCode) {
-        throw new BadRequestError('Token inválido ou expirado')
+        throw new BadRequestError('Invalid or expired token')
       }
 
       const passwordHash = await hash(password, 8)

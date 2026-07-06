@@ -74,7 +74,7 @@ export const getInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!invite) {
-        throw new NotFoundError('Convite não encontrado')
+        throw new NotFoundError('Invite not found')
       }
 
       return {

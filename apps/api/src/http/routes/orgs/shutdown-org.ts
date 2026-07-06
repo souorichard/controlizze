@@ -37,7 +37,7 @@ export const shutdownOrg: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('delete', authOrganization)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para desativar esta organização`,
+          'You do not have permission to deactivate this organization',
         )
       }
 

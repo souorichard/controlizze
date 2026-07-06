@@ -81,7 +81,7 @@ export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Recurrence')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para visualizar recorrências desta organização`,
+          'You do not have permission to view recurrences in this organization',
         )
       }
 

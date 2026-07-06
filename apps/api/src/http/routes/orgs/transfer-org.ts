@@ -42,7 +42,7 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('transfer_ownership', authOrganization)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para transferir a propriedade desta organização`,
+          'You do not have permission to transfer ownership of this organization',
         )
       }
 
@@ -58,7 +58,9 @@ export const transferOrg: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!transferToMembership) {
-        throw new BadRequestError('Usuário alvo não é membro desta organização')
+        throw new BadRequestError(
+          'The target user is not a member of this organization',
+        )
       }
 
       await db.transaction(async (tx) => {

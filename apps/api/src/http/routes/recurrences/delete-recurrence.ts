@@ -50,14 +50,14 @@ export const deleteRecurrence: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!recurrence) {
-        throw new NotFoundError('Recorrência não encontrada')
+        throw new NotFoundError('Recurrence not found')
       }
 
       const authRecurrence = recurrenceSchema.parse(recurrence)
 
       if (cannot('delete', authRecurrence)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para deletar esta recorrência`,
+          'You do not have permission to delete this recurrence',
         )
       }
 

@@ -65,7 +65,7 @@ export const getInvites: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Invite')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para visualizar convites desta organização`,
+          'You do not have permission to view invites in this organization',
         )
       }
 

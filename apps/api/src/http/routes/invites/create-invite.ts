@@ -25,9 +25,7 @@ export const createInvite: FastifyPluginAsyncZod = async (app) => {
           slug: z.string(),
         }),
         body: z.object({
-          email: z
-            .email('Endereço de email inválido')
-            .min(1, 'Email é obrigatório'),
+          email: z.email('Invalid email address').min(1, 'Email is required'),
           role: roleSchema,
         }),
         response: {
@@ -48,7 +46,7 @@ export const createInvite: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('create', 'Invite')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para criar convites`,
+          'You do not have permission to create invites',
         )
       }
 
@@ -67,7 +65,7 @@ export const createInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (existingInvite) {
-        throw new ConflictError('Convite já foi enviado para este email')
+        throw new ConflictError('An invite has already been sent to this email')
       }
 
       const [existingMember] = await db
@@ -80,7 +78,9 @@ export const createInvite: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (existingMember) {
-        throw new ConflictError('Usuário já é membro desta organização')
+        throw new ConflictError(
+          'The user is already a member of this organization',
+        )
       }
 
       const code = randomBytes(32).toString('hex')

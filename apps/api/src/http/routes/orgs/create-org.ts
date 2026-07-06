@@ -14,7 +14,7 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
         summary: 'Create a new organization',
         security: [{ bearerAuth: [] }],
         body: z.object({
-          name: z.string().min(1, 'Nome é obrigatório'),
+          name: z.string().min(1, 'Name is required'),
           avatarUrl: z.url().nullable().optional(),
         }),
         response: {

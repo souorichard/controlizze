@@ -85,7 +85,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Transaction')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para visualizar transações desta organização`,
+          'You do not have permission to view transactions in this organization',
         )
       }
 

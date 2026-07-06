@@ -89,7 +89,7 @@ export const authenticateWithGoogle: FastifyPluginAsyncZod = async (app) => {
 
       if (email === null) {
         throw new BadRequestError(
-          'Sua conta do Google deve ter um endereço de e-mail para autenticação ou você precisa torná-lo público',
+          'We could not retrieve your email from Google. Please make sure your email is public in your Google account settings.',
         )
       }
 

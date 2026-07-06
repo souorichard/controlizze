@@ -42,7 +42,7 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('update', 'Category')) {
         throw new UnauthorizedError(
-          `Você não tem permissão para atualizar categorias nesta organização`,
+          'You do not have permission to update categories in this organization',
         )
       }
 
@@ -61,7 +61,7 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
         )
 
       if (!category) {
-        throw new NotFoundError('Categoria não encontrada')
+        throw new NotFoundError('Category not found')
       }
 
       await db

@@ -14,7 +14,7 @@ export const updateAccountName: FastifyPluginAsyncZod = async (app) => {
         summary: 'Update account name',
         security: [{ bearerAuth: [] }],
         body: z.object({
-          name: z.string().min(1, 'Nome é obrigatório'),
+          name: z.string().min(1, 'Name is required'),
         }),
         response: {
           204: z.void(),

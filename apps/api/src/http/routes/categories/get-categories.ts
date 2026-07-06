@@ -66,7 +66,7 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('read', 'Category')) {
         throw new UnauthorizedError(
-          'Você não tem permissão para visualizar categorias nesta organização',
+          'You do not have permission to view categories in this organization',
         )
       }
 

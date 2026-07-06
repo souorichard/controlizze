@@ -52,7 +52,7 @@ export const getPendingInvites: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!user) {
-        throw new NotFoundError('Usuário não encontrado')
+        throw new NotFoundError('User not found')
       }
 
       const invites = await db

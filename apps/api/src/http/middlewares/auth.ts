@@ -15,7 +15,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
 
         return sub
       } catch {
-        throw new UnauthorizedError('Token inválido ou expirado')
+        throw new UnauthorizedError('Invalid or expired token')
       }
     }
 
@@ -30,14 +30,14 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
         .limit(1)
 
       if (!user) {
-        throw new UnauthorizedError('Usuário não encontrado')
+        throw new UnauthorizedError('User not found')
       }
 
       if (!user.emailVerifiedAt) {
         const hoursSinceCreation = dayjs().diff(dayjs(user.createdAt), 'hour')
 
         if (hoursSinceCreation > 24) {
-          throw new ForbiddenError('Verificação de email necessária')
+          throw new ForbiddenError('Email verification required')
         }
       }
     }
@@ -62,7 +62,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
         .limit(1)
 
       if (!member) {
-        throw new UnauthorizedError(`Você não é um membro desta organização`)
+        throw new UnauthorizedError(`You are not a member of this organization`)
       }
 
       return {

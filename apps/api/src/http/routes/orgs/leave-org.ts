@@ -39,7 +39,7 @@ export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
 
       if (cannot('leave', authOrganization)) {
         throw new UnauthorizedError(
-          `Você não tem permissão para sair desta organização`,
+          'You do not have permission to leave this organization',
         )
       }
 
@@ -53,13 +53,11 @@ export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
         .limit(1)
 
       if (!selectedOrg) {
-        throw new NotFoundError('Organização não encontrada')
+        throw new NotFoundError('Organization not found')
       }
 
       if (selectedOrg.ownerId === userId) {
-        throw new BadRequestError(
-          'Você não pode sair de sua própria organização',
-        )
+        throw new BadRequestError('You cannot leave your own organization')
       }
 
       await db
