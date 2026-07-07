@@ -51,6 +51,11 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
                 amount: z.number(),
                 status: statusSchema,
                 transactionDate: z.date(),
+                owner: z.object({
+                  id: z.uuid(),
+                  name: z.string().nullable(),
+                  avatarUrl: z.url().nullable(),
+                }),
                 createdAt: z.date(),
               }),
             ),
@@ -120,12 +125,21 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
           amount: schema.transactions.amount,
           status: schema.transactions.status,
           transactionDate: schema.transactions.transactionDate,
+          owner: {
+            id: schema.users.id,
+            name: schema.users.name,
+            avatarUrl: schema.users.avatarUrl,
+          },
           createdAt: schema.transactions.createdAt,
         })
         .from(schema.transactions)
         .leftJoin(
           schema.categories,
           eq(schema.transactions.categoryId, schema.categories.id),
+        )
+        .innerJoin(
+          schema.users,
+          eq(schema.transactions.ownerId, schema.users.id),
         )
         .where(filters)
         .limit(perPage)
