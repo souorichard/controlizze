@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '../ui/card'
@@ -30,6 +29,7 @@ export function OrgForm() {
     resolver: zodResolver(createOrgSchema),
     defaultValues: {
       name: '',
+      description: '',
     },
   })
 
@@ -58,20 +58,35 @@ export function OrgForm() {
         <CardContent>
           <div className="space-y-2">
             <Input
-              placeholder="Acme Inc."
+              placeholder="Acme Inc..."
               disabled={isSubmitting}
               {...register('name')}
             />
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
         </CardContent>
-        <CardFooter>
-          <span className="text-sm text-muted-foreground">
-            Please use 32 characters at maximum
-          </span>
+      </Card>
 
-          {/* <Button className="ml-auto">Salvar</Button> */}
-        </CardFooter>
+      <Card>
+        <CardHeader>
+          <CardTitle>Organization description</CardTitle>
+          <CardDescription>
+            This is your org's description. After create your org, you can
+            update the description
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Input
+              placeholder="We are a company that specializes in providing innovative solutions for businesses..."
+              disabled={isSubmitting}
+              {...register('description')}
+            />
+            {errors.description && (
+              <ErrorMessage>{errors.description.message}</ErrorMessage>
+            )}
+          </div>
+        </CardContent>
       </Card>
 
       {/* <Card>

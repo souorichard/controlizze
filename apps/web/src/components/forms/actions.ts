@@ -8,9 +8,10 @@ import type { CreateOrgData } from './schemas'
 
 export async function createOrgAction({
   name,
+  description,
 }: CreateOrgData): Promise<ActionResponse> {
   try {
-    await createOrg({ name, avatarUrl: null })
+    await createOrg({ name, description })
 
     revalidateTag('orgs', 'max')
   } catch (error) {
