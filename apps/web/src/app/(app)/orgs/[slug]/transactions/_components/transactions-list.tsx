@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import type { Transaction } from '@/interfaces/transaction-interface'
 import { dayjs } from '@/lib/dayjs'
 import { cn } from '@/lib/utils'
+import { getInitials } from '@/utils/get-initials'
 import { statusHandler } from './status-handler'
 
 interface TransactionsListProps {
@@ -30,8 +31,14 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
                 isExpense ? 'border-destructive' : 'border-emerald-500',
               )}
             >
-              <AvatarImage src="https://avatars.githubusercontent.com/u/101836586?s=400&u=e091da23eabfd8b6abd1515212cba9f98fc923c5&v=4" />
-              <AvatarFallback>RR</AvatarFallback>
+              {transaction.owner.avatarUrl ? (
+                <>
+                  <AvatarImage src={transaction.owner.avatarUrl as string} />
+                  <AvatarFallback>
+                    {getInitials(transaction.owner.name as string)}
+                  </AvatarFallback>
+                </>
+              ) : null}
             </Avatar>
 
             <div className="flex-1">

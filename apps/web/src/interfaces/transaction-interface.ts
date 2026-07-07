@@ -11,6 +11,11 @@ export interface Transaction {
   amount: number
   status: 'PENDING' | 'PAID' | 'CANCELED'
   transactionDate: string
+  owner: {
+    id: string
+    name: string | null
+    avatarUrl: string | null
+  }
   createdAt: string
 }
 
