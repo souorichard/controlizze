@@ -8,7 +8,7 @@ import {
 import { TransactionsView } from './_components/transactions-view'
 
 export const metadata: Metadata = {
-  title: 'Transações',
+  title: 'Transactions',
 }
 
 export default function TransactionsPage() {

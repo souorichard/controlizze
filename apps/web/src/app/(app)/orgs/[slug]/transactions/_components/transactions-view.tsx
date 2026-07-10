@@ -1,11 +1,11 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { CirclePlus } from 'lucide-react'
+import { CircleAlert, CirclePlus } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
-  ContainerContentTable,
-  ContainerContentTableWrapper,
+  ContainerContentList,
+  ContainerContentListWrapper,
 } from '@/components/container'
 import { Pagination } from '@/components/pagination'
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { useOrg } from '@/hooks/use-org'
 import { getTransactionsFilter } from '@/utils/filters'
 import { getTransactionsAction } from '../actions'
+import { TransactionsListSkeleton } from './skeletons/transactions-list-skeleton'
 import { TransactionsList } from './transactions-list'
 
 export function TransactionsView() {
@@ -23,7 +24,7 @@ export function TransactionsView() {
 
   const filters = getTransactionsFilter(searchParams)
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['transactions', org, filters],
     queryFn: () => getTransactionsAction(filters),
   })
@@ -36,6 +37,9 @@ export function TransactionsView() {
     replace(`${pathname}?${params.toString()}`)
   }
 
+  const transactions = data?.transactions ?? []
+  const meta = data?.meta
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
@@ -46,23 +50,36 @@ export function TransactionsView() {
         </Button>
       </div>
 
-      <ContainerContentTable>
-        {data ? (
+      <ContainerContentList>
+        {isPending && (
+          <ContainerContentListWrapper>
+            <TransactionsListSkeleton />
+          </ContainerContentListWrapper>
+        )}
+
+        {!isPending && transactions.length === 0 && (
+          <ContainerContentListWrapper>
+            <div className="h-20 flex items-center justify-center gap-2">
+              <CircleAlert className="text-primary size-5" />
+              <span className="text-sm">No transactions found</span>
+            </div>
+          </ContainerContentListWrapper>
+        )}
+
+        {!isPending && transactions && transactions.length > 0 && meta && (
           <>
-            <ContainerContentTableWrapper>
-              <TransactionsList transactions={data.transactions} />
-            </ContainerContentTableWrapper>
+            <ContainerContentListWrapper>
+              <TransactionsList transactions={transactions} />
+            </ContainerContentListWrapper>
             <Pagination
-              page={data.meta.page}
-              perPage={data.meta.perPage}
-              total={data.meta.total}
+              page={meta.page}
+              perPage={meta.perPage}
+              total={meta.total}
               onPageChange={handlePaginate}
             />
           </>
-        ) : (
-          'Loading...'
         )}
-      </ContainerContentTable>
+      </ContainerContentList>
     </div>
   )
 }

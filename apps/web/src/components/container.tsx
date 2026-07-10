@@ -69,11 +69,11 @@ export function ContainerContentFilter({ className, children }: GenericProps) {
   )
 }
 
-export function ContainerContentTable({ className, children }: GenericProps) {
+export function ContainerContentList({ className, children }: GenericProps) {
   return <section className={cn('space-y-3', className)}>{children}</section>
 }
 
-export function ContainerContentTableWrapper({
+export function ContainerContentListWrapper({
   className,
   children,
 }: GenericProps) {
