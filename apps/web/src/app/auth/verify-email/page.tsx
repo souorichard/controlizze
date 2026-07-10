@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { VerifyEmailWrapper } from './_components/verify-email-wrapper'
 
 export const metadata: Metadata = {
-  title: 'Verifique seu email',
+  title: 'Verify your email',
 }
 
 interface VerifyEmailPageProps {

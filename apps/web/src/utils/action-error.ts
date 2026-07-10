@@ -3,7 +3,7 @@ import type { ActionResponse } from '@/interfaces/action-interface'
 
 export async function actionError(error: unknown): Promise<ActionResponse> {
   const defaultMessage =
-    'Ocorreu um erro inesperado. Por favor, tente novamente'
+    'An unexpected error occurred. Please try again later or contact support if the problem persists.'
 
   if (error instanceof HTTPError) {
     const data = (await error.data) as { message?: string } | undefined

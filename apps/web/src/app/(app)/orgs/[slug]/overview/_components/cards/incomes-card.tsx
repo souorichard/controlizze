@@ -29,7 +29,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
     >
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
-          <p className="text-muted-foreground text-sm font-medium">RECEITAS</p>
+          <p className="text-muted-foreground text-sm font-medium">INCOMES</p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
@@ -43,7 +43,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
         {incomes ? (
           <>
             <p className="text-xl font-semibold font-heading tracking-wide lg:text-3xl">
-              {incomes?.amount.toLocaleString('pt-BR', {
+              {incomes?.amount.toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'BRL',
                 notation: 'compact',
@@ -52,7 +52,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
             <p className="text-muted-foreground text-xs">
               {incomes?.diffFromLastMonth === null ? (
                 <span className="text-muted-foreground tracking-wide">
-                  --% comparado ao mês anterior
+                  --% compared to last month
                 </span>
               ) : (
                 <span
@@ -68,7 +68,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
                   {incomes.diffFromLastMonth > 0
                     ? `+${incomes.diffFromLastMonth}`
                     : incomes.diffFromLastMonth}
-                  % comparado ao mês anterior
+                  % compared to last month
                 </span>
               )}
             </p>

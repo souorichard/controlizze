@@ -8,7 +8,7 @@ export function formatDate(date: string) {
 }
 
 export function formatDateWithMonth(date: string) {
-  const formatted = dayjs(date).format('MMM')
+  const formatted = dayjs(date).format('MMMM')
 
   return formatted[0].toUpperCase() + formatted.slice(1)
 }

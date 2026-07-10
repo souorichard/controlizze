@@ -61,12 +61,12 @@ export function SignInForm() {
 
       <div className="space-y-2">
         <div className="flex justify-between items-center gap-3">
-          <Label>Senha</Label>
+          <Label>Password</Label>
           <Link
             href="/auth/forgot-password"
             className="text-xs text-primary transition-colors hover:text-primary/85"
           >
-            Esqueceu sua senha?
+            Forgot your password?
           </Link>
         </div>
         <PasswordInput
@@ -84,7 +84,7 @@ export function SignInForm() {
           <Loader2 className="size-4 animate-spin" />
         ) : (
           <>
-            Acessar minha conta
+            Access my account
             <ArrowRight className="size-4" />
           </>
         )}

@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Loader2 } from 'lucide-react'
-import type { Metadata } from 'next'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -13,10 +12,6 @@ import { Label } from '@/components/ui/label'
 import { PasswordInput } from '../../_components/password-input'
 import { signUp } from '../actions'
 import { type SignUpData, signUpSchema } from '../schemas'
-
-export const metadata: Metadata = {
-  title: 'Criar nova conta',
-}
 
 export function SignUpForm() {
   const router = useRouter()
@@ -61,7 +56,7 @@ export function SignUpForm() {
   return (
     <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
       <div className="space-y-1">
-        <Label>Nome</Label>
+        <Label>Name</Label>
         <Input
           type="text"
           placeholder="John Doe"
@@ -83,7 +78,7 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-2">
-        <Label>Senha</Label>
+        <Label>Password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
@@ -95,7 +90,7 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-2">
-        <Label>Confirmar senha</Label>
+        <Label>Confirm password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
@@ -111,7 +106,7 @@ export function SignUpForm() {
           <Loader2 className="size-4 animate-spin" />
         ) : (
           <>
-            <span>Criar minha conta</span>
+            <span>Create my account</span>
             <ArrowRight className="size-4" />
           </>
         )}

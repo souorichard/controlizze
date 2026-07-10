@@ -41,10 +41,10 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
 
         <div className="max-w-xl w-full space-y-3 text-center">
           <h1 className="text-2xl font-medium font-heading tracking-wide">
-            Verificando seu email...
+            Verifying your email...
           </h1>
           <p className="text-muted-foreground">
-            Aguarde um momento, estamos verificando seu email
+            Please wait, we are verifying your email
           </p>
         </div>
       </div>
@@ -58,10 +58,10 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
 
         <div className="max-w-xl w-full space-y-3 text-center">
           <h1 className="text-2xl font-medium font-heading tracking-wide">
-            Email verificado com sucesso!
+            Email verified successfully!
           </h1>
           <p className="text-muted-foreground">
-            Aguarde um momento, você será redirecionado para a página de login
+            Please wait, you will be redirected to the login page
           </p>
         </div>
       </div>
@@ -74,11 +74,11 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
 
       <div className="max-w-xl w-full space-y-3 text-center">
         <h1 className="text-2xl font-medium font-heading tracking-wide">
-          Ocorreu um erro ao verificar seu email
+          There was an error verifying your email
         </h1>
         <p className="text-muted-foreground">
-          Reevie o link de verificação e tente novamente. Se o problema
-          persistir, entre em contato com o suporte.
+          Please review the verification link and try again. If the problem
+          persists, please contact support.
         </p>
       </div>
     </div>

@@ -29,7 +29,7 @@ export function ExpensesCard({ className, ...props }: ExpensesCardProps) {
     >
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
-          <p className="text-muted-foreground text-sm font-medium">DESPESAS</p>
+          <p className="text-muted-foreground text-sm font-medium">EXPENSES</p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
@@ -43,7 +43,7 @@ export function ExpensesCard({ className, ...props }: ExpensesCardProps) {
         {expenses ? (
           <>
             <p className="text-xl font-semibold font-heading tracking-wide lg:text-3xl">
-              {expenses?.amount.toLocaleString('pt-BR', {
+              {expenses?.amount.toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'BRL',
                 notation: 'compact',
@@ -52,7 +52,7 @@ export function ExpensesCard({ className, ...props }: ExpensesCardProps) {
             <p className="text-muted-foreground text-xs">
               {expenses?.diffFromLastMonth === null ? (
                 <span className="text-muted-foreground tracking-wide">
-                  --% comparado ao mês anterior
+                  --% compared to last month
                 </span>
               ) : (
                 <span
@@ -68,7 +68,7 @@ export function ExpensesCard({ className, ...props }: ExpensesCardProps) {
                   {expenses.diffFromLastMonth > 0
                     ? `+${expenses.diffFromLastMonth}`
                     : expenses.diffFromLastMonth}
-                  % comparado ao mês anterior
+                  % compared to last month
                 </span>
               )}
             </p>

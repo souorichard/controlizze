@@ -24,10 +24,10 @@ import { getMonthlyExpensesMetricsAction } from '../../actions'
 
 const chartConfig = {
   expenses: {
-    label: 'Despesas',
+    label: 'Expenses',
   },
   amount: {
-    label: 'Despesas',
+    label: 'Expenses',
     color: 'var(--chart-1)',
   },
 } satisfies ChartConfig
@@ -48,9 +48,9 @@ export function MonthlyExpensesCard({
   return (
     <Card className={cn('col-span-2', className)} {...props}>
       <CardHeader>
-        <CardTitle>Despesas mensais</CardTitle>
+        <CardTitle>Monthly expenses</CardTitle>
         <CardDescription>
-          Acompanhe como seus gastos variaram nos últimos seis meses
+          Track how your expenses have varied over the past 6 months
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -100,7 +100,7 @@ export function MonthlyExpensesCard({
             <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
               <div className="flex items-center gap-2">
                 <CircleAlert className="text-primary size-5" />
-                <span className="text-sm">Nenhuma despesa encontrada</span>
+                <span className="text-sm">No expenses found</span>
               </div>
             </div>
           )
@@ -109,7 +109,7 @@ export function MonthlyExpensesCard({
             <div className="flex items-center gap-2">
               <XCircle className="text-destructive size-8" />
               <span className="text-sm">
-                Ocorreu um erro ao carregar os dados
+                An error occurred while loading the data
               </span>
             </div>
           </div>
@@ -117,7 +117,7 @@ export function MonthlyExpensesCard({
           <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <Loader2 className="text-primary size-8 animate-spin" />
-              <span className="sr-only">Carregando...</span>
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         )}

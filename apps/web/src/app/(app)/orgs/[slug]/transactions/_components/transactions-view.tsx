@@ -39,10 +39,10 @@ export function TransactionsView() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <Input placeholder="Buscar por título" className="max-w-lg" />
+        <Input placeholder="Search by title..." className="max-w-lg" />
         <Button className="ml-auto">
           <CirclePlus className="size-4" />
-          Nova transação
+          New transaction
         </Button>
       </div>
 
@@ -60,7 +60,7 @@ export function TransactionsView() {
             />
           </>
         ) : (
-          'carregando...'
+          'Loading...'
         )}
       </ContainerContentTable>
     </div>

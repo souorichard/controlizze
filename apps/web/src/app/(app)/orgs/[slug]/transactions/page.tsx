@@ -15,9 +15,9 @@ export default function TransactionsPage() {
   return (
     <ContainerContent>
       <ContainerContentHeader>
-        <ContainerContentTitle>Transações</ContainerContentTitle>
+        <ContainerContentTitle>Transactions</ContainerContentTitle>
         <ContainerContentDescription>
-          Transforme dados financeiros em decisões mais inteligentes
+          Transform financial data into smarter decisions
         </ContainerContentDescription>
       </ContainerContentHeader>
 

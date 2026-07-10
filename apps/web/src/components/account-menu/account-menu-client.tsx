@@ -44,19 +44,19 @@ export function AccountMenuClient({
       <DropdownMenuTrigger className="outline-none group">
         <Menu className="size-6 cursor-pointer transition-all duration-200 group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0 group-data-[state=open]:scale-75 absolute" />
         <X className="size-6 cursor-pointer transition-all duration-200 group-data-[state=closed]:rotate-90 group-data-[state=closed]:opacity-0 group-data-[state=closed]:scale-75" />
-        <span className="sr-only">Abrir menu do usuário</span>
+        <span className="sr-only">Open menu</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <div className="p-2 flex items-center gap-3 outline-none">
           <Avatar className="size-8">
             {user.avatarUrl && <AvatarImage src={user.avatarUrl as string} />}
             <AvatarFallback className="text-sm">
-              {getInitials(user.name ?? 'Indefinido')}
+              {getInitials(user.name ?? 'Unknown user')}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex flex-col">
             <span className="text-xs font-medium truncate">
-              {user.name ?? 'Indefinido'}
+              {user.name ?? 'Unknown user'}
             </span>
             <span className="text-xs text-muted-foreground truncate">
               {user.email}
@@ -73,60 +73,60 @@ export function AccountMenuClient({
             <DropdownMenuItem asChild>
               <Link href={`/orgs/${currentOrg}/overview`}>
                 <LayoutDashboard className="text-muted-foreground size-5" />
-                Visão geral
+                Overview
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <Link href={`/orgs/${currentOrg}/transactions`}>
                 <BadgeDollarSign className="text-muted-foreground size-5" />
-                Transações
+                Transactions
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <Link href={`/orgs/${currentOrg}/recurrences`}>
                 <Repeat className="text-muted-foreground size-5" />
-                Recorrências
+                Recurrences
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <Link href={`/orgs/${currentOrg}/categories`}>
                 <Tags className="text-muted-foreground size-5" />
-                Categorias
+                Categories
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <Link href={`/orgs/${currentOrg}/overview`}>
                 <Settings className="text-muted-foreground size-5" />
-                Configurações
+                Settings
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
           <DropdownMenuGroup>
-            <DropdownMenuLabel>CONTA</DropdownMenuLabel>
+            <DropdownMenuLabel>ACCOUNT</DropdownMenuLabel>
 
             <DropdownMenuItem asChild>
               <Link href={'/account'}>
                 <User className="text-muted-foreground size-5" />
-                Conta
+                Account
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <Link href={'/account/orgs'}>
                 <Building2 className="text-muted-foreground size-5" />
-                Organizações
+                Organizations
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <a href="/api/auth/sign-out">
                 <LogOut className="text-destructive size-5" />
-                Sair
+                Log out
               </a>
             </DropdownMenuItem>
           </DropdownMenuGroup>

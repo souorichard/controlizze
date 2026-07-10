@@ -15,15 +15,10 @@ export default function OverviewPage() {
   return (
     <ContainerContent>
       <ContainerContentHeader>
-        <ContainerContentTitle>
-          Insights financeiros
-          {/* <span className="bg-linear-to-r from-primary via-primary/60 to-primary bg-clip-text text-transparent animate-shimmer">
-            financeiros
-          </span> */}
-        </ContainerContentTitle>
+        <ContainerContentTitle>Financial insights</ContainerContentTitle>
 
         <ContainerContentDescription>
-          Transforme dados financeiros em decisões mais inteligentes
+          Get a quick overview of your financial health and performance.
         </ContainerContentDescription>
       </ContainerContentHeader>
 

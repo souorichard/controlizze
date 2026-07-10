@@ -30,7 +30,7 @@ export function SavingsRateCard({ className, ...props }: SavingsRateCardProps) {
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <p className="text-muted-foreground text-sm font-medium">
-            TAXA DE POUPANÇA
+            SAVINGS RATE
           </p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
@@ -49,10 +49,10 @@ export function SavingsRateCard({ className, ...props }: SavingsRateCardProps) {
             </p>
             <p className="text-muted-foreground text-xs">
               {savings.transactionsCount === 0
-                ? 'Nenhuma trasação no mês'
+                ? 'No transactions in the month'
                 : savings.transactionsCount === 1
-                  ? `${savings.transactionsCount} transação no mês`
-                  : `${savings.transactionsCount} transações no mês`}
+                  ? `${savings.transactionsCount} transaction in the month`
+                  : `${savings.transactionsCount} transactions in the month`}
             </p>
           </>
         ) : (

@@ -32,7 +32,7 @@ export async function Tabs() {
       >
         <LayoutDashboard className="size-4" />
         <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
-          Visão geral
+          Overview
         </span>
       </NavLink>
 
@@ -43,7 +43,7 @@ export async function Tabs() {
         >
           <BadgeDollarSign className="size-4" />
           <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
-            Transações
+            Transactions
           </span>
         </NavLink>
       )}
@@ -55,7 +55,7 @@ export async function Tabs() {
         >
           <Repeat className="size-4" />
           <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
-            Recorrências
+            Recurrences
           </span>
         </NavLink>
       )}
@@ -67,7 +67,7 @@ export async function Tabs() {
         >
           <Tags className="size-4" />
           <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
-            Categorias
+            Categories
           </span>
         </NavLink>
       )}
@@ -79,7 +79,7 @@ export async function Tabs() {
         >
           <Settings className="size-4" />
           <span className="group-data-[current=false]:hidden md:group-data-[current=false]:inline">
-            Configurações
+            Settings
           </span>
         </NavLink>
       )}

@@ -12,13 +12,13 @@ export function SocialLogins() {
       <form action={signInWithGoogleAction} className="flex-1">
         <Button size="lg" variant="outline" className="h-10 w-full">
           <Image src={googleIcon} alt="Google" className="size-4" />
-          Google
+          Continue with Google
         </Button>
       </form>
       <form action={signInWithGithubAction} className="flex-1">
         <Button size="lg" variant="outline" className="h-10 w-full">
           <Image src={githubIcon} alt="Github" className="size-4" />
-          Github
+          Continue with Github
         </Button>
       </form>
     </div>

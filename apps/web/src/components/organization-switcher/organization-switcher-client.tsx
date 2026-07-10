@@ -55,14 +55,14 @@ export function OrganizationSwitcherClient({
           </>
         ) : (
           <span className="text-muted-foreground truncate">
-            Selecione uma organização
+            Select an organization
           </span>
         )}
         <ChevronsUpDown className="text-muted-foreground ml-auto size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" sideOffset={12} className="w-56">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>ORGANIZAÇÕES</DropdownMenuLabel>
+          <DropdownMenuLabel>ORGANIZATIONS</DropdownMenuLabel>
 
           {orgs.map((org) => {
             return (
@@ -91,7 +91,7 @@ export function OrganizationSwitcherClient({
         <DropdownMenuItem asChild>
           <Link href="/create-org">
             <CirclePlus className="text-primary size-5" />
-            Nova organização
+            Create organization
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

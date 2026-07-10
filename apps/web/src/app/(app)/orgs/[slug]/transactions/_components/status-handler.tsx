@@ -15,7 +15,7 @@ export function statusHandler({ status }: StatusHandlerProps) {
           className="text-[10px] gap-1.5 text-muted-foreground uppercase"
         >
           <Loader className="text-foreground" />
-          Pendente
+          Pending
         </Badge>
       )
     case 'PAID':
@@ -25,7 +25,7 @@ export function statusHandler({ status }: StatusHandlerProps) {
           className="text-[10px] gap-1.5 text-muted-foreground uppercase"
         >
           <Check className=" text-emerald-500" />
-          Paga
+          Paid
         </Badge>
       )
     case 'CANCELED':
@@ -35,7 +35,7 @@ export function statusHandler({ status }: StatusHandlerProps) {
           className="text-[10px] gap-1.5 text-muted-foreground uppercase"
         >
           <X className="text-destructive" />
-          Cancelada
+          Canceled
         </Badge>
       )
   }

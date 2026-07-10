@@ -32,10 +32,10 @@ import { getBalanceEvolutionMetricsAction } from '../../actions'
 
 const chartConfig = {
   evolutions: {
-    label: 'Evolução',
+    label: 'Evolution',
   },
   balance: {
-    label: 'Saldo',
+    label: 'Balance',
     color: 'var(--chart-4)',
   },
 } satisfies ChartConfig
@@ -58,16 +58,16 @@ export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
     <Card {...props}>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
-          <CardTitle>Evolução do saldo</CardTitle>
+          <CardTitle>Balance evolution</CardTitle>
           <CardDescription>
-            Veja a evolução do seu saldo ao longo do ano selecionado
+            See the evolution of your balance throughout the selected year
           </CardDescription>
         </div>
         <div className="hidden items-center gap-3 lg:flex">
-          <span className="text-xs">Ano</span>
+          <span className="text-xs">Year</span>
           <Select defaultValue={year} onValueChange={(value) => setYear(value)}>
             <SelectTrigger size="sm">
-              <SelectValue placeholder="Selecionar ano" />
+              <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -126,7 +126,7 @@ export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
             <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
               <div className="flex items-center gap-2">
                 <CircleAlert className="text-primary size-5" />
-                <span className="text-sm">Nenhuma evolução encontrada</span>
+                <span className="text-sm">No evolution found</span>
               </div>
             </div>
           )
@@ -135,7 +135,7 @@ export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
             <div className="flex items-center gap-2">
               <XCircle className="text-destructive size-8" />
               <span className="text-sm">
-                Ocorreu um erro ao carregar os dados
+                An error occurred while loading the data
               </span>
             </div>
           </div>
@@ -143,7 +143,7 @@ export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
           <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <Loader2 className="text-primary size-8 animate-spin" />
-              <span className="sr-only">Carregando...</span>
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         )}

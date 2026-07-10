@@ -36,14 +36,14 @@ import { getTransactionsPerPeriodMetricsAction } from '../../actions'
 
 const chartConfig = {
   transactions: {
-    label: 'Transações',
+    label: 'Transactions',
   },
   expenses: {
-    label: 'Despesas',
+    label: 'Expenses',
     color: 'var(--chart-1)',
   },
   incomes: {
-    label: 'Receitas',
+    label: 'Incomes',
     color: 'var(--chart-2)',
   },
 } satisfies ChartConfig
@@ -68,13 +68,13 @@ export function TransactionsPerPeriodCard({
     <Card {...props}>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
-          <CardTitle>Transações por período</CardTitle>
+          <CardTitle>Transactions per Period</CardTitle>
           <CardDescription>
-            Veja suas transações em cada período e tipo
+            See your transactions for each period and type
           </CardDescription>
         </div>
         <div className="hidden items-center gap-3 lg:flex">
-          <span className="text-xs">Período</span>
+          <span className="text-xs">Period</span>
           <Select
             defaultValue="90"
             onValueChange={(value) => setPeriod(value as DayPeriod)}
@@ -84,9 +84,9 @@ export function TransactionsPerPeriodCard({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="90">Últimos 3 meses</SelectItem>
-                <SelectItem value="30">Últimos 30 dias</SelectItem>
-                <SelectItem value="7">Últimos 7 dias</SelectItem>
+                <SelectItem value="90">Last 3 months</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="7">Last 7 days</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -170,7 +170,7 @@ export function TransactionsPerPeriodCard({
             <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
               <div className="flex items-center gap-2">
                 <CircleAlert className="text-primary size-5" />
-                <span className="text-sm">Nenhuma transação encontrada</span>
+                <span className="text-sm">No transactions found</span>
               </div>
             </div>
           )
@@ -179,7 +179,7 @@ export function TransactionsPerPeriodCard({
             <div className="flex items-center gap-2">
               <XCircle className="text-destructive size-8" />
               <span className="text-sm">
-                Ocorreu um erro ao carregar os dados
+                An error occurred while loading the data
               </span>
             </div>
           </div>
@@ -187,7 +187,7 @@ export function TransactionsPerPeriodCard({
           <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <Loader2 className="text-primary size-8 animate-spin" />
-              <span className="sr-only">Carregando...</span>
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         )}
@@ -195,7 +195,7 @@ export function TransactionsPerPeriodCard({
       <CardFooter className="justify-end gap-3 py-2.5">
         <Button size="xs" variant="link" asChild>
           <Link href={`/orgs/${org}/transactions`}>
-            Ver todas as transações
+            View all transactions
             <ArrowUpRight className="size-4" />
           </Link>
         </Button>

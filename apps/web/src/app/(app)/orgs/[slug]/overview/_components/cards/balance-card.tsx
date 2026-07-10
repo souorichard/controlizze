@@ -29,7 +29,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
     >
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
-          <p className="text-muted-foreground text-sm font-medium">SALDO</p>
+          <p className="text-muted-foreground text-sm font-medium">BALANCE</p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
@@ -43,7 +43,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
         {balance ? (
           <>
             <p className="text-xl font-semibold font-heading tracking-wide lg:text-3xl">
-              {balance?.amount.toLocaleString('pt-BR', {
+              {balance?.amount.toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'BRL',
                 notation: 'compact',
@@ -52,7 +52,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
             <p className="text-muted-foreground text-xs">
               {balance?.diffFromLastMonth === null ? (
                 <span className="text-muted-foreground tracking-wide">
-                  --% comparado ao mês anterior
+                  --% compared to last month
                 </span>
               ) : (
                 <span
@@ -68,7 +68,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
                   {balance.diffFromLastMonth > 0
                     ? `+${balance.diffFromLastMonth}`
                     : balance.diffFromLastMonth}
-                  % comparado ao mês anterior
+                  % compared to last month
                 </span>
               )}
             </p>

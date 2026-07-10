@@ -68,7 +68,7 @@ export function TopExpenseCategoriesCard({
       },
       {
         categories: {
-          label: 'Categorias',
+          label: 'Categories',
         },
       } as ChartConfig,
     )
@@ -77,9 +77,9 @@ export function TopExpenseCategoriesCard({
   return (
     <Card className={cn('col-span-2', className)} {...props}>
       <CardHeader>
-        <CardTitle>Despesas por categoria</CardTitle>
+        <CardTitle>Expenses by category</CardTitle>
         <CardDescription>
-          Olhe onde seu dinheiro está sendo utilizado com mais frequência
+          Look where your money is being used most frequently
         </CardDescription>
       </CardHeader>
 
@@ -104,8 +104,12 @@ export function TopExpenseCategoriesCard({
                 />
 
                 <ChartLegend
-                  content={<ChartLegendContent />}
-                  verticalAlign="bottom"
+                  align="right"
+                  layout="vertical"
+                  verticalAlign="middle"
+                  content={
+                    <ChartLegendContent className="flex-col items-start" />
+                  }
                 />
               </PieChart>
             </ChartContainer>
@@ -113,7 +117,7 @@ export function TopExpenseCategoriesCard({
             <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
               <div className="flex items-center gap-2">
                 <CircleAlert className="text-primary size-5" />
-                <span className="text-sm">Nenhuma categoria encontrada</span>
+                <span className="text-sm">No categories found</span>
               </div>
             </div>
           )
@@ -122,7 +126,7 @@ export function TopExpenseCategoriesCard({
             <div className="flex items-center gap-2">
               <XCircle className="text-destructive size-8" />
               <span className="text-sm">
-                Ocorreu um erro ao carregar os dados
+                An error occurred while loading the data
               </span>
             </div>
           </div>
@@ -130,7 +134,7 @@ export function TopExpenseCategoriesCard({
           <div className="flex h-62.5 w-full flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
               <Loader2 className="text-primary size-8 animate-spin" />
-              <span className="sr-only">Carregando...</span>
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         )}
