@@ -1,6 +1,7 @@
 'use client'
 
 import { CornerDownRight, Trash2 } from 'lucide-react'
+import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -13,7 +14,7 @@ import type { Transaction } from '@/interfaces/transaction-interface'
 import { dayjs } from '@/lib/dayjs'
 import { cn } from '@/lib/utils'
 import { getInitials } from '@/utils/get-initials'
-import { statusHandler } from './status-handler'
+import { statusHandler } from './helpers/status-handler'
 
 interface TransactionsListProps {
   transactions: Transaction[]
@@ -109,9 +110,12 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
               size="icon"
               variant="ghost"
               className="ml-2 opacity-0 group-hover:opacity-100"
+              asChild
             >
-              <Trash2 className="size-4" />
-              <span className="sr-only">Delete transaction</span>
+              <Link href="/create-transaction">
+                <Trash2 className="size-4" />
+                <span className="sr-only">Delete transaction</span>
+              </Link>
             </Button>
           </div>
         )

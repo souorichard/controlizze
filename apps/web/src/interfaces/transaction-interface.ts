@@ -29,3 +29,14 @@ export interface TransactionsFilter {
   startDate?: string
   endDate?: string
 }
+
+export interface HttpTransactionsFilter {
+  page?: number
+  perPage?: number
+  title?: string
+  type?: string
+  status?: string
+  // category?: string
+  startDate?: string
+  endDate?: string
+}

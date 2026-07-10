@@ -9,10 +9,10 @@ import {
 } from '@/components/container'
 import { Pagination } from '@/components/pagination'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useOrg } from '@/hooks/use-org'
 import { getTransactionsFilter } from '@/utils/filters'
 import { getTransactionsAction } from '../actions'
+import { LiveTitleFilter } from './filters/live-title-filter'
 import { TransactionsListSkeleton } from './skeletons/transactions-list-skeleton'
 import { TransactionsList } from './transactions-list'
 
@@ -43,7 +43,7 @@ export function TransactionsView() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <Input placeholder="Search by title..." className="max-w-lg" />
+        <LiveTitleFilter />
         <Button className="ml-auto">
           <CirclePlus className="size-4" />
           New transaction

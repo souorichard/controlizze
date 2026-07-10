@@ -1,15 +1,12 @@
-import type { Transaction } from '@/interfaces/transaction-interface'
+import type {
+  HttpTransactionsFilter,
+  Transaction,
+} from '@/interfaces/transaction-interface'
 import { api } from '../api-client'
 
 interface GetTransactionsRequest {
   org: string
-  page?: number
-  perPage?: number
-  title?: string
-  type?: string
-  status?: string
-  startDate?: string
-  endDate?: string
+  filters: HttpTransactionsFilter
 }
 
 interface GetTransactionsResponse {
@@ -24,24 +21,12 @@ interface GetTransactionsResponse {
 
 export async function getTransactions({
   org,
-  page,
-  perPage,
-  title,
-  type,
-  status,
-  startDate,
-  endDate,
+  filters,
 }: GetTransactionsRequest) {
   const response = await api
     .get(`orgs/${org}/transactions`, {
       searchParams: {
-        page,
-        perPage,
-        title,
-        type,
-        status,
-        startDate,
-        endDate,
+        ...filters,
       },
       next: {
         tags: [`${org}/transactions`],
