@@ -3,7 +3,6 @@
 import { CornerDownRight, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -51,60 +50,66 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
                   ) : null}
                 </Avatar>
               </TooltipTrigger>
-              <TooltipContent>
-                <p>{transaction.owner.name}</p>
+              <TooltipContent className="flex-col items-start">
+                <div className="space-y-0.5">
+                  <p className="text-muted-foreground">Account</p>
+                  <p>{transaction.owner.name}</p>
+                </div>
+
+                <div className="flex gap-6">
+                  <div className="space-y-0.5">
+                    <p className="text-muted-foreground">Created at</p>
+                    <p>{dayjs(transaction.createdAt).format('DD/MM/YYYY')}</p>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <p className="text-muted-foreground">Occurred at</p>
+                    <p>
+                      {dayjs(transaction.transactionDate).format('DD/MM/YYYY')}
+                    </p>
+                  </div>
+                </div>
               </TooltipContent>
             </Tooltip>
 
             <div className="flex-1">
-              <div className="flex items-center gap-4">
-                <h3 className="font-medium">{transaction.title}</h3>
-
-                <div className="flex items-center gap-1.5">
-                  <Badge
-                    variant="outline"
-                    className="text-[10px] gap-1.5 text-muted-foreground uppercase"
-                  >
-                    <div
-                      style={{ backgroundColor: transaction.category.color }}
-                      className="size-1 rounded-full"
-                    />
-                    {transaction.category.name}
-                  </Badge>
-
-                  <p className="text-xs text-muted-foreground">•</p>
-
-                  {statusHandler({ status: transaction.status })}
-
-                  <p className="text-xs text-muted-foreground">•</p>
-
-                  <p className="text-xs text-muted-foreground">
-                    {dayjs(transaction.transactionDate).fromNow()}
-                  </p>
-                </div>
-              </div>
+              <h3 className="font-medium">{transaction.title}</h3>
               {transaction.description && (
                 <div className="flex items-start gap-1 text-muted-foreground">
                   <CornerDownRight className="size-3" />
-                  <p className="max-w-20 text-xs truncate">
+                  <p className="max-w-full text-xs truncate">
                     {transaction.description}
                   </p>
                 </div>
               )}
             </div>
 
-            <p
-              className={cn(
-                'font-semibold tracking-wide',
-                isExpense ? 'text-destructive' : 'text-emerald-500',
-              )}
-            >
-              {isExpense ? '-' : '+'}
-              {transaction.amount.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              })}
-            </p>
+            <div className="min-w-60 flex items-center gap-2">
+              <div
+                style={{ backgroundColor: transaction.category.color }}
+                className="size-2 rounded-full"
+              />
+              <p className="text-sm">{transaction.category.name}</p>
+            </div>
+
+            <div className="min-w-20">
+              {statusHandler({ status: transaction.status })}
+            </div>
+
+            <div className="min-w-40 text-end">
+              <p
+                className={cn(
+                  'font-semibold tracking-wide',
+                  isExpense ? 'text-destructive' : 'text-emerald-500',
+                )}
+              >
+                {isExpense ? '-' : '+'}
+                {transaction.amount.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </p>
+            </div>
 
             <Button
               size="icon"

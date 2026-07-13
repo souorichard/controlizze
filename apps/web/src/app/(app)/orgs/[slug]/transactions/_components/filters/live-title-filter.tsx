@@ -79,7 +79,7 @@ export function LiveTitleFilter() {
   }, [debouncedSearch, pathname, replace, trigger])
 
   return (
-    <div className="max-w-lg w-full space-y-2">
+    <div className="flex-1 space-y-2">
       <Input placeholder="Search by title..." {...register('title')} />
       {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
     </div>

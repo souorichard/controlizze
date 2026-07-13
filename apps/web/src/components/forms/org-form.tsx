@@ -69,7 +69,7 @@ export function OrgForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Organization description</CardTitle>
+          <CardTitle>Description</CardTitle>
           <CardDescription>
             This is your org's description. After create your org, you can
             update the description
@@ -78,7 +78,7 @@ export function OrgForm() {
         <CardContent>
           <div className="space-y-2">
             <Input
-              placeholder="We are a company that specializes in providing innovative solutions for businesses..."
+              placeholder="We are a company that specializes in providing..."
               disabled={isSubmitting}
               {...register('description')}
             />
@@ -89,32 +89,8 @@ export function OrgForm() {
         </CardContent>
       </Card>
 
-      {/* <Card>
-        <div className="pr-4 flex items-center gap-3">
-          <CardHeader className="flex-1">
-            <CardTitle>Organization avatar</CardTitle>
-            <CardDescription>
-              This is your org's avatar. <br /> After create your org, you can
-              update the avatar
-            </CardDescription>
-          </CardHeader>
-
-          <Avatar className="size-16 transition-all cursor-pointer hover:opacity-90">
-            <AvatarImage src="https://avatars.githubusercontent.com/u/101836586?s=400&u=e091da23eabfd8b6abd1515212cba9f98fc923c5&v=4" />
-            <AvatarFallback>UN</AvatarFallback>
-          </Avatar>
-        </div>
-        <CardFooter>
-          <span className="text-sm text-muted-foreground">
-            An avatar is optional but strongly recommended.
-          </span>
-
-          <Button className="hidden ml-auto">Salvar</Button>
-        </CardFooter>
-      </Card> */}
-
       <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Salvar'}
+        {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Save'}
       </Button>
     </form>
   )

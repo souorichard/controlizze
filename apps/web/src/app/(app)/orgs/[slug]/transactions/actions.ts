@@ -1,7 +1,7 @@
 'use server'
 
 import { getTransactions } from '@/http/transactions/get-transactions'
-import type { HttpTransactionsFilter } from '@/interfaces/transaction-interface'
+import type { TransactionsFilter } from '@/interfaces/transaction-interface'
 import { getCurrentOrg } from '@/utils/auth'
 
 export async function getTransactionsAction({
@@ -12,7 +12,7 @@ export async function getTransactionsAction({
   status,
   startDate,
   endDate,
-}: HttpTransactionsFilter) {
+}: TransactionsFilter) {
   const currentOrg = await getCurrentOrg()
 
   const { transactions, meta } = await getTransactions({

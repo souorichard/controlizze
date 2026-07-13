@@ -26,7 +26,7 @@ export default function CreateOrgPage() {
       </ContainerHeader>
 
       <ContainerMain>
-        <ContainerContent>
+        <ContainerContent className="max-w-4xl">
           <ContainerContentHeader>
             <ContainerContentTitle>Create organization</ContainerContentTitle>
             <ContainerContentDescription>
