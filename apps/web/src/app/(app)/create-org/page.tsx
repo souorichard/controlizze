@@ -13,7 +13,7 @@ import { OrgForm } from '@/components/forms/org-form'
 import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
-  title: 'Criar organização',
+  title: 'Create organization',
 }
 
 export default function CreateOrgPage() {
