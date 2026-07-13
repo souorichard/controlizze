@@ -10,7 +10,7 @@ export function getTransactionsFilter(
   const title = searchParams.get('title')
   const type = searchParams.get('type')
   const status = searchParams.get('status')
-  // const category = searchParams.get('category')
+  const category = searchParams.get('category')
   const startDate = searchParams.get('startDate')
   const endDate = searchParams.get('endDate')
 
@@ -19,7 +19,7 @@ export function getTransactionsFilter(
   if (title) filters.title = title
   if (type) filters.type = type
   if (status) filters.status = status
-  // if (category) filters.category = category
+  if (category) filters.category = category
   if (startDate) filters.startDate = startDate
   if (endDate) filters.endDate = endDate
 

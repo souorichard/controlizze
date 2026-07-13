@@ -25,7 +25,7 @@ export interface TransactionsFilter {
   title?: string
   type?: string
   status?: string
-  // category?: string
+  category?: string
   startDate?: string
   endDate?: string
 }
@@ -36,7 +36,7 @@ export interface HttpTransactionsFilter {
   title?: string
   type?: string
   status?: string
-  // category?: string
+  category?: string
   startDate?: string
   endDate?: string
 }
