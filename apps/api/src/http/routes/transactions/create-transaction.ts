@@ -67,7 +67,6 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
       const [category] = await db
         .select({
           id: schema.categories.id,
-          type: schema.categories.type,
         })
         .from(schema.categories)
         .where(
@@ -80,12 +79,6 @@ export const createTransaction: FastifyPluginAsyncZod = async (app) => {
 
       if (!category) {
         throw new BadRequestError('Category not found')
-      }
-
-      if (category.type !== type) {
-        throw new BadRequestError(
-          'The category must match the transaction type',
-        )
       }
 
       const [transaction] = await db

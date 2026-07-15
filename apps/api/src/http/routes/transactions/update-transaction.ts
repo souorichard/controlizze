@@ -6,6 +6,7 @@ import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
+import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -82,6 +83,23 @@ export const updateTransaction: FastifyPluginAsyncZod = async (app) => {
         throw new UnauthorizedError(
           'You do not have permission to update this transaction',
         )
+      }
+
+      const [category] = await db
+        .select({
+          id: schema.categories.id,
+        })
+        .from(schema.categories)
+        .where(
+          and(
+            eq(schema.categories.id, categoryId),
+            eq(schema.categories.orgId, org.id),
+          ),
+        )
+        .limit(1)
+
+      if (!category) {
+        throw new BadRequestError('Category not found')
       }
 
       await db
