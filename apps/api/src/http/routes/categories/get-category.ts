@@ -7,7 +7,6 @@ import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { typeSchema } from '../../schemas.ts'
 
 export const getCategory: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
@@ -27,7 +26,6 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
               id: z.uuid(),
               name: z.string(),
               color: z.string(),
-              type: typeSchema,
               owner: z.object({
                 id: z.uuid(),
                 name: z.string().nullable(),
@@ -59,7 +57,6 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
           id: schema.categories.id,
           name: schema.categories.name,
           color: schema.categories.color,
-          type: schema.categories.type,
           owner: {
             id: schema.users.id,
             name: schema.users.name,

@@ -116,9 +116,9 @@ async function seed() {
     const categoryExpenseFood = await db
       .insert(schema.categories)
       .values({
-        name: 'Alimentação',
+        name: 'Food',
+        slug: createSlug('Food'),
         color: '#FF6B6B',
-        type: 'EXPENSE',
         orgId: org1.id,
         ownerId: user1.id,
       })
@@ -128,9 +128,9 @@ async function seed() {
     const categoryExpenseTransport = await db
       .insert(schema.categories)
       .values({
-        name: 'Transporte',
+        name: 'Transport',
+        slug: createSlug('Transport'),
         color: '#4ECDC4',
-        type: 'EXPENSE',
         orgId: org1.id,
         ownerId: user1.id,
       })
@@ -140,9 +140,9 @@ async function seed() {
     const categoryExpenseUtilities = await db
       .insert(schema.categories)
       .values({
-        name: 'Utilidades',
+        name: 'Utilities',
+        slug: createSlug('Utilities'),
         color: '#45B7D1',
-        type: 'EXPENSE',
         orgId: org1.id,
         ownerId: user1.id,
       })
@@ -152,9 +152,9 @@ async function seed() {
     const categoryIncomeSalary = await db
       .insert(schema.categories)
       .values({
-        name: 'Salário',
+        name: 'Salary',
+        slug: createSlug('Salary'),
         color: '#96CEB4',
-        type: 'INCOME',
         orgId: org1.id,
         ownerId: user1.id,
       })
@@ -164,9 +164,9 @@ async function seed() {
     const categoryIncomeBonuses = await db
       .insert(schema.categories)
       .values({
-        name: 'Bônus',
+        name: 'Bonus',
+        slug: createSlug('Bonus'),
         color: '#FFEAA7',
-        type: 'INCOME',
         orgId: org1.id,
         ownerId: user1.id,
       })
@@ -184,32 +184,32 @@ async function seed() {
     startSeedDate.setDate(1) // Start from beginning of month
 
     const foodTitles = [
-      'Almoço no Restaurante',
-      'Café da Manhã',
-      'Lanches Rápidos',
+      'Lunch at the Restaurant',
+      'Breakfast',
+      'Fast Food',
       'Pizza Delivery',
-      'Compras no Mercado',
-      'Açai na Praia',
-      'Churrascaria',
-      'Pastelaria Local',
+      'Grocery Shopping',
+      'Açaí by the Beach',
+      'Steakhouse',
+      'Local Bakery',
     ]
 
     const transportTitles = [
-      'Gasolina',
+      'Gasoline',
       'Uber',
-      'Passagem de Ônibus',
-      'Manutenção do Carro',
-      'Estacionamento',
-      'Táxi',
+      'Bus Ticket',
+      'Car Maintenance',
+      'Parking',
+      'Taxi',
     ]
 
     const utilityTitles = [
-      'Conta de Luz',
-      'Conta de Água',
+      'Electric Bill',
+      'Water Bill',
       'Internet',
-      'Aluguel Mensal',
-      'Condomínio',
-      'Seguro do Imóvel',
+      'Monthly Rent',
+      'Condo Fee',
+      'Property Insurance',
     ]
 
     const daysInMonth = (year: number, month: number) => {
@@ -226,7 +226,7 @@ async function seed() {
 
       // Salary - every month on the 5th
       transactions.push({
-        title: 'Salário Mensal',
+        title: 'Monthly Salary',
         type: 'INCOME' as const,
         categoryId: categoryIncomeSalary.id,
         amount: 500000,
@@ -239,7 +239,7 @@ async function seed() {
       // Bonus - every 3 months on the 10th
       if (i % 3 === 0) {
         transactions.push({
-          title: 'Bônus de Projeto',
+          title: 'Project Bonus',
           type: 'INCOME' as const,
           categoryId: categoryIncomeBonuses.id,
           amount: 50000,
@@ -320,8 +320,8 @@ async function seed() {
 
     await db.insert(schema.recurrences).values([
       {
-        title: 'Aluguel Mensal',
-        description: 'Pagamento do aluguel da casa',
+        title: 'Monthly Rent',
+        description: 'House rent payment',
         type: 'EXPENSE',
         categoryId: categoryExpenseUtilities.id,
         amount: 150000, // $1500.00
@@ -336,8 +336,8 @@ async function seed() {
         orgId: org1.id,
       },
       {
-        title: 'Compras Semanais',
-        description: 'Compras no mercado',
+        title: 'Weekly Groceries',
+        description: 'Grocery shopping',
         type: 'EXPENSE',
         categoryId: categoryExpenseFood.id,
         amount: 12000, // $120.00
@@ -352,8 +352,8 @@ async function seed() {
         orgId: org1.id,
       },
       {
-        title: 'Café Diário',
-        description: 'Café da manhã',
+        title: 'Daily Coffee',
+        description: 'Breakfast',
         type: 'EXPENSE',
         categoryId: categoryExpenseFood.id,
         amount: 500, // $5.00
@@ -368,8 +368,8 @@ async function seed() {
         orgId: org1.id,
       },
       {
-        title: 'Assinatura Academia',
-        description: 'Mensalidade da academia',
+        title: 'Gym Membership',
+        description: 'Gym monthly fee',
         type: 'EXPENSE',
         categoryId: categoryExpenseUtilities.id,
         amount: 5000, // $50.00
@@ -386,7 +386,7 @@ async function seed() {
 
     console.log(`✅ Created ${4} recurrences`)
 
-    console.log('✨ Database seed paid successfully!')
+    console.log('✨ Database seed completed successfully!')
   } catch (error) {
     console.error('❌ Error seeding database:', error)
     throw error

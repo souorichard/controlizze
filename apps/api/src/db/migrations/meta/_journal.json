@@ -43,6 +43,13 @@
       "when": 1780668250458,
       "tag": "0005_minor_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1784136451794,
+      "tag": "0006_wide_sinister_six",
+      "breakpoints": true
     }
   ]
 }

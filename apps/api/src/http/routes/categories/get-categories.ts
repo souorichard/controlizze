@@ -6,7 +6,6 @@ import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { typeSchema } from '../../schemas.ts'
 
 export const getCategories: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).get(
@@ -24,7 +23,6 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
             .string()
             .min(3, 'Termo de busca deve ter pelo menos 3 caracteres')
             .optional(),
-          type: typeSchema.optional(),
           page: z.coerce.number().min(1).default(1),
           perPage: z.coerce.number().min(1).max(50).default(10),
         }),
@@ -35,7 +33,6 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
                 id: z.uuid(),
                 name: z.string(),
                 color: z.string(),
-                type: typeSchema,
                 owner: z.object({
                   id: z.uuid(),
                   name: z.string().nullable(),
@@ -56,7 +53,7 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
     },
     async (request, reply) => {
       const { slug } = request.params
-      const { name, type, page, perPage } = request.query
+      const { name, page, perPage } = request.query
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
@@ -73,7 +70,6 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
       const filters = and(
         eq(schema.categories.orgId, org.id),
         name ? ilike(schema.categories.name, `%${name}%`) : undefined,
-        type ? eq(schema.categories.type, type) : undefined,
       )
 
       const [{ total }] = await db
@@ -86,7 +82,6 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
           id: schema.categories.id,
           name: schema.categories.name,
           color: schema.categories.color,
-          type: schema.categories.type,
           owner: {
             id: schema.users.id,
             name: schema.users.name,
