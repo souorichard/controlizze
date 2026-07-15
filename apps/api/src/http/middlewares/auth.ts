@@ -45,13 +45,24 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
     request.getUserMembership = async (slug: string, userId: string) => {
       const [member] = await db
         .select({
-          organization: schema.organizations,
+          orgId: schema.organizations.id,
+          orgName: schema.organizations.name,
+          orgSlug: schema.organizations.slug,
+          orgAvatarUrl: schema.organizations.avatarUrl,
+          orgCreatedAt: schema.organizations.createdAt,
+          ownerId: schema.users.id,
+          ownerName: schema.users.name,
+          ownerAvatarUrl: schema.users.avatarUrl,
           membership: schema.members,
         })
         .from(schema.members)
         .innerJoin(
           schema.organizations,
           eq(schema.members.orgId, schema.organizations.id),
+        )
+        .innerJoin(
+          schema.users,
+          eq(schema.organizations.ownerId, schema.users.id),
         )
         .where(
           and(
@@ -61,12 +72,19 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
         )
         .limit(1)
 
-      if (!member) {
-        throw new UnauthorizedError(`You are not a member of this organization`)
-      }
-
       return {
-        org: member.organization,
+        org: {
+          id: member.orgId,
+          name: member.orgName,
+          slug: member.orgSlug,
+          avatarUrl: member.orgAvatarUrl,
+          createdAt: member.orgCreatedAt,
+          owner: {
+            id: member.ownerId,
+            name: member.ownerName,
+            avatarUrl: member.ownerAvatarUrl,
+          },
+        },
         membership: member.membership,
       }
     }
