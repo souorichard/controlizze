@@ -25,6 +25,7 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
             category: z.object({
               id: z.uuid(),
               name: z.string(),
+              slug: z.string(),
               color: z.string(),
               owner: z.object({
                 id: z.uuid(),
@@ -56,6 +57,7 @@ export const getCategory: FastifyPluginAsyncZod = async (app) => {
         .select({
           id: schema.categories.id,
           name: schema.categories.name,
+          slug: schema.categories.slug,
           color: schema.categories.color,
           owner: {
             id: schema.users.id,

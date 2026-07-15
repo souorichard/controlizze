@@ -3,6 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { createSlug } from '../../../utils/create-slug.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
@@ -68,8 +69,8 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
         .update(schema.categories)
         .set({
           name,
+          slug: createSlug(name),
           color,
-          type,
         })
         .where(
           and(
