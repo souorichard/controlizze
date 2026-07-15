@@ -20,8 +20,8 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
         }),
         response: {
           201: z.object({
-            id: z.uuid(),
-            slug: z.string(),
+            orgId: z.uuid(),
+            orgSlug: z.string(),
           }),
         },
       },
@@ -54,8 +54,8 @@ export const createOrg: FastifyPluginAsyncZod = async (app) => {
       })
 
       return reply.status(201).send({
-        id: org.id,
-        slug: org.slug,
+        orgId: org.id,
+        orgSlug: org.slug,
       })
     },
   )

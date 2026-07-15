@@ -46,6 +46,11 @@ export const getRecurrence: FastifyPluginAsyncZod = async (app) => {
               interval: z.number(),
               startDate: z.date(),
               endDate: z.date().nullable(),
+              owner: z.object({
+                id: z.uuid(),
+                name: z.string().nullable(),
+                avatarUrl: z.url().nullable(),
+              }),
               createdAt: z.date(),
             }),
           }),
@@ -84,6 +89,11 @@ export const getRecurrence: FastifyPluginAsyncZod = async (app) => {
           interval: schema.recurrences.interval,
           startDate: schema.recurrences.startDate,
           endDate: schema.recurrences.endDate,
+          owner: {
+            id: schema.users.id,
+            name: schema.users.name,
+            avatarUrl: schema.users.avatarUrl,
+          },
           createdAt: schema.recurrences.createdAt,
         })
         .from(schema.recurrences)

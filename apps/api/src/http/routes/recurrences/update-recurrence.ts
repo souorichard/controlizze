@@ -6,7 +6,6 @@ import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { realToCents } from '../../../utils/amount-converter.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
-import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
@@ -21,7 +20,7 @@ export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
     '/',
     {
       schema: {
-        tags: ['Recurrence transaction'],
+        tags: ['Recurrence'],
         summary: 'Update recurrence',
         security: [{ bearerAuth: [] }],
         params: z.object({
@@ -80,7 +79,6 @@ export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
       const [category] = await db
         .select({
           id: schema.categories.id,
-          type: schema.categories.type,
         })
         .from(schema.categories)
         .where(
@@ -93,12 +91,6 @@ export const updateRecurrence: FastifyPluginAsyncZod = async (app) => {
 
       if (!category) {
         throw new NotFoundError('Category not found')
-      }
-
-      if (category.type !== type) {
-        throw new BadRequestError(
-          'The category must match the transaction type',
-        )
       }
 
       const [recurrence] = await db
