@@ -27,7 +27,7 @@ describe('PUT /orgs/:slug/transactions/:transactionId', () => {
   it('should be able to update a transaction as OWNER', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(user.id, org.id)
     const transaction = await makeTransaction(user.id, org.id, {
       categoryId: category.id,
     })
@@ -51,7 +51,7 @@ describe('PUT /orgs/:slug/transactions/:transactionId', () => {
   it('should be able to update own transaction as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -79,7 +79,7 @@ describe('PUT /orgs/:slug/transactions/:transactionId', () => {
   it('should not be able to update another member transaction as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -107,7 +107,7 @@ describe('PUT /orgs/:slug/transactions/:transactionId', () => {
   it('should not be able to update a non existing transaction', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(user.id, org.id)
 
     const token = await authenticate(app)
 

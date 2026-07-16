@@ -268,7 +268,7 @@ export const routes: Route[] = [
   },
   {
     plugin: getRecurrence,
-    prefix: '/orgs/:slug/recurrences/recurrenceId',
+    prefix: '/orgs/:slug/recurrences/:recurrenceId',
   },
   {
     plugin: updateRecurrence,

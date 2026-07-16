@@ -3,6 +3,7 @@ import { hash } from 'bcryptjs'
 import dayjs from 'dayjs'
 import { db } from '../../db/index.ts'
 import { schema } from '../../db/schema/index.ts'
+import { createSlug } from '../../utils/create-slug.ts'
 import { hashToken } from '../../utils/hash-token.ts'
 
 export async function makeUser(
@@ -67,8 +68,8 @@ export async function makeCategory(
     .insert(schema.categories)
     .values({
       name: 'Food',
+      slug: createSlug('Food'),
       color: '#ff0000',
-      type: 'EXPENSE',
       ownerId: userId,
       orgId,
       ...override,

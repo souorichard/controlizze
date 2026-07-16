@@ -26,7 +26,7 @@ describe('DELETE /orgs/:slug/recurrences/:recurrenceId', () => {
   it('should be able to delete a recurrence as OWNER', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
     const recurrence = await makeRecurrence(user.id, org.id, category.id)
 
     const token = await authenticate(app)
@@ -41,7 +41,7 @@ describe('DELETE /orgs/:slug/recurrences/:recurrenceId', () => {
   it('should be able to delete own recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -60,7 +60,7 @@ describe('DELETE /orgs/:slug/recurrences/:recurrenceId', () => {
   it('should not be able to delete another member recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')

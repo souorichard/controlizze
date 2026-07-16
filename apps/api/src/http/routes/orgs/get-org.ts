@@ -19,11 +19,7 @@ export const getOrg: FastifyPluginAsyncZod = async (app) => {
               id: z.uuid(),
               name: z.string(),
               slug: z.string(),
-              owner: z.object({
-                id: z.uuid(),
-                name: z.string().nullable(),
-                avatarUrl: z.url().nullable(),
-              }),
+              ownerId: z.uuid(),
               avatarUrl: z.url().nullable(),
               createdAt: z.date(),
             }),

@@ -87,7 +87,7 @@ describe('GET /orgs/:slug/metrics/transactions-per-period', () => {
     const token = await authenticate(app)
 
     const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/metrics/transactions-per-period?lastMonths=1`)
+      .get(`/orgs/${org.slug}/metrics/transactions-per-period?period=30`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)

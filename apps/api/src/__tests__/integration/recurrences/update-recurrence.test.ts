@@ -27,7 +27,7 @@ describe('PUT /orgs/:slug/recurrences/:recurrenceId', () => {
   it('should be able to update a recurrence as OWNER', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
     const recurrence = await makeRecurrence(user.id, org.id, category.id)
 
     const token = await authenticate(app)
@@ -52,7 +52,7 @@ describe('PUT /orgs/:slug/recurrences/:recurrenceId', () => {
   it('should be able to update own recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -81,7 +81,7 @@ describe('PUT /orgs/:slug/recurrences/:recurrenceId', () => {
   it('should not be able to update another member recurrence as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -107,41 +107,10 @@ describe('PUT /orgs/:slug/recurrences/:recurrenceId', () => {
     expect(response.status).toBe(401)
   })
 
-  it('should not be able to update with mismatched category type', async () => {
-    const user = await makeUser()
-    const org = await makeOrganization(user.id)
-    const incomeCategory = await makeCategory(user.id, org.id, {
-      type: 'INCOME',
-    })
-    const expenseCategory = await makeCategory(user.id, org.id, {
-      name: 'Rent',
-      type: 'EXPENSE',
-    })
-    const recurrence = await makeRecurrence(user.id, org.id, incomeCategory.id)
-
-    const token = await authenticate(app)
-
-    const response = await supertest(app.server)
-      .put(`/orgs/${org.slug}/recurrences/${recurrence.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'Updated',
-        type: 'INCOME',
-        categoryId: expenseCategory.id,
-        amount: 6000,
-        status: 'ACTIVE',
-        frequency: 'MONTHLY',
-        interval: 1,
-        startDate: new Date().toISOString(),
-      })
-
-    expect(response.status).toBe(400)
-  })
-
   it('should not be able to update a non existing recurrence', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
 
     const token = await authenticate(app)
 

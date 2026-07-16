@@ -101,6 +101,10 @@ export const getRecurrence: FastifyPluginAsyncZod = async (app) => {
           schema.categories,
           eq(schema.recurrences.categoryId, schema.categories.id),
         )
+        .innerJoin(
+          schema.users,
+          eq(schema.recurrences.ownerId, schema.users.id),
+        )
         .where(
           and(
             eq(schema.recurrences.orgId, org.id),

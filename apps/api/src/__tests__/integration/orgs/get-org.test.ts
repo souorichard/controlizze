@@ -81,6 +81,8 @@ describe('GET /orgs/:slug', () => {
       .get(`/orgs/${otherOrg.slug}`)
       .set('Authorization', `Bearer ${token}`)
 
+    console.log(response)
+
     expect(response.status).toBe(401)
   })
 })

@@ -27,7 +27,7 @@ describe('DELETE /orgs/:slug/transactions/:transactionId', () => {
   it('should be able to delete a transaction as OWNER', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(user.id, org.id)
     const transaction = await makeTransaction(user.id, org.id, {
       categoryId: category.id,
     })
@@ -44,7 +44,7 @@ describe('DELETE /orgs/:slug/transactions/:transactionId', () => {
   it('should be able to delete own transaction as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -65,7 +65,7 @@ describe('DELETE /orgs/:slug/transactions/:transactionId', () => {
   it('should not be able to delete another member transaction as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')

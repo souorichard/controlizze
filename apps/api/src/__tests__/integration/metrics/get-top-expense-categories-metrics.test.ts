@@ -29,11 +29,9 @@ describe('GET /orgs/:slug/metrics/top-expense-categories', () => {
 
     const food = await makeCategory(user.id, org.id, {
       name: 'Food',
-      type: 'EXPENSE',
     })
     const rent = await makeCategory(user.id, org.id, {
       name: 'Rent',
-      type: 'EXPENSE',
     })
 
     await db.insert(schema.transactions).values([
@@ -79,7 +77,6 @@ describe('GET /orgs/:slug/metrics/top-expense-categories', () => {
 
     const food = await makeCategory(user.id, org.id, {
       name: 'Food',
-      type: 'EXPENSE',
     })
 
     await db.insert(schema.transactions).values([

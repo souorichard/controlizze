@@ -2,6 +2,7 @@ import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { createSlug } from '../../../utils/create-slug.ts'
 import { createTestApp } from '../../helpers/app.ts'
 import { authenticate } from '../../helpers/auth.ts'
 import { cleanDatabase } from '../../helpers/db.ts'
@@ -26,15 +27,15 @@ describe('GET /orgs/:slug/categories', () => {
     await db.insert(schema.categories).values([
       {
         name: 'Food',
+        slug: createSlug('Food'),
         color: '#ff0000',
-        type: 'EXPENSE',
         ownerId: user.id,
         orgId: org.id,
       },
       {
         name: 'Salary',
+        slug: createSlug('Salary'),
         color: '#00ff00',
-        type: 'INCOME',
         ownerId: user.id,
         orgId: org.id,
       },
@@ -63,15 +64,15 @@ describe('GET /orgs/:slug/categories', () => {
     await db.insert(schema.categories).values([
       {
         name: 'Food',
+        slug: createSlug('Food'),
         color: '#ff0000',
-        type: 'EXPENSE',
         ownerId: user.id,
         orgId: org.id,
       },
       {
         name: 'Salary',
+        slug: createSlug('Salary'),
         color: '#00ff00',
-        type: 'INCOME',
         ownerId: user.id,
         orgId: org.id,
       },
@@ -86,38 +87,6 @@ describe('GET /orgs/:slug/categories', () => {
     expect(response.status).toBe(200)
     expect(response.body.categories).toHaveLength(1)
     expect(response.body.categories[0].name).toBe('Salary')
-  })
-
-  it('should be able to filter categories by type', async () => {
-    const user = await makeUser()
-    const org = await makeOrganization(user.id)
-
-    await db.insert(schema.categories).values([
-      {
-        name: 'Food',
-        color: '#ff0000',
-        type: 'EXPENSE',
-        ownerId: user.id,
-        orgId: org.id,
-      },
-      {
-        name: 'Salary',
-        color: '#00ff00',
-        type: 'INCOME',
-        ownerId: user.id,
-        orgId: org.id,
-      },
-    ])
-
-    const token = await authenticate(app)
-
-    const response = await supertest(app.server)
-      .get(`/orgs/${org.slug}/categories?type=EXPENSE`)
-      .set('Authorization', `Bearer ${token}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body.categories).toHaveLength(1)
-    expect(response.body.categories[0].name).toBe('Food')
   })
 
   it('should not be able to get categories without authentication', async () => {

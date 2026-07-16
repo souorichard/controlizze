@@ -29,7 +29,6 @@ describe('POST /orgs/:slug/recurrences', () => {
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, {
       name: 'Salary',
-      type: 'INCOME',
     })
 
     const token = await authenticate(app)
@@ -52,39 +51,11 @@ describe('POST /orgs/:slug/recurrences', () => {
     expect(response.body).toHaveProperty('recurrenceId')
   })
 
-  it('should not be able to create a recurrence with mismatched category type', async () => {
-    const user = await makeUser()
-    const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, {
-      name: 'Food',
-      type: 'EXPENSE',
-    })
-
-    const token = await authenticate(app)
-
-    const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/recurrences`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'Monthly Salary',
-        type: 'INCOME',
-        categoryId: category.id,
-        amount: 5000,
-        status: 'ACTIVE',
-        frequency: 'MONTHLY',
-        interval: 1,
-        startDate: dayjs().toISOString(),
-      })
-
-    expect(response.status).toBe(400)
-  })
-
   it('should not be able to create a recurrence with endDate before startDate', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
     const category = await makeCategory(user.id, org.id, {
       name: 'Salary',
-      type: 'INCOME',
     })
 
     const token = await authenticate(app)
@@ -112,7 +83,6 @@ describe('POST /orgs/:slug/recurrences', () => {
     const org = await makeOrganization(owner.id)
     const category = await makeCategory(owner.id, org.id, {
       name: 'Salary',
-      type: 'INCOME',
     })
 
     const member = await makeUser({ email: 'member@example.com' })

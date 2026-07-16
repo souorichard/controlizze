@@ -45,14 +45,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
     request.getUserMembership = async (slug: string, userId: string) => {
       const [member] = await db
         .select({
-          orgId: schema.organizations.id,
-          orgName: schema.organizations.name,
-          orgSlug: schema.organizations.slug,
-          orgAvatarUrl: schema.organizations.avatarUrl,
-          orgCreatedAt: schema.organizations.createdAt,
-          ownerId: schema.users.id,
-          ownerName: schema.users.name,
-          ownerAvatarUrl: schema.users.avatarUrl,
+          org: schema.organizations,
           membership: schema.members,
         })
         .from(schema.members)
@@ -72,19 +65,12 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
         )
         .limit(1)
 
+      if (!member) {
+        throw new UnauthorizedError(`You are not a member of this organization`)
+      }
+
       return {
-        org: {
-          id: member.orgId,
-          name: member.orgName,
-          slug: member.orgSlug,
-          avatarUrl: member.orgAvatarUrl,
-          createdAt: member.orgCreatedAt,
-          owner: {
-            id: member.ownerId,
-            name: member.ownerName,
-            avatarUrl: member.ownerAvatarUrl,
-          },
-        },
+        org: member.org,
         membership: member.membership,
       }
     }

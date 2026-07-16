@@ -26,7 +26,7 @@ describe('POST /orgs/:slug/transactions', () => {
   it('should be able to create a transaction', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(user.id, org.id)
 
     const token = await authenticate(app)
 
@@ -48,7 +48,7 @@ describe('POST /orgs/:slug/transactions', () => {
   it('should be able to create a transaction as MEMBER', async () => {
     const owner = await makeUser()
     const org = await makeOrganization(owner.id)
-    const category = await makeCategory(owner.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(owner.id, org.id)
 
     const member = await makeUser({ email: 'member@example.com' })
     await makeMember(member.id, org.id, 'MEMBER')
@@ -67,27 +67,6 @@ describe('POST /orgs/:slug/transactions', () => {
       })
 
     expect(response.status).toBe(201)
-  })
-
-  it('should not be able to create a transaction with mismatched category type', async () => {
-    const user = await makeUser()
-    const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'EXPENSE' })
-
-    const token = await authenticate(app)
-
-    const response = await supertest(app.server)
-      .post(`/orgs/${org.slug}/transactions`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'Salary',
-        type: 'INCOME',
-        categoryId: category.id,
-        amount: 5000,
-        status: 'PAID',
-      })
-
-    expect(response.status).toBe(400)
   })
 
   it('should not be able to create a transaction without authentication', async () => {

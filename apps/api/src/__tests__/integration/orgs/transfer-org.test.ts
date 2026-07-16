@@ -38,6 +38,8 @@ describe('PATCH /orgs/:slug/owner', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ transferToUserId: member.id })
 
+    console.log(response.error)
+
     expect(response.status).toBe(204)
 
     const [updatedOrg] = await db

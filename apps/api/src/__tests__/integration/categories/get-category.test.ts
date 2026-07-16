@@ -38,7 +38,6 @@ describe('GET /orgs/:slug/categories/:categoryId', () => {
       id: category.id,
       name: 'Food',
       color: '#ff0000',
-      type: 'EXPENSE',
     })
     expect(response.body.category.owner).toBeDefined()
   })

@@ -107,7 +107,7 @@ describe('GET /orgs/:slug/transactions', () => {
   it('should be able to filter by category', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'EXPENSE' })
+    const category = await makeCategory(user.id, org.id)
 
     await makeTransaction(user.id, org.id, {
       title: 'Groceries',

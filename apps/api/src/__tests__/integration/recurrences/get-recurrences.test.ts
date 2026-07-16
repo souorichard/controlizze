@@ -25,7 +25,7 @@ describe('GET /orgs/:slug/recurrences', () => {
   it('should be able to get recurrences', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
 
     await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
@@ -53,7 +53,7 @@ describe('GET /orgs/:slug/recurrences', () => {
   it('should be able to filter by title', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
 
     await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
@@ -76,12 +76,9 @@ describe('GET /orgs/:slug/recurrences', () => {
   it('should be able to filter by type', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const incomeCategory = await makeCategory(user.id, org.id, {
-      type: 'INCOME',
-    })
+    const incomeCategory = await makeCategory(user.id, org.id, {})
     const expenseCategory = await makeCategory(user.id, org.id, {
       name: 'Rent',
-      type: 'EXPENSE',
     })
 
     await makeRecurrence(user.id, org.id, incomeCategory.id, {
@@ -107,7 +104,7 @@ describe('GET /orgs/:slug/recurrences', () => {
   it('should be able to filter by status', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
 
     await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
@@ -132,7 +129,7 @@ describe('GET /orgs/:slug/recurrences', () => {
   it('should be able to filter by frequency', async () => {
     const user = await makeUser()
     const org = await makeOrganization(user.id)
-    const category = await makeCategory(user.id, org.id, { type: 'INCOME' })
+    const category = await makeCategory(user.id, org.id)
 
     await makeRecurrence(user.id, org.id, category.id, {
       title: 'Salary',
