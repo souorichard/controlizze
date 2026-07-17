@@ -30,7 +30,7 @@ export const getMembers: FastifyPluginAsyncZod = async (app) => {
                 id: z.uuid(),
                 name: z.string().nullable(),
                 email: z.string(),
-                role: roleSchema,
+                role: roleSchema.transform((v) => v.toLowerCase()),
                 avatarUrl: z.url().nullable(),
                 userId: z.uuid(),
                 createdAt: z.date(),

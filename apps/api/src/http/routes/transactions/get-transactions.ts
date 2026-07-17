@@ -40,7 +40,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
                 id: z.uuid(),
                 title: z.string(),
                 description: z.string().nullable(),
-                type: typeSchema,
+                type: typeSchema.transform((v) => v.toLowerCase()),
                 category: z
                   .object({
                     id: z.uuid(),
@@ -49,7 +49,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
                   })
                   .nullable(),
                 amount: z.number(),
-                status: statusSchema,
+                status: statusSchema.transform((v) => v.toLowerCase()),
                 transactionDate: z.date(),
                 owner: z.object({
                   id: z.uuid(),

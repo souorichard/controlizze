@@ -42,7 +42,7 @@ export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
                 id: z.uuid(),
                 title: z.string(),
                 description: z.string().nullable().optional(),
-                type: typeSchema,
+                type: typeSchema.transform((v) => v.toLowerCase()),
                 category: z
                   .object({
                     id: z.uuid(),
@@ -51,8 +51,10 @@ export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
                   })
                   .nullable(),
                 amount: z.number(),
-                status: recurrenceStatusSchema,
-                frequency: frequencySchema,
+                status: recurrenceStatusSchema.transform((v) =>
+                  v.toLowerCase(),
+                ),
+                frequency: frequencySchema.transform((v) => v.toLowerCase()),
                 interval: z.number(),
                 startDate: z.date(),
                 endDate: z.date().nullable(),

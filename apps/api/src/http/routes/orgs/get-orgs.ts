@@ -22,7 +22,7 @@ export const getOrgs: FastifyPluginAsyncZod = async (app) => {
                 name: z.string(),
                 slug: z.string(),
                 avatarUrl: z.string().nullable(),
-                role: roleSchema,
+                role: roleSchema.transform((v) => v.toLowerCase()),
               }),
             ),
           }),

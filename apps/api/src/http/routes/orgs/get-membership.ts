@@ -18,7 +18,7 @@ export const getOrgMembership: FastifyPluginAsyncZod = async (app) => {
           200: z.object({
             membership: z.object({
               id: z.uuid(),
-              role: roleSchema,
+              role: roleSchema, // do not convert to lowercase
               userId: z.uuid(),
               orgId: z.uuid(),
             }),

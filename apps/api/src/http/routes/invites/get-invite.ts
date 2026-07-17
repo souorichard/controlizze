@@ -23,8 +23,8 @@ export const getInvite: FastifyPluginAsyncZod = async (app) => {
             invite: z.object({
               id: z.uuid(),
               email: z.email(),
-              role: roleSchema,
-              status: inviteStatusSchema,
+              role: roleSchema.transform((v) => v.toLowerCase()),
+              status: inviteStatusSchema.transform((v) => v.toLowerCase()),
               expiresAt: z.date(),
               author: z
                 .object({
