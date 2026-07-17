@@ -27,7 +27,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
             .optional(),
           type: typeSchema.optional(),
           status: statusSchema.optional(),
-          categoryId: z.uuid().optional(),
+          categorySlug: z.string().optional(),
           startDate: z.coerce.date().optional(),
           endDate: z.coerce.date().optional(),
           page: z.coerce.number().min(1).default(1),
@@ -75,7 +75,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         title,
         type,
         status,
-        categoryId,
+        categorySlug,
         startDate,
         endDate,
         page,
@@ -99,7 +99,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         title ? ilike(schema.transactions.title, `%${title}%`) : undefined,
         type ? eq(schema.transactions.type, type) : undefined,
         status ? eq(schema.transactions.status, status) : undefined,
-        categoryId ? eq(schema.transactions.categoryId, categoryId) : undefined,
+        categorySlug ? eq(schema.categories.slug, categorySlug) : undefined,
         startDate
           ? gte(schema.transactions.transactionDate, startDate)
           : undefined,
@@ -109,6 +109,10 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
       const [{ total }] = await db
         .select({ total: count() })
         .from(schema.transactions)
+        .leftJoin(
+          schema.categories,
+          eq(schema.transactions.categoryId, schema.categories.id),
+        )
         .where(filters)
 
       const transactions = await db
@@ -150,6 +154,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
           return {
             ...transaction,
             amount: centsToReal(transaction.amount),
+            category: transaction.category?.id ? transaction.category : null,
           }
         },
       )
