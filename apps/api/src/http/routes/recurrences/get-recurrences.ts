@@ -1,4 +1,4 @@
-import { and, count, eq, ilike } from 'drizzle-orm'
+import { and, count, desc, eq, ilike } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -141,6 +141,7 @@ export const getRecurrences: FastifyPluginAsyncZod = async (app) => {
         .where(filters)
         .limit(perPage)
         .offset((page - 1) * perPage)
+        .orderBy(desc(schema.recurrences.createdAt))
 
       const recurrencesWithFormattedAmount = recurrences.map((transaction) => {
         return {

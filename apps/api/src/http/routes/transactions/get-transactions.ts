@@ -1,4 +1,4 @@
-import { and, count, eq, gte, ilike, lte } from 'drizzle-orm'
+import { and, count, desc, eq, gte, ilike, lte } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -148,6 +148,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         .where(filters)
         .limit(perPage)
         .offset((page - 1) * perPage)
+        .orderBy(desc(schema.transactions.createdAt))
 
       const transactionsWithFormattedAmount = transactions.map(
         (transaction) => {

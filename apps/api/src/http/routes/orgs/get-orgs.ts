@@ -1,5 +1,5 @@
 import { roleSchema } from '@controlizze/rbac'
-import { eq } from 'drizzle-orm'
+import { asc, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
@@ -47,6 +47,7 @@ export const getOrgs: FastifyPluginAsyncZod = async (app) => {
           eq(schema.organizations.id, schema.members.orgId),
         )
         .where(eq(schema.members.userId, userId))
+        .orderBy(asc(schema.organizations.createdAt))
 
       return { orgs }
     },
