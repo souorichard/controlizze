@@ -2,14 +2,14 @@ export interface Transaction {
   id: string
   title: string
   description: string
-  type: 'EXPENSE' | 'INCOME'
+  type: Type
   category: {
     id: string
     name: string
     color: string
   }
   amount: number
-  status: 'PENDING' | 'PAID' | 'CANCELED'
+  status: Status
   transactionDate: string
   owner: {
     id: string
@@ -23,8 +23,8 @@ export interface TransactionsFilter {
   page?: string
   perPage?: string
   title?: string
-  type?: string
-  status?: string
+  type?: Type
+  status?: Status
   category?: string
   startDate?: string
   endDate?: string
@@ -34,9 +34,9 @@ export interface HttpTransactionsFilter {
   page?: number
   perPage?: number
   title?: string
-  type?: string
-  status?: string
-  category?: string
+  type?: HttpType
+  status?: HttpStatus
+  categorySlug?: string
   startDate?: string
   endDate?: string
 }

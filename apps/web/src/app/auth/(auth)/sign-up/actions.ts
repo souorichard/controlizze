@@ -1,7 +1,7 @@
 'use server'
 
 import { createAccount } from '@/http/auth/create-account'
-import type { ActionResponse } from '@/interfaces/action-interface'
+import type { ActionResponse } from '@/interfaces/action'
 import { actionError } from '@/utils/action-error'
 import type { SignUpData } from './schemas'
 

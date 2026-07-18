@@ -1,7 +1,7 @@
 import type {
   HttpTransactionsFilter,
   Transaction,
-} from '@/interfaces/transaction-interface'
+} from '@/interfaces/transaction'
 import { api } from '../api-client'
 
 interface GetTransactionsRequest {

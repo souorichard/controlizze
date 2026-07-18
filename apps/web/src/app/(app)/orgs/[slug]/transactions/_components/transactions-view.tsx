@@ -9,9 +9,12 @@ import {
 } from '@/components/container'
 import { Pagination } from '@/components/pagination'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { useOrg } from '@/hooks/use-org'
 import { getTransactionsFilter } from '@/utils/filters'
 import { getTransactionsAction } from '../actions'
+import { UpsertTransactionDialog } from './dialogs/upsert-transaction-dialog'
+import { CategoryFilter } from './filters/category-filter'
 import { LiveTitleFilter } from './filters/live-title-filter'
 import { StatusFilter } from './filters/status-filter'
 import { TypeFilter } from './filters/type-filter'
@@ -47,12 +50,19 @@ export function TransactionsView() {
       <div className="flex items-center gap-3">
         <LiveTitleFilter />
         <TypeFilter />
+        <CategoryFilter />
         <StatusFilter />
 
-        <Button className="ml-auto">
-          <CirclePlus className="size-4" />
-          New transaction
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="ml-auto">
+              <CirclePlus className="size-4" />
+              New transaction
+            </Button>
+          </DialogTrigger>
+
+          <UpsertTransactionDialog />
+        </Dialog>
       </div>
 
       <ContainerContentList>

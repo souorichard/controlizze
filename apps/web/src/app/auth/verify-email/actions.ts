@@ -1,7 +1,7 @@
 'use server'
 
 import { verifyEmail } from '@/http/auth/verifiy-email'
-import type { ActionResponse } from '@/interfaces/action-interface'
+import type { ActionResponse } from '@/interfaces/action'
 import { actionError } from '@/utils/action-error'
 
 interface VerifyEmailActionProps {

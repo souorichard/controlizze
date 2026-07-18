@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { authenticateWithPassword } from '@/http/auth/authenticate-with-password'
-import type { ActionResponse } from '@/interfaces/action-interface'
+import type { ActionResponse } from '@/interfaces/action'
 import { actionError } from '@/utils/action-error'
 import type { SignInData } from './schemas'
 

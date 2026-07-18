@@ -1,7 +1,7 @@
 'use server'
 
 import { resetPassword } from '@/http/auth/reset-password'
-import type { ActionResponse } from '@/interfaces/action-interface'
+import type { ActionResponse } from '@/interfaces/action'
 import { actionError } from '@/utils/action-error'
 
 interface ResetPasswordActionProps {

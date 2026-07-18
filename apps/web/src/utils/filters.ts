@@ -1,5 +1,5 @@
 import type { ReadonlyURLSearchParams } from 'next/navigation'
-import type { TransactionsFilter } from '@/interfaces/transaction-interface'
+import type { TransactionsFilter } from '@/interfaces/transaction'
 
 export function getTransactionsFilter(
   searchParams: ReadonlyURLSearchParams,

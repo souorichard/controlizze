@@ -5,40 +5,33 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { StatusSelect } from '@/components/status-select'
+import { CategorySelect } from '@/components/category-select'
 import { getTransactionsFilter } from '@/utils/filters'
 
-const items = [
-  { label: 'All status', value: 'all' },
-  { label: 'Pending', value: 'PENDING' },
-  { label: 'Paid', value: 'PAID' },
-  { label: 'Canceled', value: 'CANCELED' },
-]
-
-const statusFilterSchema = z.object({
-  status: z.string().optional(),
+const categoryFilterSchema = z.object({
+  category: z.string().optional(),
 })
 
-type StatusFilterFormData = z.infer<typeof statusFilterSchema>
+type CategoryFilterFormData = z.infer<typeof categoryFilterSchema>
 
-export function StatusFilter() {
+export function CategoryFilter() {
   const pathname = usePathname()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
 
-  const { status } = getTransactionsFilter(searchParams)
+  const { category } = getTransactionsFilter(searchParams)
 
-  const { watch, control } = useForm<StatusFilterFormData>({
-    resolver: zodResolver(statusFilterSchema),
+  const { watch, control } = useForm<CategoryFilterFormData>({
+    resolver: zodResolver(categoryFilterSchema),
     defaultValues: {
-      status: status ?? 'all',
+      category: category ?? 'all',
     },
   })
 
   const isFirstRender = useRef(true)
   const searchParamsRef = useRef(searchParams)
 
-  const selectedStatus = watch('status')
+  const selectedCategory = watch('category')
 
   useEffect(() => {
     searchParamsRef.current = searchParams
@@ -52,25 +45,25 @@ export function StatusFilter() {
 
     const params = new URLSearchParams(searchParamsRef.current.toString())
 
-    if (!selectedStatus || selectedStatus === 'all') {
-      params.delete('status')
+    if (!selectedCategory || selectedCategory === 'all') {
+      params.delete('category')
     } else {
-      params.set('status', selectedStatus)
+      params.set('category', selectedCategory)
     }
 
     params.delete('page')
     replace(`${pathname}?${params.toString()}`)
-  }, [selectedStatus, pathname, replace])
+  }, [selectedCategory, pathname, replace])
 
   return (
     <Controller
       control={control}
-      name="status"
+      name="category"
       render={({ field }) => (
-        <StatusSelect
+        <CategorySelect
           value={field.value}
           onValueChange={field.onChange}
-          className="w-32"
+          className="w-42"
         />
       )}
     />

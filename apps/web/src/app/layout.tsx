@@ -37,7 +37,7 @@ export default function RootLayout({
         geistSans.variable,
       )}
     >
-      <body>
+      <body suppressHydrationWarning>
         <Providers>
           {children}
           <Toaster richColors />

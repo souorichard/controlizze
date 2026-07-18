@@ -1,5 +1,5 @@
 import { HTTPError } from 'ky'
-import type { ActionResponse } from '@/interfaces/action-interface'
+import type { ActionResponse } from '@/interfaces/action'
 
 export async function actionError(error: unknown): Promise<ActionResponse> {
   const defaultMessage =

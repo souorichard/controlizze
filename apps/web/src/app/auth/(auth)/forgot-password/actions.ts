@@ -1,7 +1,7 @@
 'use server'
 
 import { requestPasswordRecover } from '@/http/auth/request-password-recover'
-import type { ActionResponse } from '@/interfaces/action-interface'
+import type { ActionResponse } from '@/interfaces/action'
 import { actionError } from '@/utils/action-error'
 
 interface RequestPasswordRecoverActionProps {

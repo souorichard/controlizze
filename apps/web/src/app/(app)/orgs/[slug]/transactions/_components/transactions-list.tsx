@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import type { Transaction } from '@/interfaces/transaction-interface'
+import type { Transaction } from '@/interfaces/transaction'
 import { dayjs } from '@/lib/dayjs'
 import { cn } from '@/lib/utils'
 import { getInitials } from '@/utils/get-initials'
@@ -23,7 +23,7 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
   return (
     <div className="[&_div:last-child]:border-0">
       {transactions.map((transaction) => {
-        const isExpense = transaction.type === 'EXPENSE'
+        const isExpense = transaction.type === 'expense'
 
         return (
           <div

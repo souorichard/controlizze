@@ -18,8 +18,8 @@ import { getTransactionsFilter } from '@/utils/filters'
 
 const items = [
   { label: 'All types', value: 'all' },
-  { label: 'Income', value: 'INCOME' },
-  { label: 'Expense', value: 'EXPENSE' },
+  { label: 'Expense', value: 'expense' },
+  { label: 'Income', value: 'income' },
 ]
 
 const typeFilterSchema = z.object({

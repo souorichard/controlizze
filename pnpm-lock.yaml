@@ -117,6 +117,9 @@ importers:
       cookies-next:
         specifier: ^6.1.1
         version: 6.1.1(next@16.2.6(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+      date-fns:
+        specifier: ^4.4.0
+        version: 4.4.0
       dayjs:
         specifier: ^1.11.20
         version: 1.11.20
@@ -141,6 +144,9 @@ importers:
       react:
         specifier: 19.2.4
         version: 19.2.4
+      react-day-picker:
+        specifier: ^10.0.1
+        version: 10.0.1(@types/react@19.2.15)(react@19.2.4)
       react-dom:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
@@ -416,6 +422,9 @@ packages:
 
   '@casl/ability@6.8.0':
     resolution: {integrity: sha512-Ipt4mzI4gSgnomFdaPjaLgY2MWuXqAEZLrU6qqWBB7khGiBBuuEp6ytYDnq09bRXqcjaeeHiaCvCGFbBA2SpvA==}
+
+  '@date-fns/tz@1.5.0':
+    resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
 
   '@dotenvx/dotenvx@1.67.0':
     resolution: {integrity: sha512-KBfIx5OrAG6giqSkHCkQWynZmT47XkSTuuYIcvjHxlKoVRlYbxNrJmyIPaefnszU8MCvMwrrB+viJQzPqzgpcg==}
@@ -2697,6 +2706,9 @@ packages:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
 
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
+
   dayjs@1.11.20:
     resolution: {integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==}
 
@@ -3957,6 +3969,16 @@ packages:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
 
+  react-day-picker@10.0.1:
+    resolution: {integrity: sha512-eNh6BlwcYInWaJtRv18mXQ06Ys/H6rdTZAnTaSdOYJuTpwP1JMCHNd1FDRadA+gbeinq+psdULN5Xnowy9mV8w==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   react-dom@19.2.4:
     resolution: {integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==}
     peerDependencies:
@@ -4862,6 +4884,8 @@ snapshots:
   '@casl/ability@6.8.0':
     dependencies:
       '@ucast/mongo2js': 1.4.1
+
+  '@date-fns/tz@1.5.0': {}
 
   '@dotenvx/dotenvx@1.67.0':
     dependencies:
@@ -6865,6 +6889,8 @@ snapshots:
 
   data-uri-to-buffer@4.0.1: {}
 
+  date-fns@4.4.0: {}
+
   dayjs@1.11.20: {}
 
   debug@4.4.3:
@@ -8095,6 +8121,14 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.2
       unpipe: 1.0.0
+
+  react-day-picker@10.0.1(@types/react@19.2.15)(react@19.2.4):
+    dependencies:
+      '@date-fns/tz': 1.5.0
+      date-fns: 4.4.0
+      react: 19.2.4
+    optionalDependencies:
+      '@types/react': 19.2.15
 
   react-dom@19.2.4(react@19.2.4):
     dependencies:
