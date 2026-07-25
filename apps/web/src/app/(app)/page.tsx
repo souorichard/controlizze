@@ -9,7 +9,7 @@ import { Header } from '@/components/header'
 import { HomeWrapper } from './_components/home-wrapper'
 
 export const metadata: Metadata = {
-  title: 'Início',
+  title: 'Home',
 }
 
 export default function HomePage() {

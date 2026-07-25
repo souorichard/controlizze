@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChevronDownIcon, Loader2 } from 'lucide-react'
+import { type Dispatch, type SetStateAction, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { CategorySelect } from '@/components/category-select'
@@ -29,12 +30,14 @@ interface UpsertTransactionFormProps {
   mode?: 'create' | 'update'
   type: Type
   initialData?: Transaction
+  setDialogState: Dispatch<SetStateAction<boolean>>
 }
 
 export function UpsertTransactionForm({
   mode = 'create',
   type,
   initialData,
+  setDialogState,
 }: UpsertTransactionFormProps) {
   const org = useOrg()
   const queryClient = useQueryClient()
@@ -44,6 +47,7 @@ export function UpsertTransactionForm({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<UpsertTransactionFormData>({
     resolver: zodResolver(upsertTransactionSchema),
     defaultValues: {
@@ -84,8 +88,15 @@ export function UpsertTransactionForm({
 
     queryClient.invalidateQueries({ queryKey: ['transactions', org] })
     queryClient.invalidateQueries({ queryKey: ['metrics', org] })
+
     toast.success(message)
+
+    setDialogState(false)
   }
+
+  useEffect(() => {
+    setValue('type', type)
+  }, [type, setValue])
 
   return (
     <form onSubmit={handleSubmit(upsertTransaction)} className="space-y-3">
@@ -190,14 +201,14 @@ export function UpsertTransactionForm({
                 <Button
                   variant="outline"
                   data-empty={!field.value}
-                  className="w-full justify-between dark:bg-card text-left font-normal data-[empty=true]:text-muted-foreground"
+                  className="group w-full justify-between dark:bg-card dark:hover:bg-card text-left font-normal data-[empty=true]:text-muted-foreground active:scale-none"
                 >
                   {field.value ? (
                     dayjs(field.value).format('MMM D, YYYY')
                   ) : (
                     <span>Pick a transaction date</span>
                   )}
-                  <ChevronDownIcon data-icon="inline-end" />
+                  <ChevronDownIcon className="transition-transform duration-200 group-data-[state=open]:rotate-180" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -206,6 +217,7 @@ export function UpsertTransactionForm({
                   selected={field.value ? new Date(field.value) : undefined}
                   onSelect={(date) => field.onChange(date?.toISOString() ?? '')}
                   defaultMonth={field.value ? new Date(field.value) : undefined}
+                  disabled={{ after: new Date() }}
                 />
               </PopoverContent>
             </Popover>

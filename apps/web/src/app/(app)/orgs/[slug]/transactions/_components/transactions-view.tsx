@@ -1,15 +1,13 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { CircleAlert, CirclePlus } from 'lucide-react'
+import { CircleAlert } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   ContainerContentList,
   ContainerContentListWrapper,
 } from '@/components/container'
 import { Pagination } from '@/components/pagination'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { useOrg } from '@/hooks/use-org'
 import { getTransactionsFilter } from '@/utils/filters'
 import { getTransactionsAction } from '../actions'
@@ -53,16 +51,7 @@ export function TransactionsView() {
         <CategoryFilter />
         <StatusFilter />
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="ml-auto">
-              <CirclePlus className="size-4" />
-              New transaction
-            </Button>
-          </DialogTrigger>
-
-          <UpsertTransactionDialog />
-        </Dialog>
+        <UpsertTransactionDialog />
       </div>
 
       <ContainerContentList>

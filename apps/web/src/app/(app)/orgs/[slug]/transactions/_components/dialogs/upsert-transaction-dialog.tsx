@@ -1,13 +1,17 @@
 'use client'
 
-import { TrendingDown, TrendingUp } from 'lucide-react'
+import { CirclePlus, TrendingDown, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
+  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Transaction } from '@/interfaces/transaction'
 import { UpsertTransactionForm } from './upsert-transaction-form'
 
@@ -20,39 +24,54 @@ export function UpsertTransactionDialog({
   mode = 'create',
   transaction,
 }: UpsertTransactionDialogProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedType, setSelectedType] = useState<Type>(
+    (transaction?.type.toLowerCase() as Type) ?? 'expense',
+  )
+
   return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>
-          {mode === 'create' ? 'Create transaction' : 'Update transaction'}
-        </DialogTitle>
-        <DialogDescription>
-          {mode === 'create'
-            ? 'Fill in the details below to record a new transaction.'
-            : 'Update the details of your transaction below.'}
-        </DialogDescription>
-      </DialogHeader>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button className="ml-auto">
+          <CirclePlus className="size-4" />
+          New transaction
+        </Button>
+      </DialogTrigger>
 
-      <Tabs defaultValue={transaction?.type.toLowerCase() ?? 'expense'}>
-        <TabsList className="w-full">
-          <TabsTrigger value="expense" className="gap-2">
-            <TrendingDown className="size-3 text-destructive" />
-            Expense
-          </TabsTrigger>
-          <TabsTrigger value="income" className="gap-2">
-            <TrendingUp className="size-3 text-emerald-500" />
-            Income
-          </TabsTrigger>
-        </TabsList>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            {mode === 'create' ? 'Create transaction' : 'Update transaction'}
+          </DialogTitle>
+          <DialogDescription>
+            {mode === 'create'
+              ? 'Fill in the details below to record a new transaction.'
+              : 'Update the details of your transaction below.'}
+          </DialogDescription>
+        </DialogHeader>
 
-        {/* TODO: single form instance outside TabsContent to preserve state on tab change and update type prop reactively */}
-        <TabsContent value="expense">
-          <UpsertTransactionForm type="expense" initialData={transaction} />
-        </TabsContent>
-        <TabsContent value="income">
-          <UpsertTransactionForm type="income" initialData={transaction} />
-        </TabsContent>
-      </Tabs>
-    </DialogContent>
+        <Tabs
+          defaultValue={selectedType}
+          onValueChange={(value) => setSelectedType(value as Type)}
+        >
+          <TabsList className="w-full">
+            <TabsTrigger value="expense" className="gap-2">
+              <TrendingDown className="size-3 text-destructive" />
+              Expense
+            </TabsTrigger>
+            <TabsTrigger value="income" className="gap-2">
+              <TrendingUp className="size-3 text-emerald-500" />
+              Income
+            </TabsTrigger>
+          </TabsList>
+
+          <UpsertTransactionForm
+            type={selectedType}
+            initialData={transaction}
+            setDialogState={setIsOpen}
+          />
+        </Tabs>
+      </DialogContent>
+    </Dialog>
   )
 }
