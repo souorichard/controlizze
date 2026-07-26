@@ -1,5 +1,6 @@
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import rateLimit from '@fastify/rate-limit'
 import fastifySwagger from '@fastify/swagger'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import fastify from 'fastify'
@@ -29,35 +30,45 @@ export function buildApp() {
 
   app.setErrorHandler(errorHandler)
 
-  app.register(fastifySwagger, {
-    openapi: {
-      info: {
-        title: 'Controlizze API',
-        description:
-          'Full-stack SaaS app with multi-tenant architecture & RBAC.',
-        version: '1.0.0',
-      },
-      components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
+  if (env.NODE_ENV !== 'production') {
+    app.register(fastifySwagger, {
+      openapi: {
+        info: {
+          title: 'Controlizze API',
+          description:
+            'Full-stack SaaS app with multi-tenant architecture & RBAC.',
+          version: '1.0.0',
+        },
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: 'http',
+              scheme: 'bearer',
+              bearerFormat: 'JWT',
+            },
           },
         },
       },
-    },
-    transform: jsonSchemaTransform,
-  })
+      transform: jsonSchemaTransform,
+    })
 
-  app.register(scalarFastifyApiReference, {
-    routePrefix: '/docs',
-    configuration: {
-      theme: 'deepSpace',
-      metaData: {
-        title: 'Controlizze API',
+    app.register(scalarFastifyApiReference, {
+      routePrefix: '/docs',
+      configuration: {
+        theme: 'deepSpace',
+        metaData: {
+          title: 'Controlizze API',
+        },
       },
-    },
+    })
+  }
+
+  app.register(rateLimit, {
+    max: 30,
+    timeWindow: '3 minutes',
+    errorResponseBuilder: (_, context) => ({
+      message: `Too many requests, please try again in ${Math.ceil(context.ttl / 1000)} seconds`,
+    }),
   })
 
   for (const route of routes) {

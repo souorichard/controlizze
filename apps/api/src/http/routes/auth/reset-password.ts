@@ -27,6 +27,12 @@ export const resetPassword: FastifyPluginAsyncZod = async (app) => {
           204: z.void(),
         },
       },
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: '5 minutes',
+        },
+      },
     },
     async (request, reply) => {
       const { code } = request.query
