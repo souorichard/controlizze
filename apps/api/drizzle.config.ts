@@ -5,6 +5,7 @@ export default defineConfig({
   dbCredentials: {
     // biome-ignore lint/style/noNonNullAssertion: DATABASE_URL is required and validated at runtime
     url: process.env.DATABASE_URL!,
+    ssl: true,
   },
   schema: './src/db/schema/**.ts',
   out: './src/db/migrations',
