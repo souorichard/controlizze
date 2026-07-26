@@ -64,7 +64,7 @@ export function buildApp() {
   }
 
   app.register(rateLimit, {
-    max: 30,
+    max: env.NODE_ENV === 'production' ? 200 : 0,
     timeWindow: '3 minutes',
     errorResponseBuilder: (_, context) => ({
       message: `Too many requests, please try again in ${Math.ceil(context.ttl / 1000)} seconds`,
