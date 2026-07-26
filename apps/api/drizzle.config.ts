@@ -1,10 +1,10 @@
 import { defineConfig } from 'drizzle-kit'
-import { env } from './src/env.ts'
 
 export default defineConfig({
   dialect: 'postgresql',
   dbCredentials: {
-    url: env.DATABASE_URL,
+    // biome-ignore lint/style/noNonNullAssertion: DATABASE_URL is required and validated at runtime
+    url: process.env.DATABASE_URL!,
   },
   schema: './src/db/schema/**.ts',
   out: './src/db/migrations',

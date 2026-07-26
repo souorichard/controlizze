@@ -1,4 +1,4 @@
 {
   "extends": "@controlizze/tsconfig/node.json",
-  "include": ["src/**/*", "@types/*.d.ts"]
+  "include": ["src/**/*", "@types/*.d.ts", "drizzle.config.ts"]
 }
