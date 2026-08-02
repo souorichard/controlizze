@@ -2,6 +2,7 @@
 
 import { revalidateTag } from 'next/cache'
 import { createTransaction } from '@/http/transactions/create-transaction'
+import { deleteTransaction } from '@/http/transactions/delete-transaction'
 import { getTransactions } from '@/http/transactions/get-transactions'
 import { updateTransaction } from '@/http/transactions/update-transaction'
 import type { TransactionsFilter } from '@/interfaces/transaction'
@@ -112,5 +113,29 @@ export async function updateTransactionAction({
   return {
     success: true,
     message: 'Successfully updated transaction',
+  }
+}
+
+export async function deleteTransactionAction({
+  transactionId,
+}: {
+  transactionId: string
+}) {
+  const currentOrg = await getCurrentOrg()
+
+  try {
+    await deleteTransaction({
+      org: currentOrg as string,
+      transactionId,
+    })
+
+    revalidateTag(`${currentOrg}/transactions`, 'max')
+  } catch (error) {
+    await actionError(error)
+  }
+
+  return {
+    success: true,
+    message: 'Successfully deleted transaction',
   }
 }

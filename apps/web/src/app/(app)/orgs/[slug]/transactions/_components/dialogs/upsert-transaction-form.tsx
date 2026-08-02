@@ -216,7 +216,7 @@ export function UpsertTransactionForm({
                 <Button
                   variant="outline"
                   data-empty={!field.value}
-                  className="group w-full justify-between dark:bg-card dark:hover:bg-card text-left font-normal data-[empty=true]:text-muted-foreground active:scale-none"
+                  className="group w-full justify-between dark:border-input-foreground dark:bg-card dark:hover:bg-card text-left font-normal data-[empty=true]:text-muted-foreground active:scale-none"
                 >
                   {field.value ? (
                     dayjs(field.value).format('MMM D, YYYY')
