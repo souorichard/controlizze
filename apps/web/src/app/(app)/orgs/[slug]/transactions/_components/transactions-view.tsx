@@ -1,13 +1,15 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { CircleAlert } from 'lucide-react'
+import { CircleAlert, CirclePlus } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import {
   ContainerContentList,
   ContainerContentListWrapper,
 } from '@/components/container'
 import { Pagination } from '@/components/pagination'
+import { Button } from '@/components/ui/button'
 import { useOrg } from '@/hooks/use-org'
 import { getTransactionsFilter } from '@/utils/filters'
 import { getTransactionsAction } from '../actions'
@@ -24,6 +26,8 @@ export function TransactionsView() {
   const pathname = usePathname()
   const { replace } = useRouter()
   const searchParams = useSearchParams()
+
+  const [isOpen, setIsOpen] = useState(false)
 
   const filters = getTransactionsFilter(searchParams)
 
@@ -51,7 +55,11 @@ export function TransactionsView() {
         <CategoryFilter />
         <StatusFilter />
 
-        <UpsertTransactionDialog />
+        <Button className="ml-auto" onClick={() => setIsOpen(true)}>
+          <CirclePlus className="size-4" />
+          New transaction
+        </Button>
+        <UpsertTransactionDialog open={isOpen} onOpenChange={setIsOpen} />
       </div>
 
       <ContainerContentList>

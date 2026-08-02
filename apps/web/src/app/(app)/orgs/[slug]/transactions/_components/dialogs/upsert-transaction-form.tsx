@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChevronDownIcon, Loader2 } from 'lucide-react'
-import { type Dispatch, type SetStateAction, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { CategorySelect } from '@/components/category-select'
@@ -20,7 +20,7 @@ import {
 import { useOrg } from '@/hooks/use-org'
 import type { Transaction } from '@/interfaces/transaction'
 import { dayjs } from '@/lib/dayjs'
-import { createTransactionAction } from '../../actions'
+import { createTransactionAction, updateTransactionAction } from '../../actions'
 import {
   type UpsertTransactionFormData,
   upsertTransactionSchema,
@@ -30,7 +30,7 @@ interface UpsertTransactionFormProps {
   mode?: 'create' | 'update'
   type: Type
   initialData?: Transaction
-  setDialogState: Dispatch<SetStateAction<boolean>>
+  setDialogState: (open: boolean) => void
 }
 
 export function UpsertTransactionForm({
@@ -41,6 +41,8 @@ export function UpsertTransactionForm({
 }: UpsertTransactionFormProps) {
   const org = useOrg()
   const queryClient = useQueryClient()
+
+  console.log('initialData', initialData)
 
   const {
     control,
@@ -56,10 +58,12 @@ export function UpsertTransactionForm({
       type,
       category: initialData?.category?.id ?? '',
       status: initialData?.status ?? '',
-      amount: (initialData?.amount as unknown as string) ?? '',
+      amount: initialData?.amount?.toString() ?? '',
       transactionDate: initialData?.transactionDate ?? '',
     },
   })
+
+  const isUpdating = mode === 'update'
 
   async function upsertTransaction({
     title,
@@ -70,15 +74,26 @@ export function UpsertTransactionForm({
     amount,
     transactionDate,
   }: UpsertTransactionFormData) {
-    const { success, message } = await createTransactionAction({
-      title,
-      description,
-      type,
-      category,
-      status,
-      amount,
-      transactionDate,
-    })
+    const { success, message } = isUpdating
+      ? await updateTransactionAction({
+          transactionId: initialData?.id as string,
+          title,
+          description,
+          type,
+          category,
+          status,
+          amount,
+          transactionDate,
+        })
+      : await createTransactionAction({
+          title,
+          description,
+          type,
+          category,
+          status,
+          amount,
+          transactionDate,
+        })
 
     if (!success) {
       toast.error(message)

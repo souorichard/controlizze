@@ -1,15 +1,13 @@
 'use client'
 
-import { CirclePlus, TrendingDown, TrendingUp } from 'lucide-react'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { TrendingDown, TrendingUp } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Transaction } from '@/interfaces/transaction'
@@ -18,26 +16,28 @@ import { UpsertTransactionForm } from './upsert-transaction-form'
 interface UpsertTransactionDialogProps {
   mode?: 'create' | 'update'
   transaction?: Transaction
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 export function UpsertTransactionDialog({
   mode = 'create',
   transaction,
+  open,
+  onOpenChange,
 }: UpsertTransactionDialogProps) {
-  const [isOpen, setIsOpen] = useState(false)
   const [selectedType, setSelectedType] = useState<Type>(
     (transaction?.type.toLowerCase() as Type) ?? 'expense',
   )
 
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button className="ml-auto">
-          <CirclePlus className="size-4" />
-          New transaction
-        </Button>
-      </DialogTrigger>
+  useEffect(() => {
+    if (transaction?.type) {
+      setSelectedType(transaction.type.toLowerCase() as Type)
+    }
+  }, [transaction])
 
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -66,9 +66,10 @@ export function UpsertTransactionDialog({
           </TabsList>
 
           <UpsertTransactionForm
+            mode={mode}
             type={selectedType}
             initialData={transaction}
-            setDialogState={setIsOpen}
+            setDialogState={onOpenChange}
           />
         </Tabs>
       </DialogContent>
