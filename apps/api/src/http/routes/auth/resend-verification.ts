@@ -27,6 +27,9 @@ export const resendVerification: FastifyPluginAsyncZod = async (app) => {
         rateLimit: {
           max: 5,
           timeWindow: '5 minutes',
+          errorResponseBuilder: (_, context) => ({
+            message: `Too many requests, please try again in ${Math.ceil(context.ttl / 1000)} seconds`,
+          }),
         },
       },
     },

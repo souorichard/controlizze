@@ -5,6 +5,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
+import { env } from '../../../env.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
 import { ForbiddenError } from '../../errors/forbidden-error.ts'
 
@@ -30,8 +31,11 @@ export const authenticateWithPassword: FastifyPluginAsyncZod = async (app) => {
       },
       config: {
         rateLimit: {
-          max: 5,
+          max: env.NODE_ENV === 'production' ? 8 : 0,
           timeWindow: '5 minutes',
+          errorResponseBuilder: (_, context) => ({
+            message: `Too many requests, please try again in ${Math.ceil(context.ttl / 1000)} seconds`,
+          }),
         },
       },
     },

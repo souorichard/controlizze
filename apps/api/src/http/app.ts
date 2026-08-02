@@ -63,13 +63,15 @@ export function buildApp() {
     })
   }
 
-  app.register(rateLimit, {
-    max: env.NODE_ENV === 'production' ? 200 : 0,
-    timeWindow: '3 minutes',
-    errorResponseBuilder: (_, context) => ({
-      message: `Too many requests, please try again in ${Math.ceil(context.ttl / 1000)} seconds`,
-    }),
-  })
+  if (env.NODE_ENV === 'production') {
+    app.register(rateLimit, {
+      max: 200,
+      timeWindow: '3 minutes',
+      errorResponseBuilder: (_, context) => ({
+        message: `Too many requests, please try again in ${Math.ceil(context.ttl / 1000)} seconds`,
+      }),
+    })
+  }
 
   for (const route of routes) {
     app.register(route.plugin, { prefix: route.prefix })
