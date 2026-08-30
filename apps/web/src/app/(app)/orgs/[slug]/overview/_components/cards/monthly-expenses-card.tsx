@@ -28,7 +28,7 @@ const chartConfig = {
   },
   amount: {
     label: 'Expenses',
-    color: 'var(--chart-1)',
+    color: 'var(--danger)',
   },
 } satisfies ChartConfig
 
@@ -46,7 +46,7 @@ export function MonthlyExpensesCard({
   })
 
   return (
-    <Card className={cn('col-span-2', className)} {...props}>
+    <Card className={cn('', className)} {...props}>
       <CardHeader>
         <CardTitle>Monthly expenses</CardTitle>
         <CardDescription>
@@ -75,13 +75,17 @@ export function MonthlyExpensesCard({
                   axisLine={false}
                   tickMargin={8}
                   minTickGap={32}
-                  tickFormatter={(value) => formatDateWithMonth(value)}
+                  tickFormatter={(value) =>
+                    formatDateWithMonth({ date: value, short: true })
+                  }
                 />
                 <ChartTooltip
                   cursor={false}
                   content={
                     <ChartTooltipContent
-                      labelFormatter={(value) => formatDateWithMonth(value)}
+                      labelFormatter={(value) =>
+                        formatDateWithMonth({ date: value })
+                      }
                       className="w-40"
                     />
                   }

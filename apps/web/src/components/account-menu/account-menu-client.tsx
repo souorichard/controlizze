@@ -51,7 +51,12 @@ export function AccountMenuClient({
       <DropdownMenuContent align="end" className="w-48">
         <div className="p-2 flex items-center gap-3 outline-none">
           <Avatar className="size-8">
-            {user.avatarUrl && <AvatarImage src={user.avatarUrl as string} />}
+            {user.avatarUrl && (
+              <AvatarImage
+                src={user.avatarUrl as string}
+                className="rounded-md"
+              />
+            )}
             <AvatarFallback className="text-sm">
               {getInitials(user.name ?? 'Unknown user')}
             </AvatarFallback>

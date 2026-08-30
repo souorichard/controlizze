@@ -21,20 +21,19 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
 
   return (
     <Card
-      className={cn(
-        'gap-5 transition-all hover:border-primary hover:-translate-y-0.5',
-        className,
-      )}
+      className={cn('gap-5 transition-all hover:-translate-y-0.5', className)}
       {...props}
     >
       <CardHeader>
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-muted-foreground text-sm font-medium">INCOMES</p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-muted-foreground text-sm font-medium">
+            Total income
+          </p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
-            <div className="size-8 flex items-center justify-center bg-emerald-500/10 border border-emerald-500 rounded-full">
-              <TrendingUp className="text-emerald-500 size-4" />
+            <div className="size-8 flex items-center justify-center bg-success/10 rounded-lg">
+              <TrendingUp className="size-4 text-success" />
             </div>
           )}
         </div>
@@ -42,7 +41,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
       <CardContent className="space-y-1">
         {incomes ? (
           <>
-            <p className="text-xl font-semibold font-heading tracking-wide lg:text-3xl">
+            <p className="text-xl font-medium tracking-wide text-success lg:text-3xl">
               {incomes?.amount.toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'BRL',
@@ -51,9 +50,7 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
             </p>
             <p className="text-muted-foreground text-xs">
               {incomes?.diffFromLastMonth === null ? (
-                <span className="text-muted-foreground tracking-wide">
-                  --% compared to last month
-                </span>
+                <span className="text-muted-foreground tracking-wide">--%</span>
               ) : (
                 <span
                   className={cn(
@@ -61,16 +58,17 @@ export function IncomesCard({ className, ...props }: IncomesCardProps) {
                     incomes?.diffFromLastMonth === 0
                       ? 'text-muted-foreground'
                       : incomes?.diffFromLastMonth > 0
-                        ? 'text-emerald-500'
+                        ? 'text-success'
                         : 'text-destructive',
                   )}
                 >
                   {incomes.diffFromLastMonth > 0
                     ? `+${incomes.diffFromLastMonth}`
                     : incomes.diffFromLastMonth}
-                  % compared to last month
+                  %
                 </span>
-              )}
+              )}{' '}
+              compared to last month
             </p>
           </>
         ) : (

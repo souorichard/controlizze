@@ -1,16 +1,13 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { ArrowUpRight, CircleAlert, Loader2, XCircle } from 'lucide-react'
-import Link from 'next/link'
+import { CircleAlert, Loader2, XCircle } from 'lucide-react'
 import { type ComponentProps, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -31,6 +28,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useOrg } from '@/hooks/use-org'
+import { cn } from '@/lib/utils'
 import { formatDate } from '@/utils/format-date'
 import { getTransactionsPerPeriodMetricsAction } from '../../actions'
 
@@ -38,13 +36,13 @@ const chartConfig = {
   transactions: {
     label: 'Transactions',
   },
-  expenses: {
-    label: 'Expenses',
-    color: 'var(--chart-1)',
-  },
   incomes: {
     label: 'Incomes',
-    color: 'var(--chart-2)',
+    color: 'var(--success)',
+  },
+  expenses: {
+    label: 'Expenses',
+    color: 'var(--danger)',
   },
 } satisfies ChartConfig
 
@@ -53,6 +51,7 @@ type DayPeriod = '90' | '30' | '7'
 interface TransactionsPerPeriodCardProps extends ComponentProps<'div'> {}
 
 export function TransactionsPerPeriodCard({
+  className,
   ...props
 }: TransactionsPerPeriodCardProps) {
   const org = useOrg()
@@ -65,7 +64,7 @@ export function TransactionsPerPeriodCard({
   })
 
   return (
-    <Card {...props}>
+    <Card className={cn('', className)} {...props}>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
           <CardTitle>Transactions per Period</CardTitle>
@@ -101,18 +100,6 @@ export function TransactionsPerPeriodCard({
             >
               <AreaChart data={transactionsPerPeriod}>
                 <defs>
-                  <linearGradient id="fillExpenses" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-expenses)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-expenses)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
                   <linearGradient id="fillIncomes" x1="0" y1="0" x2="0" y2="1">
                     <stop
                       offset="5%"
@@ -122,6 +109,18 @@ export function TransactionsPerPeriodCard({
                     <stop
                       offset="95%"
                       stopColor="var(--color-incomes)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                  <linearGradient id="fillExpenses" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-expenses)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-expenses)"
                       stopOpacity={0.1}
                     />
                   </linearGradient>
@@ -146,20 +145,20 @@ export function TransactionsPerPeriodCard({
                   }
                 />
                 <Area
-                  dataKey="expenses"
-                  type="monotone"
-                  fill="url(#fillExpenses)"
-                  strokeWidth={2}
-                  stroke="var(--color-expenses)"
-                  stackId="a"
-                  isAnimationActive
-                />
-                <Area
                   dataKey="incomes"
                   type="monotone"
                   fill="url(#fillIncomes)"
                   strokeWidth={2}
                   stroke="var(--color-incomes)"
+                  stackId="a"
+                  isAnimationActive
+                />
+                <Area
+                  dataKey="expenses"
+                  type="monotone"
+                  fill="url(#fillExpenses)"
+                  strokeWidth={2}
+                  stroke="var(--color-expenses)"
                   stackId="a"
                   isAnimationActive
                 />
@@ -192,14 +191,6 @@ export function TransactionsPerPeriodCard({
           </div>
         )}
       </CardContent>
-      <CardFooter className="justify-end gap-3 py-2.5">
-        <Button size="xs" variant="link" asChild>
-          <Link href={`/orgs/${org}/transactions`}>
-            View all transactions
-            <ArrowUpRight className="size-4" />
-          </Link>
-        </Button>
-      </CardFooter>
     </Card>
   )
 }

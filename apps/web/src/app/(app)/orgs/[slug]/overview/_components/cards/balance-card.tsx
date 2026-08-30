@@ -21,20 +21,17 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
 
   return (
     <Card
-      className={cn(
-        'gap-5 transition-all hover:border-primary hover:-translate-y-0.5',
-        className,
-      )}
+      className={cn('gap-5 transition-all hover:-translate-y-0.5', className)}
       {...props}
     >
       <CardHeader>
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-muted-foreground text-sm font-medium">BALANCE</p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-muted-foreground text-sm font-medium">Balance</p>
           {isLoading ? (
-            <Loader2 className="text-primary size-8 animate-spin" />
+            <Loader2 className="text-foreground size-8 animate-spin" />
           ) : (
-            <div className="size-8 flex items-center justify-center bg-primary/10 border border-primary rounded-full">
-              <Wallet2 className="text-primary size-4" />
+            <div className="size-8 flex items-center justify-center bg-foreground/10 rounded-lg">
+              <Wallet2 className="text-foreground size-4" />
             </div>
           )}
         </div>
@@ -42,7 +39,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
       <CardContent className="space-y-1">
         {balance ? (
           <>
-            <p className="text-xl font-semibold font-heading tracking-wide lg:text-3xl">
+            <p className="text-xl font-medium tracking-wide text-foreground lg:text-3xl">
               {balance?.amount.toLocaleString('en-us', {
                 style: 'currency',
                 currency: 'BRL',
@@ -51,9 +48,7 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
             </p>
             <p className="text-muted-foreground text-xs">
               {balance?.diffFromLastMonth === null ? (
-                <span className="text-muted-foreground tracking-wide">
-                  --% compared to last month
-                </span>
+                <span className="text-muted-foreground tracking-wide">--%</span>
               ) : (
                 <span
                   className={cn(
@@ -61,16 +56,17 @@ export function BalanceCard({ className, ...props }: BalanceCardProps) {
                     balance?.diffFromLastMonth === 0
                       ? 'text-muted-foreground'
                       : balance?.diffFromLastMonth > 0
-                        ? 'text-emerald-500'
+                        ? 'text-foreground'
                         : 'text-destructive',
                   )}
                 >
                   {balance.diffFromLastMonth > 0
                     ? `+${balance.diffFromLastMonth}`
                     : balance.diffFromLastMonth}
-                  % compared to last month
+                  %
                 </span>
-              )}
+              )}{' '}
+              compared to last month
             </p>
           </>
         ) : (

@@ -21,22 +21,19 @@ export function SavingsRateCard({ className, ...props }: SavingsRateCardProps) {
 
   return (
     <Card
-      className={cn(
-        'gap-5 transition-all hover:border-primary hover:-translate-y-0.5',
-        className,
-      )}
+      className={cn('gap-5 transition-all hover:-translate-y-0.5', className)}
       {...props}
     >
       <CardHeader>
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <p className="text-muted-foreground text-sm font-medium">
-            SAVINGS RATE
+            Savings rate
           </p>
           {isLoading ? (
             <Loader2 className="text-primary size-8 animate-spin" />
           ) : (
-            <div className="size-8 flex items-center justify-center bg-orange-500/10 border border-orange-500 rounded-full">
-              <PiggyBank className="text-orange-500 size-4" />
+            <div className="size-8 flex items-center justify-center bg-warning/10 rounded-lg">
+              <PiggyBank className="text-warning size-4" />
             </div>
           )}
         </div>
@@ -44,7 +41,7 @@ export function SavingsRateCard({ className, ...props }: SavingsRateCardProps) {
       <CardContent className="space-y-1">
         {savings ? (
           <>
-            <p className="text-xl font-semibold font-heading tracking-wide lg:text-3xl">
+            <p className="text-xl font-medium tracking-wide text-warning lg:text-3xl">
               {savings.rate}%
             </p>
             <p className="text-muted-foreground text-xs">

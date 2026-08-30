@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/select'
 import { useOrg } from '@/hooks/use-org'
 import { dayjs } from '@/lib/dayjs'
+import { cn } from '@/lib/utils'
 import { formatDateWithMonth } from '@/utils/format-date'
 import { getBalanceEvolutionMetricsAction } from '../../actions'
 
@@ -36,13 +37,16 @@ const chartConfig = {
   },
   balance: {
     label: 'Balance',
-    color: 'var(--chart-4)',
+    color: 'var(--chart-5)',
   },
 } satisfies ChartConfig
 
 interface BalanceEvolutionCardProps extends ComponentProps<'div'> {}
 
-export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
+export function BalanceEvolutionCard({
+  className,
+  ...props
+}: BalanceEvolutionCardProps) {
   const org = useOrg()
 
   const currentYear = dayjs().year()
@@ -55,7 +59,7 @@ export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
   })
 
   return (
-    <Card {...props}>
+    <Card className={cn('', className)} {...props}>
       <CardHeader className="flex items-center justify-between">
         <div className="space-y-1">
           <CardTitle>Balance evolution</CardTitle>
@@ -102,13 +106,17 @@ export function BalanceEvolutionCard({ ...props }: BalanceEvolutionCardProps) {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
-                  tickFormatter={(value) => formatDateWithMonth(value)}
+                  tickFormatter={(value) =>
+                    formatDateWithMonth({ date: value, short: true })
+                  }
                 />
                 <ChartTooltip
                   cursor={false}
                   content={
                     <ChartTooltipContent
-                      labelFormatter={(value) => formatDateWithMonth(value)}
+                      labelFormatter={(value) =>
+                        formatDateWithMonth({ date: value })
+                      }
                       className="w-40"
                     />
                   }

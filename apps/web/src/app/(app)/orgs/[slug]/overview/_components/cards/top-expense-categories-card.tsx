@@ -75,7 +75,7 @@ export function TopExpenseCategoriesCard({
   }, [topExpenseCategories])
 
   return (
-    <Card className={cn('col-span-2', className)} {...props}>
+    <Card className={cn('', className)} {...props}>
       <CardHeader>
         <CardTitle>Expenses by category</CardTitle>
         <CardDescription>

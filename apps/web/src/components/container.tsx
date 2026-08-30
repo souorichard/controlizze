@@ -29,9 +29,7 @@ export function ContainerHeader({ className, children }: GenericProps) {
 }
 
 export function ContainerMain({ className, children }: GenericProps) {
-  return (
-    <main className={cn('px-5 py-10 md:py-12', className)}>{children}</main>
-  )
+  return <main className={cn('px-5 py-8', className)}>{children}</main>
 }
 
 export function ContainerContent({ className, children }: GenericProps) {
@@ -48,9 +46,7 @@ export function ContainerContentHeader({ className, children }: GenericProps) {
 
 export function ContainerContentTitle({ className, children }: GenericProps) {
   return (
-    <h1
-      className={cn('text-4xl font-bold font-heading tracking-wide', className)}
-    >
+    <h1 className={cn('text-2xl font-semibold tracking-wide', className)}>
       {children}
     </h1>
   )
@@ -60,7 +56,9 @@ export function ContainerContentDescription({
   className,
   children,
 }: GenericProps) {
-  return <p className={cn('text-muted-foreground', className)}>{children}</p>
+  return (
+    <p className={cn('text-sm text-muted-foreground', className)}>{children}</p>
+  )
 }
 
 export function ContainerContentFilter({ className, children }: GenericProps) {

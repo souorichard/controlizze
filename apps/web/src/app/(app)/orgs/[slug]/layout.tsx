@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react'
-import { AnimatedBackground } from '@/components/animated-background'
 import {
   Container,
   ContainerHeader,
@@ -13,7 +12,7 @@ export default async function OrganizationLayout({
 }: PropsWithChildren) {
   return (
     <Container>
-      <AnimatedBackground />
+      {/* <AnimatedBackground /> */}
 
       <ContainerHeader className="space-y-4">
         <Header />
