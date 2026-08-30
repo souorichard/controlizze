@@ -13,10 +13,10 @@ export default function SignInPage() {
   return (
     <div className="max-w-lg w-full space-y-12">
       <div className="space-y-3">
-        <h1 className="text-4xl font-medium font-heading tracking-wide">
+        <h1 className="text-2xl font-medium tracking-wide md:text-4xl">
           Welcome back!
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground md:text-base">
           Access your account and continue to take control of your financial
           life
         </p>

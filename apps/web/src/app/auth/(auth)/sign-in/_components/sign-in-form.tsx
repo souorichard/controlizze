@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '@/components/error-message'
@@ -17,6 +18,8 @@ import { type SignInData, signInSchema } from '../schemas'
 export function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [forgotPassword, setForgotPassword] = useState(false)
+  const [error, setError] = useState()
 
   const email = searchParams.get('email') ?? ''
 
@@ -39,6 +42,7 @@ export function SignInForm() {
     })
 
     if (!success) {
+      setForgotPassword(true)
       toast.error(message)
       return
     }
@@ -49,8 +53,9 @@ export function SignInForm() {
   return (
     <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
       <div className="space-y-2">
-        <Label>Email</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
+          id="email"
           type="email"
           placeholder="john@exemplo.com"
           disabled={isSubmitting}
@@ -61,15 +66,20 @@ export function SignInForm() {
 
       <div className="space-y-2">
         <div className="flex justify-between items-center gap-3">
-          <Label>Password</Label>
-          <Link
-            href="/auth/forgot-password"
-            className="text-xs text-primary transition-colors hover:text-primary/85"
-          >
-            Forgot your password?
-          </Link>
+          <Label htmlFor="password" className="flex-1">
+            Password
+          </Label>
+          {forgotPassword && (
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-primary transition-colors hover:text-primary/85"
+            >
+              Forgot your password?
+            </Link>
+          )}
         </div>
         <PasswordInput
+          id="password"
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
           {...register('password')}

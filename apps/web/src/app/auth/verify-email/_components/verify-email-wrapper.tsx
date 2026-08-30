@@ -40,10 +40,10 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
         <Loader2 className="size-16 animate-spin text-primary" />
 
         <div className="max-w-xl w-full space-y-3 text-center">
-          <h1 className="text-2xl font-medium font-heading tracking-wide">
+          <h1 className="text-2xl font-medium tracking-wide">
             Verifying your email...
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground md:text-base">
             Please wait, we are verifying your email
           </p>
         </div>
@@ -57,7 +57,7 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
         <CircleCheck className="size-16 text-green-500" />
 
         <div className="max-w-xl w-full space-y-3 text-center">
-          <h1 className="text-2xl font-medium font-heading tracking-wide">
+          <h1 className="text-2xl font-medium tracking-wide">
             Email verified successfully!
           </h1>
           <p className="text-muted-foreground">
@@ -73,7 +73,7 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
       <CircleX className="size-16 text-destructive" />
 
       <div className="max-w-xl w-full space-y-3 text-center">
-        <h1 className="text-2xl font-medium font-heading tracking-wide">
+        <h1 className="text-2xl font-medium tracking-wide">
           There was an error verifying your email
         </h1>
         <p className="text-muted-foreground">

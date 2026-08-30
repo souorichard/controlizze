@@ -206,7 +206,7 @@ function ChartTooltipContent({
 
             return (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: org.id is not available at this point, using index as a stable key fallback
+                // biome-ignore lint/suspicious/noArrayIndexKey: todo
                 key={index}
                 className={cn(
                   'flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground',
@@ -223,7 +223,7 @@ function ChartTooltipContent({
                       !hideIndicator && (
                         <div
                           className={cn(
-                            'shrink-0 rounded-xs border-(--color-border) bg-(--color-bg)',
+                            'shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)',
                             {
                               'h-2.5 w-2.5': indicator === 'dot',
                               'w-1': indicator === 'line',
@@ -256,11 +256,7 @@ function ChartTooltipContent({
                       {item.value != null && (
                         <span className="font-mono font-medium text-foreground tabular-nums">
                           {typeof item.value === 'number'
-                            ? item.value.toLocaleString('en-us', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                notation: 'compact',
-                              })
+                            ? item.value.toLocaleString()
                             : String(item.value)}
                         </span>
                       )}
@@ -309,7 +305,7 @@ function ChartLegendContent({
 
           return (
             <div
-              // biome-ignore lint/suspicious/noArrayIndexKey: org.id is not available at this point, using index as a stable key fallback
+              // biome-ignore lint/suspicious/noArrayIndexKey: todo
               key={index}
               className={cn(
                 'flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground',
@@ -319,7 +315,7 @@ function ChartLegendContent({
                 <itemConfig.icon />
               ) : (
                 <div
-                  className="h-2 w-2 shrink-0 rounded-xs"
+                  className="h-2 w-2 shrink-0 rounded-[2px]"
                   style={{
                     backgroundColor: item.color,
                   }}

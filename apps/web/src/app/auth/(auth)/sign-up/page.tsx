@@ -13,7 +13,7 @@ export default function SignUpPage() {
   return (
     <div className="max-w-lg w-full space-y-12">
       <div className="space-y-3">
-        <h1 className="text-4xl font-medium font-heading tracking-wide">
+        <h1 className="text-2xl font-medium font-heading tracking-wide md:text-4xl">
           Financial control <br /> simple, clear and{' '}
           <TypingText
             text="efficient"
@@ -21,7 +21,7 @@ export default function SignUpPage() {
             className="bg-linear-to-r from-primary via-primary/60 to-primary bg-clip-text text-transparent animate-shimmer"
           />
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground md:text-base">
           Organize your finances, track results in real time, and make decisions
           with confidence
         </p>
