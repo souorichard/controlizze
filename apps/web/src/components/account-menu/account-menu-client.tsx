@@ -39,6 +39,8 @@ export function AccountMenuClient({
   user,
   currentOrg,
 }: AccountMenuClientProps) {
+  const iconStyle = 'size-4 text-muted-foreground'
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none group">
@@ -67,65 +69,69 @@ export function AccountMenuClient({
         <DropdownMenuSeparator />
 
         <div className="space-y-4">
-          <DropdownMenuGroup className="lg:hidden">
-            <DropdownMenuLabel>MENU</DropdownMenuLabel>
+          {currentOrg && (
+            <DropdownMenuGroup>
+              {/* <DropdownMenuLabel>MENU</DropdownMenuLabel> */}
 
-            <DropdownMenuItem asChild>
-              <Link href={`/orgs/${currentOrg}/overview`}>
-                <LayoutDashboard className="text-muted-foreground size-5" />
-                Overview
-              </Link>
-            </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/orgs/${currentOrg}/overview`}>
+                  <LayoutDashboard className={iconStyle} />
+                  Overview
+                </Link>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link href={`/orgs/${currentOrg}/transactions`}>
-                <BadgeDollarSign className="text-muted-foreground size-5" />
-                Transactions
-              </Link>
-            </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/orgs/${currentOrg}/transactions`}>
+                  <BadgeDollarSign className={iconStyle} />
+                  Transactions
+                </Link>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link href={`/orgs/${currentOrg}/recurrences`}>
-                <Repeat className="text-muted-foreground size-5" />
-                Recurrences
-              </Link>
-            </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/orgs/${currentOrg}/recurrences`}>
+                  <Repeat className={iconStyle} />
+                  Recurrences
+                </Link>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link href={`/orgs/${currentOrg}/categories`}>
-                <Tags className="text-muted-foreground size-5" />
-                Categories
-              </Link>
-            </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/orgs/${currentOrg}/categories`}>
+                  <Tags className={iconStyle} />
+                  Categories
+                </Link>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link href={`/orgs/${currentOrg}/overview`}>
-                <Settings className="text-muted-foreground size-5" />
-                Settings
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link href={`/orgs/${currentOrg}/overview`}>
+                  <Settings className={iconStyle} />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          )}
 
           <DropdownMenuGroup>
-            <DropdownMenuLabel>ACCOUNT</DropdownMenuLabel>
+            {currentOrg && <DropdownMenuLabel>ACCOUNT</DropdownMenuLabel>}
 
             <DropdownMenuItem asChild>
               <Link href={'/account'}>
-                <User className="text-muted-foreground size-5" />
-                Account
+                <User className={iconStyle} />
+                Profile
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild>
               <Link href={'/account/orgs'}>
-                <Building2 className="text-muted-foreground size-5" />
+                <Building2 className={iconStyle} />
                 Organizations
               </Link>
             </DropdownMenuItem>
 
+            <DropdownMenuSeparator />
+
             <DropdownMenuItem asChild>
               <a href="/api/auth/sign-out">
-                <LogOut className="text-destructive size-5" />
+                <LogOut className={iconStyle} />
                 Log out
               </a>
             </DropdownMenuItem>

@@ -40,10 +40,10 @@ export function OrganizationSwitcherClient({
 }: OrganizationSwitcherClientProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="focus-visible:ring-primary bg-background flex h-9 w-40 items-center gap-2 rounded-md border px-3 text-sm font-medium outline-none focus-visible:ring-2 sm:w-56 cursor-pointer">
+      <DropdownMenuTrigger className="bg-background flex h-9 w-50 items-center gap-2 rounded-md border px-3 text-sm font-medium outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary sm:w-56">
         {currentOrg ? (
           <>
-            <Avatar className="mr-1 size-5">
+            <Avatar className="size-5 mr-1">
               {currentOrg.avatarUrl && (
                 <AvatarImage src={currentOrg.avatarUrl as string} />
               )}
@@ -60,7 +60,11 @@ export function OrganizationSwitcherClient({
         )}
         <ChevronsUpDown className="text-muted-foreground ml-auto size-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" sideOffset={12} className="w-56">
+      <DropdownMenuContent
+        align="start"
+        sideOffset={12}
+        className="w-50 sm:w-56"
+      >
         <DropdownMenuGroup>
           <DropdownMenuLabel>ORGANIZATIONS</DropdownMenuLabel>
 

@@ -23,7 +23,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
-        <Separator orientation="vertical" className="h-5! lg:hidden" />
+        {/* <Separator orientation="vertical" className="h-5! lg:hidden" /> */}
 
         <div className="flex items-center gap-2">
           <AccountMenu />
