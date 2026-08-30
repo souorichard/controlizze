@@ -15,26 +15,26 @@ export function HomeWrapper() {
           </span>
         </div>
 
-        <h1 className="text-2xl font-semibold font-heading tracking-wide lg:text-5xl">
+        <h1 className="text-2xl font-semibold tracking-wide lg:text-4xl">
           Organize your finances
           {/* <span className="bg-linear-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent animate-shimmer">
             Controlizze
           </span> */}
         </h1>
-        <p className="text-muted-foreground max-w-2xl text-pretty lg:text-lg">
+        <p className="text-sm text-muted-foreground max-w-2xl text-pretty md:text-base">
           Each organization has its own transactions, charts, and insights.
           Choose an existing one or create your first to get started
         </p>
       </div>
 
-      <Button size="lg" asChild>
+      <Button asChild>
         <Link href="/create-org">
           <CirclePlus className="size-5" />
           Create organization
         </Link>
       </Button>
 
-      <div className="flex justify-center items-center gap-2 text-muted-foreground">
+      <div className="hidden md:flex justify-center items-center gap-2 text-muted-foreground">
         <Building2 className="size-4" />
         <p className="text-xs">
           If you already have an organization, ask the owner to invite you
