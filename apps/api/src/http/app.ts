@@ -20,7 +20,7 @@ export function buildApp() {
   app.setSerializerCompiler(serializerCompiler)
 
   app.register(fastifyCors, {
-    origin: '*',
+    origin: env.NODE_ENV !== 'production' ? '*' : env.WEB_URL,
     methods: ['POST', 'GET', 'PATCH', 'DELETE', 'OPTIONS'],
   })
 
