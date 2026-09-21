@@ -67,6 +67,7 @@ export const createAccount: FastifyPluginAsyncZod = async (app) => {
             name,
             email,
             passwordHash,
+            avatarUrl,
           })
           .returning()
 

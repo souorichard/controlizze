@@ -36,7 +36,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
       if (!user.emailVerifiedAt) {
         const hoursSinceCreation = dayjs().diff(dayjs(user.createdAt), 'hour')
 
-        if (hoursSinceCreation > 24) {
+        if (hoursSinceCreation > 1) {
           throw new ForbiddenError('Email verification required')
         }
       }
