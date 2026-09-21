@@ -8,13 +8,13 @@ import { schema } from '../../../db/schema/index.ts'
 import { centsToReal } from '../../../utils/amount-converter.ts'
 import { auth } from '../../middlewares/auth.ts'
 
-type PeriodTransaction = {
+type MonthlyTransaction = {
   date: Date
   incomes: number
   expenses: number
 }
 
-export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
+export const getTransactionsPerMonthMetrics: FastifyPluginAsyncZod = async (
   app,
 ) => {
   app.register(auth).get(
@@ -22,13 +22,13 @@ export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
     {
       schema: {
         tags: ['Metrics'],
-        summary: 'Get organization transactions per period',
+        summary: 'Get organization transactions per month',
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
         }),
         querystring: z.object({
-          period: z.coerce.number().optional().default(90),
+          months: z.coerce.number().min(6).max(12).optional().default(6),
         }),
         response: {
           200: z.object({
@@ -45,37 +45,52 @@ export const getTransactionsPerPeriodMetrics: FastifyPluginAsyncZod = async (
     },
     async (request) => {
       const { slug } = request.params
-      const { period } = request.query
+      const { months } = request.query
 
       const userId = await request.getCurrentUserId()
       await request.verifyEmailVerification(userId)
       const { org } = await request.getUserMembership(slug, userId)
 
       const startDate = dayjs()
-        .subtract(period - 1, 'days')
-        .startOf('day')
-      const endDate = dayjs().endOf('day')
+        .subtract(months - 1, 'months')
+        .startOf('month')
+      const endDate = dayjs().endOf('month')
 
-      const periodTransactions = await db.execute<PeriodTransaction>(sql`
+      const monthlyTransactions = await db.execute<MonthlyTransaction>(sql`
         SELECT 
-          DATE_TRUNC('day', ${schema.transactions.transactionDate}) as date,
+          DATE_TRUNC('month', ${schema.transactions.transactionDate}) as date,
           COALESCE(SUM(CASE WHEN ${schema.transactions.type} = 'INCOME' THEN ${schema.transactions.amount} ELSE 0 END), 0) as incomes,
           COALESCE(SUM(CASE WHEN ${schema.transactions.type} = 'EXPENSE' THEN ${schema.transactions.amount} ELSE 0 END), 0) as expenses
         FROM ${schema.transactions}
         WHERE ${schema.transactions.orgId} = ${org.id}
           AND ${schema.transactions.status} != 'CANCELED'
           AND ${schema.transactions.transactionDate} BETWEEN ${startDate.toDate()} AND ${endDate.toDate()}
-        GROUP BY DATE_TRUNC('day', ${schema.transactions.transactionDate})
+        GROUP BY DATE_TRUNC('month', ${schema.transactions.transactionDate})
         ORDER BY date ASC
       `)
 
-      const transactions = (periodTransactions.rows as PeriodTransaction[]).map(
-        (item) => ({
-          date: new Date(item.date),
-          incomes: centsToReal(Number(item.incomes) || 0),
-          expenses: centsToReal(Number(item.expenses) || 0),
-        }),
+      const monthsArray = Array.from({ length: months }, (_, i) =>
+        dayjs()
+          .subtract(months - 1 - i, 'months')
+          .startOf('month'),
       )
+
+      const resultsByMonth = new Map(
+        (monthlyTransactions.rows as MonthlyTransaction[]).map((item) => [
+          dayjs(item.date).format('YYYY-MM'),
+          item,
+        ]),
+      )
+
+      const transactions = monthsArray.map((month) => {
+        const item = resultsByMonth.get(month.format('YYYY-MM'))
+
+        return {
+          date: month.toDate(),
+          incomes: centsToReal(Number(item?.incomes ?? 0)),
+          expenses: centsToReal(Number(item?.expenses ?? 0)),
+        }
+      })
 
       return {
         transactions,

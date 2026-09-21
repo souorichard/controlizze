@@ -27,13 +27,11 @@ import {
 } from './invites/index.ts'
 import { getMembers, removeMember, updateMemberRole } from './members/index.ts'
 import {
-  getBalanceEvolutionMetrics,
   getMonthlyExpensesMetrics,
-  getSavingsRateMetrics,
   getTopExpenseCategoriesMetrics,
   getTransactionsAmountMetrics,
   getTransactionsBalanceAmountMetrics,
-  getTransactionsPerPeriodMetrics,
+  getTransactionsPerMonthMetrics,
 } from './metrics/index.ts'
 import {
   createOrg,
@@ -289,20 +287,12 @@ export const routes: Route[] = [
     prefix: '/orgs/:slug/metrics/transactions-balance',
   },
   {
-    plugin: getTransactionsPerPeriodMetrics,
+    plugin: getTransactionsPerMonthMetrics,
     prefix: '/orgs/:slug/metrics/transactions-per-period',
   },
   {
     plugin: getTopExpenseCategoriesMetrics,
     prefix: '/orgs/:slug/metrics/top-expense-categories',
-  },
-  {
-    plugin: getBalanceEvolutionMetrics,
-    prefix: '/orgs/:slug/metrics/balance-evolution',
-  },
-  {
-    plugin: getSavingsRateMetrics,
-    prefix: '/orgs/:slug/metrics/savings-rate',
   },
   {
     plugin: getMonthlyExpensesMetrics,
