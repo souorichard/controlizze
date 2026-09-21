@@ -1,4 +1,4 @@
-import { desc, eq, sql } from 'drizzle-orm'
+import { and, desc, eq, ne, sql } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 
@@ -52,15 +52,15 @@ export const getTopExpenseCategoriesMetrics: FastifyPluginAsyncZod = async (
           eq(schema.transactions.categoryId, schema.categories.id),
         )
         .where(
-          sql`
-            ${schema.transactions.orgId} = ${org.id}
-            and ${schema.transactions.type} = 'EXPENSE'
-            and ${schema.transactions.status} != 'CANCELED'
-          `,
+          and(
+            eq(schema.transactions.orgId, org.id),
+            eq(schema.transactions.type, 'EXPENSE'),
+            ne(schema.transactions.status, 'CANCELED'),
+          ),
         )
         .groupBy(schema.categories.id, schema.categories.name)
         .orderBy(desc(amountSum))
-        .limit(6)
+        .limit(5)
 
       return {
         categories: topExpenses.map((item) => ({
