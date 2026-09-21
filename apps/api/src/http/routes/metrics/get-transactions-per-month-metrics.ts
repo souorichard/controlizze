@@ -28,7 +28,7 @@ export const getTransactionsPerMonthMetrics: FastifyPluginAsyncZod = async (
           slug: z.string(),
         }),
         querystring: z.object({
-          months: z.coerce.number().min(6).max(12).optional().default(6),
+          months: z.coerce.number().min(1).max(12).optional().default(6),
         }),
         response: {
           200: z.object({

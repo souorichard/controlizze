@@ -27,7 +27,6 @@ import {
 } from './invites/index.ts'
 import { getMembers, removeMember, updateMemberRole } from './members/index.ts'
 import {
-  getMonthlyExpensesMetrics,
   getPendingTransactionsMetrics,
   getTopExpenseCategoriesMetrics,
   getTransactionsAmountMetrics,
@@ -294,10 +293,6 @@ export const routes: Route[] = [
   {
     plugin: getTopExpenseCategoriesMetrics,
     prefix: '/orgs/:slug/metrics/top-expense-categories',
-  },
-  {
-    plugin: getMonthlyExpensesMetrics,
-    prefix: '/orgs/:slug/metrics/monthly-expenses',
   },
   {
     plugin: getPendingTransactionsMetrics,
