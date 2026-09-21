@@ -1,6 +1,6 @@
 import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import * as emailsModule from '../../../services/emails/index.ts'
+import * as emailsModule from '../../../lib/mail/index.ts'
 import { createTestApp } from '../../helpers/app.ts'
 import { authenticate } from '../../helpers/auth.ts'
 import { cleanDatabase } from '../../helpers/db.ts'

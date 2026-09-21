@@ -6,7 +6,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
-import { emails } from '../../../services/emails/index.ts'
+import { emails } from '../../../lib/mail/index.ts'
 import { hashToken } from '../../../utils/hash-token.ts'
 
 export const resendVerification: FastifyPluginAsyncZod = async (app) => {
