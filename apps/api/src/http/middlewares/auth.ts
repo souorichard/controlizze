@@ -53,10 +53,6 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
           schema.organizations,
           eq(schema.members.orgId, schema.organizations.id),
         )
-        .innerJoin(
-          schema.users,
-          eq(schema.organizations.ownerId, schema.users.id),
-        )
         .where(
           and(
             eq(schema.members.userId, userId),
