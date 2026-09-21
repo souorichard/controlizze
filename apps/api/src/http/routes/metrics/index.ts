@@ -1,4 +1,5 @@
 export * from './get-monthly-expenses-metrics.ts'
+export * from './get-pending-transactions-metrics.ts'
 export * from './get-top-expense-categories-metrics.ts'
 export * from './get-transactions-amount-metrics.ts'
 export * from './get-transactions-balance-amount-metrics.ts'
