@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { and, count, eq, gte, lt, ne, sql } from 'drizzle-orm'
+import { and, eq, gte, lt, ne, sql } from 'drizzle-orm'
 import { db } from '../../db/index.ts'
 import { schema } from '../../db/schema/index.ts'
 
@@ -52,7 +52,7 @@ export async function getTotalTransactionsAmount(
     }
   }
 
-  const [[total], [totalLastMonth], [{ totalCount }]] = await Promise.all([
+  const [[total], [totalLastMonth]] = await Promise.all([
     db
       .select({ amount: amountSum })
       .from(schema.transactions)
@@ -76,21 +76,10 @@ export async function getTotalTransactionsAmount(
           lt(schema.transactions.transactionDate, currentMonth.toDate()),
         ),
       ),
-
-    db
-      .select({ totalCount: count() })
-      .from(schema.transactions)
-      .where(
-        and(
-          ...baseFilters,
-          gte(schema.transactions.transactionDate, currentMonth.toDate()),
-        ),
-      ),
   ])
 
   return {
     totalAmount: total.amount ?? 0,
     totalLastMonthAmount: totalLastMonth.amount ?? 0,
-    totalCount: totalCount ?? 0,
   }
 }

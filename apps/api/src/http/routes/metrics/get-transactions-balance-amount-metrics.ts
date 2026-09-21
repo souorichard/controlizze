@@ -24,7 +24,7 @@ export const getTransactionsBalanceAmountMetrics: FastifyPluginAsyncZod =
           },
         },
       },
-      async (request, reply) => {
+      async (request) => {
         const { slug } = request.params
 
         const userId = await request.getCurrentUserId()
