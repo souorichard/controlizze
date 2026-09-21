@@ -23,7 +23,7 @@ export const getTransactions: FastifyPluginAsyncZod = async (app) => {
         querystring: z.object({
           title: z
             .string()
-            .min(3, 'Termo de busca deve ter pelo menos 3 caracteres')
+            .min(3, 'Title must be at least 3 characters')
             .optional(),
           type: typeSchema.optional(),
           status: statusSchema.optional(),
