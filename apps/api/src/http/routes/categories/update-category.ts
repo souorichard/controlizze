@@ -8,7 +8,6 @@ import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
-import { typeSchema } from '../../schemas.ts'
 
 export const updateCategory: FastifyPluginAsyncZod = async (app) => {
   app.register(auth).put(
@@ -25,7 +24,6 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
         body: z.object({
           name: z.string(),
           color: z.string(),
-          type: typeSchema,
         }),
         response: {
           204: z.void(),
@@ -47,7 +45,7 @@ export const updateCategory: FastifyPluginAsyncZod = async (app) => {
         )
       }
 
-      const { name, color, type } = request.body
+      const { name, color } = request.body
 
       const [category] = await db
         .select({

@@ -17,7 +17,7 @@ export const deleteCategory: FastifyPluginAsyncZod = async (app) => {
         security: [{ bearerAuth: [] }],
         params: z.object({
           slug: z.string(),
-          categoryId: z.string(),
+          categoryId: z.uuid(),
         }),
         response: {
           204: z.void(),
