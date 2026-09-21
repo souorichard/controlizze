@@ -6,7 +6,6 @@ import { db } from '../../../db/index.ts'
 import { schema } from '../../../db/schema/index.ts'
 import { getUserPermissions } from '../../../utils/get-user-permissions.ts'
 import { BadRequestError } from '../../errors/bad-request-error.ts'
-import { NotFoundError } from '../../errors/not-found-error.ts'
 import { UnauthorizedError } from '../../errors/unauthorized-error.ts'
 import { auth } from '../../middlewares/auth.ts'
 
@@ -43,20 +42,7 @@ export const leaveOrg: FastifyPluginAsyncZod = async (app) => {
         )
       }
 
-      const [selectedOrg] = await db
-        .select({
-          id: schema.organizations.id,
-          ownerId: schema.organizations.ownerId,
-        })
-        .from(schema.organizations)
-        .where(eq(schema.organizations.slug, slug))
-        .limit(1)
-
-      if (!selectedOrg) {
-        throw new NotFoundError('Organization not found')
-      }
-
-      if (selectedOrg.ownerId === userId) {
+      if (org.ownerId === userId) {
         throw new BadRequestError('You cannot leave your own organization')
       }
 
