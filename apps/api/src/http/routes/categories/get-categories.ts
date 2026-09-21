@@ -21,7 +21,7 @@ export const getCategories: FastifyPluginAsyncZod = async (app) => {
         querystring: z.object({
           name: z
             .string()
-            .min(3, 'Termo de busca deve ter pelo menos 3 caracteres')
+            .min(3, 'Name must be at least 3 characters')
             .optional(),
           page: z.coerce.number().min(1).default(1),
           perPage: z.coerce.number().min(1).max(50).default(10),
