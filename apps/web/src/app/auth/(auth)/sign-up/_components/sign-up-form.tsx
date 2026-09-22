@@ -70,7 +70,7 @@ export function SignUpForm() {
         <Label>Email</Label>
         <Input
           type="email"
-          placeholder="john@exemplo.com"
+          placeholder="john@example.com"
           disabled={isSubmitting}
           {...register('email')}
         />

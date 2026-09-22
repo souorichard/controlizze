@@ -40,7 +40,7 @@ export default function SignUpPage() {
           Already have an account?{' '}
           <Link
             href="/auth/sign-in"
-            className="text-primary transition-colors hover:text-primary/85"
+            className="text-primary transition-colors hover:text-primary/80"
           >
             Access it!
           </Link>

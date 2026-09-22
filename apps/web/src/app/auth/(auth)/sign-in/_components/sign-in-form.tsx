@@ -57,7 +57,7 @@ export function SignInForm() {
         <Input
           id="email"
           type="email"
-          placeholder="john@exemplo.com"
+          placeholder="john@example.com"
           disabled={isSubmitting}
           {...register('email')}
         />

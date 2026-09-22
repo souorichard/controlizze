@@ -53,7 +53,7 @@ export function ResetPasswordForm({ code }: ResetPasswordFormProps) {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label>Nova senha</Label>
+        <Label>New password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
@@ -65,7 +65,7 @@ export function ResetPasswordForm({ code }: ResetPasswordFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Confirmar nova senha</Label>
+        <Label>Confirm new password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
           disabled={isSubmitting}
@@ -81,7 +81,7 @@ export function ResetPasswordForm({ code }: ResetPasswordFormProps) {
           <Loader2 className="size-4 animate-spin" />
         ) : (
           <>
-            Redefinir senha
+            Change password
             <ArrowRight className="size-4" />
           </>
         )}

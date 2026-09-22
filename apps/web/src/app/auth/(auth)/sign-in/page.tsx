@@ -37,7 +37,7 @@ export default function SignInPage() {
           Don't have an account?{' '}
           <Link
             href="/auth/sign-up"
-            className="text-primary transition-colors hover:text-primary/85"
+            className="text-primary transition-colors hover:text-primary/80"
           >
             Create one!
           </Link>

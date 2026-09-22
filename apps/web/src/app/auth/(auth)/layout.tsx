@@ -21,7 +21,7 @@ export default function AuthLayout({ children }: PropsWithChildren) {
               rel="noopener noreferrer"
               href="https://www.magnific.com"
               target="_blank"
-              className="text-primary transition-colors hover:text-primary/85"
+              className="text-primary transition-colors hover:text-primary/80"
             >
               Magnific
             </a>

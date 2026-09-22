@@ -43,7 +43,7 @@ export function ForgotPasswordForm() {
         <Label>Email</Label>
         <Input
           type="email"
-          placeholder="john@exemplo.com"
+          placeholder="john@example.com"
           disabled={isSubmitting}
           {...register('email')}
         />
@@ -55,7 +55,7 @@ export function ForgotPasswordForm() {
           <Loader2 className="size-4 animate-spin" />
         ) : (
           <>
-            Enviar email
+            Send email
             <ArrowRight className="size-4" />
           </>
         )}
