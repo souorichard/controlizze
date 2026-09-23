@@ -1,7 +1,7 @@
 'use client'
 
 import type { Role } from '@controlizze/rbac'
-import { Check, ChevronsUpDown, CirclePlus } from 'lucide-react'
+import { Check, ChevronDown, CirclePlus } from 'lucide-react'
 import Link from 'next/link'
 import { getInitials } from '@/utils/get-initials'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
@@ -40,10 +40,10 @@ export function OrganizationSwitcherClient({
 }: OrganizationSwitcherClientProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="bg-background flex h-9 w-50 items-center gap-2 rounded-md border px-3 text-sm font-medium outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary sm:w-56">
+      <DropdownMenuTrigger className="group bg-border/60 flex h-8 w-50 items-center gap-2 rounded-md px-3 text-sm font-medium outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary sm:w-56">
         {currentOrg ? (
           <>
-            <Avatar className="size-5 mr-1">
+            <Avatar className="size-4 mr-1">
               {currentOrg.avatarUrl && (
                 <AvatarImage src={currentOrg.avatarUrl as string} />
               )}
@@ -58,7 +58,7 @@ export function OrganizationSwitcherClient({
             Select an organization
           </span>
         )}
-        <ChevronsUpDown className="text-muted-foreground ml-auto size-4" />
+        <ChevronDown className="size-3 ml-auto text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
@@ -72,7 +72,7 @@ export function OrganizationSwitcherClient({
             return (
               <DropdownMenuItem key={org.id} asChild>
                 <Link href={`/orgs/${org.slug}/overview`}>
-                  <Avatar className="size-5">
+                  <Avatar className="size-4">
                     {org.avatarUrl && (
                       <AvatarImage src={org.avatarUrl as string} />
                     )}
@@ -94,7 +94,7 @@ export function OrganizationSwitcherClient({
 
         <DropdownMenuItem asChild>
           <Link href="/create-org">
-            <CirclePlus className="text-primary size-5" />
+            <CirclePlus className="text-primary size-4" />
             Create organization
           </Link>
         </DropdownMenuItem>

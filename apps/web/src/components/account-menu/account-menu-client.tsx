@@ -2,15 +2,12 @@
 
 import {
   BadgeDollarSign,
-  Building2,
   LayoutDashboard,
   LogOut,
-  Menu,
   Repeat,
   Settings,
   Tags,
   User,
-  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import { getInitials } from '@/utils/get-initials'
@@ -20,7 +17,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
@@ -43,20 +39,15 @@ export function AccountMenuClient({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="outline-none group">
-        <Menu className="size-6 cursor-pointer transition-all duration-200 group-data-[state=open]:rotate-90 group-data-[state=open]:opacity-0 group-data-[state=open]:scale-75 absolute" />
-        <X className="size-6 cursor-pointer transition-all duration-200 group-data-[state=closed]:rotate-90 group-data-[state=closed]:opacity-0 group-data-[state=closed]:scale-75" />
-        <span className="sr-only">Open menu</span>
+      <DropdownMenuTrigger className="outline-none group" asChild>
+        <Avatar className="size-8">
+          <AvatarImage src={user.avatarUrl as string} />
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <div className="p-2 flex items-center gap-3 outline-none">
           <Avatar className="size-8">
-            {user.avatarUrl && (
-              <AvatarImage
-                src={user.avatarUrl as string}
-                className="rounded-md"
-              />
-            )}
+            {user.avatarUrl && <AvatarImage src={user.avatarUrl as string} />}
             <AvatarFallback className="text-sm">
               {getInitials(user.name ?? 'Unknown user')}
             </AvatarFallback>
@@ -74,50 +65,7 @@ export function AccountMenuClient({
         <DropdownMenuSeparator />
 
         <div className="space-y-4">
-          {currentOrg && (
-            <DropdownMenuGroup>
-              {/* <DropdownMenuLabel>MENU</DropdownMenuLabel> */}
-
-              <DropdownMenuItem asChild>
-                <Link href={`/orgs/${currentOrg}/overview`}>
-                  <LayoutDashboard className={iconStyle} />
-                  Overview
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link href={`/orgs/${currentOrg}/transactions`}>
-                  <BadgeDollarSign className={iconStyle} />
-                  Transactions
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link href={`/orgs/${currentOrg}/recurrences`}>
-                  <Repeat className={iconStyle} />
-                  Recurrences
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link href={`/orgs/${currentOrg}/categories`}>
-                  <Tags className={iconStyle} />
-                  Categories
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link href={`/orgs/${currentOrg}/overview`}>
-                  <Settings className={iconStyle} />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          )}
-
           <DropdownMenuGroup>
-            {currentOrg && <DropdownMenuLabel>ACCOUNT</DropdownMenuLabel>}
-
             <DropdownMenuItem asChild>
               <Link href={'/account'}>
                 <User className={iconStyle} />
@@ -125,12 +73,46 @@ export function AccountMenuClient({
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link href={'/account/orgs'}>
-                <Building2 className={iconStyle} />
-                Organizations
-              </Link>
-            </DropdownMenuItem>
+            {currentOrg && (
+              <>
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem asChild>
+                  <Link href={`/orgs/${currentOrg}/overview`}>
+                    <LayoutDashboard className={iconStyle} />
+                    Overview
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
+                  <Link href={`/orgs/${currentOrg}/transactions`}>
+                    <BadgeDollarSign className={iconStyle} />
+                    Transactions
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
+                  <Link href={`/orgs/${currentOrg}/recurrences`}>
+                    <Repeat className={iconStyle} />
+                    Recurrences
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
+                  <Link href={`/orgs/${currentOrg}/categories`}>
+                    <Tags className={iconStyle} />
+                    Categories
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
+                  <Link href={`/orgs/${currentOrg}/overview`}>
+                    <Settings className={iconStyle} />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            )}
 
             <DropdownMenuSeparator />
 
