@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: PropsWithChildren) {
           />
         </div>
         <div>
-          <p className="text-sm text-muted-foreground text-end">
+          <p className="text-xs font-medium text-muted-foreground text-end">
             Image by{' '}
             <a
               rel="noopener noreferrer"

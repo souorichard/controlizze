@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 export default function SignInPage() {
   return (
-    <div className="max-w-lg w-full space-y-12">
-      <div className="space-y-3">
+    <div className="max-w-lg w-full space-y-10">
+      <div className="space-y-2">
         <h1 className="text-2xl font-medium tracking-wide md:text-4xl">
           Welcome back!
         </h1>
@@ -21,19 +21,23 @@ export default function SignInPage() {
           life
         </p>
       </div>
+
       <div className="space-y-6">
         <SocialLogins />
-        <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-3">
           <Separator className="flex-1" />
-          <span className="text-sm text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             or continue with
           </span>
           <Separator className="flex-1" />
         </div>
+
         <Suspense>
           <SignInForm />
         </Suspense>
-        <p className="text-sm text-muted-foreground text-center">
+
+        <p className="text-xs text-muted-foreground text-center">
           Don't have an account?{' '}
           <Link
             href="/auth/sign-up"

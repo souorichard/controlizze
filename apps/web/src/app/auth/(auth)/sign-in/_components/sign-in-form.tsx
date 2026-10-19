@@ -63,7 +63,6 @@ export function SignInForm() {
         />
         {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
       </div>
-
       <div className="space-y-2">
         <div className="flex justify-between items-center gap-3">
           <Label htmlFor="password" className="flex-1">
@@ -94,7 +93,7 @@ export function SignInForm() {
           <Loader2 className="size-4 animate-spin" />
         ) : (
           <>
-            Access my account
+            Access account
             <ArrowRight className="size-4" />
           </>
         )}
