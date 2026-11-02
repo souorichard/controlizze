@@ -7,24 +7,23 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '../error-message'
 import { Button } from '../ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../ui/card'
+import { DialogClose, DialogFooter } from '../ui/dialog'
 import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 import { createOrgAction } from './actions'
 import { type CreateOrgData, createOrgSchema } from './schemas'
 
-export function OrgForm() {
+interface OrgFormProps {
+  viewMode?: 'card' | 'dialog'
+}
+
+export function OrgForm({ viewMode = 'card' }: OrgFormProps) {
   const router = useRouter()
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isDirty, isSubmitting },
   } = useForm<CreateOrgData>({
     resolver: zodResolver(createOrgSchema),
     defaultValues: {
@@ -46,38 +45,27 @@ export function OrgForm() {
     router.back()
   }
 
-  return (
-    <form onSubmit={handleSubmit(handleUpsertOrg)} className="space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Displayed name</CardTitle>
-          <CardDescription>
-            This is your org's visible name within Controlizze
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
+  if (viewMode === 'dialog') {
+    return (
+      <form onSubmit={handleSubmit(handleUpsertOrg)} className="space-y-4">
+        <div className="flex flex-col gap-4">
+          <div className="space-y-1">
+            <Label htmlFor="name">Name</Label>
             <Input
-              placeholder="Acme Inc..."
+              id="name"
+              type="text"
+              placeholder="Acme Corp"
               disabled={isSubmitting}
               {...register('name')}
             />
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
-        </CardContent>
-      </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Description</CardTitle>
-          <CardDescription>
-            This is your org's description. After create your org, you can
-            update the description
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
+          <div className="space-y-1">
+            <Label htmlFor="description">Description</Label>
             <Input
+              id="description"
+              type="text"
               placeholder="We are a company that specializes in providing..."
               disabled={isSubmitting}
               {...register('description')}
@@ -86,12 +74,71 @@ export function OrgForm() {
               <ErrorMessage>{errors.description.message}</ErrorMessage>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Save'}
-      </Button>
-    </form>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="ghost" disabled={isSubmitting}>
+              Cancel
+            </Button>
+          </DialogClose>
+
+          <Button type="submit" disabled={isSubmitting || !isDirty}>
+            {isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              'Create'
+            )}
+          </Button>
+        </DialogFooter>
+      </form>
+    )
+  }
+
+  return (
+    <div className="bg-card/60 rounded-xl border overflow-hidden">
+      <form onSubmit={handleSubmit(handleUpsertOrg)}>
+        <div className="p-5 flex flex-col gap-4">
+          <div className="space-y-1">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Acme Corp"
+              disabled={isSubmitting}
+              {...register('name')}
+            />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="description">Description</Label>
+            <Input
+              id="description"
+              type="text"
+              placeholder="We are a company that specializes in providing..."
+              disabled={isSubmitting}
+              {...register('description')}
+            />
+            {errors.description && (
+              <ErrorMessage>{errors.description.message}</ErrorMessage>
+            )}
+          </div>
+        </div>
+        <div className="px-5 py-3 flex gap-3 border-t">
+          <Button
+            type="submit"
+            className="ml-auto"
+            disabled={isSubmitting || !isDirty}
+          >
+            {isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              'Create'
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }

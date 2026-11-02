@@ -57,7 +57,9 @@ export function ContainerContentDescription({
   children,
 }: GenericProps) {
   return (
-    <p className={cn('text-sm text-muted-foreground', className)}>{children}</p>
+    <p className={cn('text-sm text-muted-foreground text-pretty', className)}>
+      {children}
+    </p>
   )
 }
 

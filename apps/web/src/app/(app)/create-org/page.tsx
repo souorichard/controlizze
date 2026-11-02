@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { AnimatedBackground } from '@/components/animated-background'
 import {
   Container,
   ContainerContent,
@@ -19,14 +18,12 @@ export const metadata: Metadata = {
 export default function CreateOrgPage() {
   return (
     <Container className="flex flex-col">
-      <AnimatedBackground />
-
       <ContainerHeader className="pb-5">
-        <Header />
+        <Header isHome />
       </ContainerHeader>
 
-      <ContainerMain>
-        <ContainerContent className="max-w-4xl">
+      <ContainerMain className="flex flex-1 justify-center">
+        <ContainerContent className="max-w-2xl">
           <ContainerContentHeader>
             <ContainerContentTitle>Create organization</ContainerContentTitle>
             <ContainerContentDescription>
