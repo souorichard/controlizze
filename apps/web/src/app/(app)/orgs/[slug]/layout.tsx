@@ -12,8 +12,6 @@ export default async function OrganizationLayout({
 }: PropsWithChildren) {
   return (
     <Container>
-      {/* <AnimatedBackground /> */}
-
       <ContainerHeader className="space-y-4">
         <Header />
         <Tabs />

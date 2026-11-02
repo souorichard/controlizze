@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '../error-message'
 import { Button } from '../ui/button'
-import { DialogClose, DialogFooter } from '../ui/dialog'
+import { DialogFooter } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { createOrgAction } from './actions'
@@ -45,6 +45,10 @@ export function OrgForm({ viewMode = 'card' }: OrgFormProps) {
     router.back()
   }
 
+  function onDismiss() {
+    router.back()
+  }
+
   if (viewMode === 'dialog') {
     return (
       <form onSubmit={handleSubmit(handleUpsertOrg)} className="space-y-4">
@@ -77,11 +81,14 @@ export function OrgForm({ viewMode = 'card' }: OrgFormProps) {
         </div>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="ghost" disabled={isSubmitting}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onDismiss}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
 
           <Button type="submit" disabled={isSubmitting || !isDirty}>
             {isSubmitting ? (

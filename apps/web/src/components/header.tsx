@@ -32,7 +32,7 @@ export function Header({ isHome = false }: HeaderProps) {
 
         {!isHome && (
           <>
-            <Slash className="size-4 text-border rotate-[-24deg]" />
+            <Slash className="size-4 text-border rotate-[-20deg]" />
             <OrganizationSwitcher />
           </>
         )}
