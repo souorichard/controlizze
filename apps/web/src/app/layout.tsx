@@ -6,10 +6,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 import { Providers } from './providers'
 
-const geistSans = Geist({
-  variable: '--font-sans',
-  subsets: ['latin'],
-})
+const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn('antialiased', geistSans.variable)}>
+    <html lang="en" className={cn('antialiased', "font-sans", geist.variable)}>
       <body suppressHydrationWarning>
         <Providers>
           {children}
