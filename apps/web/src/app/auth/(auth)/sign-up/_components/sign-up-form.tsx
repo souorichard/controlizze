@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2, Mail, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -60,24 +60,26 @@ export function SignUpForm() {
         <Input
           type="text"
           placeholder="John Doe"
+          startAdornment={<User className="size-4 text-muted-foreground" />}
           disabled={isSubmitting}
           {...register('name')}
         />
         {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label>Email</Label>
         <Input
           type="email"
           placeholder="john@example.com"
+          startAdornment={<Mail className="size-4 text-muted-foreground" />}
           disabled={isSubmitting}
           {...register('email')}
         />
         {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label>Password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
@@ -89,7 +91,7 @@ export function SignUpForm() {
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label>Confirm password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"

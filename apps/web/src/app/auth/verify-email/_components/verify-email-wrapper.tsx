@@ -54,7 +54,7 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
   if (status === 'success') {
     return (
       <div className="flex flex-col justify-center items-center gap-5">
-        <CircleCheck className="size-16 text-green-500" />
+        <CircleCheck className="size-16 text-success" />
 
         <div className="max-w-xl w-full space-y-3 text-center">
           <h1 className="text-2xl font-medium tracking-wide">
@@ -70,7 +70,7 @@ export function VerifyEmailWrapper({ code }: VerifyEmailWrapperProps) {
 
   return (
     <div className="flex flex-col justify-center items-center gap-5">
-      <CircleX className="size-16 text-destructive" />
+      <CircleX className="size-16 text-danger" />
 
       <div className="max-w-xl w-full space-y-3 text-center">
         <h1 className="text-2xl font-medium tracking-wide">

@@ -16,7 +16,7 @@ export default function SignInPage() {
         <h1 className="text-2xl font-medium tracking-wide md:text-4xl">
           Welcome back!
         </h1>
-        <p className="text-sm text-muted-foreground md:text-base">
+        <p className="text-sm text-muted-foreground">
           Access your account and continue to take control of your financial
           life
         </p>

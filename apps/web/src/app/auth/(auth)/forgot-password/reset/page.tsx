@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { ResetPasswordForm } from './_components/reset-password-form'
 
 export const metadata: Metadata = {
-  title: 'Esqueci minha senha',
+  title: 'Reset your password',
 }
 
 interface ResetPassowordPageProps {
@@ -25,9 +25,9 @@ export default async function ResetPassowordPage({
     <div className="max-w-lg w-full space-y-12">
       <div className="space-y-3">
         <h1 className="text-2xl font-medium font-heading tracking-wide md:text-4xl">
-          Change your password <br /> and regain access to your account
+          Reset your password
         </h1>
-        <p className="text-sm text-muted-foreground md-text-base">
+        <p className="text-sm text-muted-foreground">
           Fill out the form below to reset your password and regain access to
           your account.
         </p>

@@ -19,6 +19,6 @@ export async function requestPasswordRecoverAction({
 
   return {
     success: true,
-    message: 'Email de recuperação de senha enviado com sucesso!',
+    message: 'Password recovery email sent successfully!',
   }
 }

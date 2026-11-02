@@ -52,7 +52,7 @@ export function ResetPasswordForm({ code }: ResetPasswordFormProps) {
       onSubmit={handleSubmit(handleRequestPasswordRecover)}
       className="space-y-4"
     >
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label>New password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"
@@ -64,7 +64,7 @@ export function ResetPasswordForm({ code }: ResetPasswordFormProps) {
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label>Confirm new password</Label>
         <PasswordInput
           placeholder="• • • • • • • •"

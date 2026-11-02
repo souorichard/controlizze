@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -52,18 +52,19 @@ export function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           type="email"
           placeholder="john@example.com"
+          startAdornment={<Mail className="size-4 text-muted-foreground" />}
           disabled={isSubmitting}
           {...register('email')}
         />
         {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
       </div>
-      <div className="space-y-2">
+      <div className="space-y-1">
         <div className="flex justify-between items-center gap-3">
           <Label htmlFor="password" className="flex-1">
             Password
@@ -71,7 +72,7 @@ export function SignInForm() {
           {forgotPassword && (
             <Link
               href="/auth/forgot-password"
-              className="text-xs text-primary transition-colors hover:text-primary/85"
+              className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               Forgot your password?
             </Link>

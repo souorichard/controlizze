@@ -22,6 +22,6 @@ export async function resetPasswordAction({
   return {
     success: true,
     message:
-      'Senha redefinida com sucesso! Agora você já pode fazer login com sua nova senha.',
+      'Password reset successfully! You can now log in with your new password',
   }
 }

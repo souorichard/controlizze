@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2, Mail } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ErrorMessage } from '@/components/error-message'
@@ -39,11 +39,12 @@ export function ForgotPasswordForm() {
       onSubmit={handleSubmit(handleRequestPasswordRecover)}
       className="space-y-4"
     >
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label>Email</Label>
         <Input
           type="email"
           placeholder="john@example.com"
+          startAdornment={<Mail className="size-4 text-muted-foreground" />}
           disabled={isSubmitting}
           {...register('email')}
         />

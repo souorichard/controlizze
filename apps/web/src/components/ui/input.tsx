@@ -1,17 +1,45 @@
 import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
-function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
+type InputProps = React.ComponentProps<'input'> & {
+  startAdornment?: React.ReactNode
+  endAdornment?: React.ReactNode
+  wrapperClassName?: string
+}
+
+function Input({
+  className,
+  type,
+  startAdornment,
+  endAdornment,
+  wrapperClassName,
+  ...props
+}: InputProps) {
   return (
-    <input
-      type={type}
-      data-slot="input"
+    <div
+      data-slot="input-wrapper"
       className={cn(
-        'h-9 w-full min-w-0 rounded-md border border-input bg-surface/60 px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-        className,
+        'flex h-9 w-full items-center rounded-md border border-input bg-surface/60 px-3 shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/20',
+        'has-disabled:pointer-events-none has-disabled:opacity-50',
+        startAdornment || endAdornment ? 'gap-3' : 'gap-2',
+        wrapperClassName,
       )}
-      {...props}
-    />
+    >
+      {startAdornment}
+
+      <input
+        type={type}
+        data-slot="input"
+        className={cn(
+          'h-full w-full min-w-0 bg-transparent py-1 text-sm outline-none placeholder:text-muted-foreground',
+          'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
+          className,
+        )}
+        {...props}
+      />
+
+      {endAdornment}
+    </div>
   )
 }
 

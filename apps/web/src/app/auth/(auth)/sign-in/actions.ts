@@ -24,6 +24,6 @@ export async function signIn({
 
   return {
     success: true,
-    message: 'Autenticado com sucesso!',
+    message: 'Signed in successfully!',
   }
 }

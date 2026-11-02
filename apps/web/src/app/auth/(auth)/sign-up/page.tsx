@@ -21,7 +21,7 @@ export default function SignUpPage() {
             className="bg-linear-to-r from-primary via-primary/60 to-primary bg-clip-text text-transparent animate-shimmer"
           />
         </h1>
-        <p className="text-sm text-muted-foreground md:text-base">
+        <p className="text-sm text-muted-foreground">
           Organize your finances, track results in real time, and make decisions
           with confidence
         </p>
@@ -30,13 +30,13 @@ export default function SignUpPage() {
         <SocialLogins />
         <div className="flex items-center gap-4">
           <Separator className="flex-1" />
-          <span className="text-sm text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             or continue with
           </span>
           <Separator className="flex-1" />
         </div>
         <SignUpForm />
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-xs text-muted-foreground text-center">
           Already have an account?{' '}
           <Link
             href="/auth/sign-in"

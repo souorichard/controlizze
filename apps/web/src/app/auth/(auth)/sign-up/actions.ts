@@ -19,6 +19,6 @@ export async function signUp({
   return {
     success: true,
     message:
-      'Conta criada com sucesso! Verifique seu email para confirmar sua conta.',
+      'Account created successfully! Please check your email to verify your account',
   }
 }
